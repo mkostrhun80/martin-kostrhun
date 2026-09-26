@@ -1,0 +1,212 @@
+/* Purple Lens: registered duplicate artwork, clipped by a single optical aperture.
+   The native page keeps scrolling; the lens never owns or locks the viewport. */
+.hero-with-lens {
+  --lens-x: 68%;
+  --lens-y: 49%;
+  --lens-rx: clamp(105px, 11.5vw, 185px);
+  --lens-ry: var(--lens-rx);
+  --lens-offset-x: 0px;
+  --lens-offset-y: 0px;
+  --hero-parallax-x: 0px;
+  --hero-parallax-y: 0px;
+  --portal-depth: 0;
+  --portal-opacity: 1;
+  --portal-wash: 0;
+  --lens-rim-opacity: 1;
+  --name-size: clamp(140px, 20vw, 325px);
+  --name-leading: .78;
+  --name-gap: 24px;
+  --name-left: 3vw;
+  --surname-indent: 10vw;
+  --portrait-left: 42%;
+  --portrait-width: 35%;
+  --portrait-height: 76%;
+  --portrait-bottom: 65px;
+  touch-action: pan-y pinch-zoom;
+}
+.hero-artwork {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  background: var(--paper);
+  pointer-events: none;
+}
+.hero-name {
+  position: absolute;
+  left: var(--name-left);
+  top: 22%;
+  font-family: Display, 'Arial Narrow', sans-serif;
+  font-size: var(--name-size);
+  font-weight: 700;
+  line-height: var(--name-leading);
+  letter-spacing: -.026em;
+  white-space: nowrap;
+  user-select: none;
+}
+.hero-name-back {
+  z-index: 1;
+  transform: translate3d(calc(var(--portal-depth) * -24px), calc(var(--portal-depth) * -12px), 0);
+}
+.hero-name-front {
+  z-index: 3;
+  left: calc(var(--name-left) + var(--surname-indent));
+  top: calc(22% + var(--name-size) * var(--name-leading) + var(--name-gap));
+  color: white;
+  mix-blend-mode: difference;
+  transform: translate3d(calc(var(--portal-depth) * 28px), calc(var(--portal-depth) * 8px), 0);
+}
+.hero-name-dot { color: #6ac709; }
+.hero-photo-layer {
+  position: absolute;
+  z-index: 2;
+  left: var(--portrait-left);
+  width: var(--portrait-width);
+  height: var(--portrait-height);
+  bottom: var(--portrait-bottom);
+  overflow: hidden;
+  background: #b5b2b6;
+  transform: translate3d(var(--hero-parallax-x), var(--hero-parallax-y), 0);
+}
+.hero-photo-layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+  filter: grayscale(1);
+  transform: scale(calc(1.015 + var(--portal-depth) * .065));
+  transform-origin: 50% 40%;
+  user-select: none;
+}
+.hero-photo-layer::after {
+  content: '';
+  position: absolute;
+  inset: 70% 0 0;
+  background: linear-gradient(transparent, #0b091055);
+}
+.hero-photo-caption {
+  position: absolute;
+  left: calc(var(--portrait-left) + 16px);
+  bottom: calc(var(--portrait-bottom) + 14px);
+  width: calc(var(--portrait-width) - 25px);
+  z-index: 6;
+  font-size: 10px;
+  line-height: 1.45;
+  letter-spacing: .06em;
+  color: white;
+  pointer-events: none;
+}
+.purple-lens-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  clip-path: ellipse(var(--lens-rx) var(--lens-ry) at var(--lens-x) var(--lens-y));
+  opacity: var(--portal-opacity);
+  contain: paint;
+}
+.hero-artwork-alternate { background: #8b2cff; }
+.hero-artwork-alternate .hero-photo-layer { background: #8b2cff; }
+.hero-artwork-alternate .hero-photo-layer img {
+  filter: grayscale(1) contrast(1.1);
+  mix-blend-mode: luminosity;
+  transform: translate(var(--lens-offset-x), var(--lens-offset-y)) scale(calc(1.055 + var(--portal-depth) * .065));
+}
+.hero-artwork-alternate .hero-name-back { color: #eee2ff; }
+.hero-artwork-alternate .hero-name-front {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #f9f3ff;
+  mix-blend-mode: normal;
+  text-shadow: 2px 0 #c594ff33;
+}
+.hero-artwork-alternate .hero-name-dot { color: #f5f3f6; -webkit-text-stroke: 0; }
+.portal-wash { position: absolute; inset: 0; z-index: 5; background: #8b2cff; opacity: var(--portal-wash); }
+.lens-rim, .lens-hit {
+  position: absolute;
+  left: calc(var(--lens-x) - var(--lens-rx));
+  top: calc(var(--lens-y) - var(--lens-ry));
+  width: calc(var(--lens-rx) * 2);
+  height: calc(var(--lens-ry) * 2);
+  border-radius: 50%;
+}
+.lens-rim {
+  z-index: 5;
+  pointer-events: none;
+  opacity: var(--lens-rim-opacity);
+  border: 1px solid #f3e6ffbd;
+  /* Two crisp, unequal edges read as optical glass, not an illuminated orb. */
+  box-shadow: inset 2px 0 0 #f5e8ff99, inset -3px -1px 0 #441778b3, 0 0 0 1px #711ad988;
+}
+.lens-rim::before { content: ''; position: absolute; inset: 5px; border: 1px solid #efdbff40; border-radius: inherit; }
+.lens-edge-mark { position: absolute; left: 50%; top: -5px; width: 1px; height: 9px; background: #e9d2ff; }
+.lens-edge-mark.second { top: auto; bottom: -5px; }
+.lens-hit {
+  z-index: 7;
+  background: none;
+  border: 0;
+  padding: 0;
+  touch-action: pan-y pinch-zoom;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.lens-hit:focus-visible { outline: 2px solid var(--ink); outline-offset: 8px; box-shadow: 0 0 0 5px var(--paper); }
+.lens-annotation {
+  position: absolute;
+  z-index: 8;
+  top: calc(var(--lens-y) + var(--lens-ry) + 17px);
+  left: clamp(22px, calc(var(--lens-x) - 58px), calc(100% - 165px));
+  width: 150px;
+  pointer-events: none;
+  color: white;
+  mix-blend-mode: difference;
+  opacity: var(--lens-rim-opacity);
+  font-size: 11px;
+  letter-spacing: .09em;
+  line-height: 1.5;
+}
+.lens-word { display: inline-block; color: white; padding: 0; font-size: 11px; letter-spacing: .08em; }
+.lens-hint { display: flex; align-items: center; gap: 9px; margin-top: 7px; font-size: 9px; line-height: 1.7; padding: 0; width: max-content; transition: opacity .25s; }
+.lens-hint>span:last-child { font-size: 15px; line-height: 1; }
+.touch-hint { display: none; }
+.hero-with-lens[data-lens-explored=true] .lens-hint { opacity: 0; }
+.hero-with-lens .hero-meta { z-index: 9; transform: translate(calc(var(--hero-parallax-x) * -.45), calc(var(--hero-parallax-y) * -.45)); }
+.hero-with-lens .hero-note, .hero-with-lens .hero-bottom { z-index: 9; }
+.hero-with-lens .hero-note .text-link { transition: letter-spacing .2s; }
+.hero-with-lens .hero-note .text-link:hover { letter-spacing: .06em; }
+.hero-with-lens[data-lens-phase=expanding] .lens-hit { pointer-events: none; }
+.hero-with-lens[data-lens-phase=settled] .purple-lens-layer,
+.hero-with-lens[data-lens-phase=settled] .lens-rim,
+.hero-with-lens[data-lens-phase=settled] .lens-hit,
+.hero-with-lens[data-lens-phase=settled] .lens-annotation { display: none; }
+.hero-with-lens[data-lens-phase=reduced] .lens-hit,
+.hero-with-lens[data-lens-phase=reduced] .lens-hint { display: none; }
+/* Only actively moving scenes request their own image layer. */
+.hero-with-lens[data-lens-phase=expanding] .hero-photo-layer img { will-change: transform; }
+@media(min-width:761px) and (max-width:1099px) {
+  .hero-with-lens { --surname-indent: 3vw; --portrait-left: 40%; --portrait-width: 44%; --portrait-height: 72%; }
+}
+@media(max-width:760px) {
+  .hero-with-lens {
+    --lens-x: 66%; --lens-y: 50%; --lens-rx: clamp(70px, 22.5vw, 125px); --lens-ry: var(--lens-rx);
+    --name-size: 24vw; --name-leading: .82; --name-gap: 10px; --name-left: 20px; --surname-indent: 0px;
+    --portrait-left: 24%; --portrait-width: 69%; --portrait-height: 64%; --portrait-bottom: 83px;
+  }
+  .hero-name-back { z-index: 3; color: white; mix-blend-mode: difference; }
+  .hero-artwork-alternate .hero-name-back { mix-blend-mode: normal; }
+  .hero-photo-caption { font-size: 9px; }
+  .hero-artwork-alternate .hero-photo-layer img { transform: scale(calc(1.035 + var(--portal-depth) * .04)); }
+  .hero-artwork-alternate .hero-name-front { -webkit-text-stroke-width: 1px; text-shadow: none; }
+  .lens-rim { box-shadow: inset 1px 0 0 #f5e8ff99, 0 0 0 1px #711ad988; }
+  .lens-rim::before { display: none; }
+  .lens-annotation { top: calc(var(--lens-y) - var(--lens-ry) - 50px); left: clamp(22px, calc(var(--lens-x) - 50px), calc(100% - 156px)); }
+}
+@media(hover:none), (pointer:coarse) {
+  .pointer-hint { display: none; }
+  .touch-hint { display: inline; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .hero-name, .hero-photo-layer, .hero-photo-layer img, .hero-with-lens .hero-meta { transform: none!important; }
+  .lens-hit, .lens-hint { display: none!important; }
+  .purple-lens-layer { opacity: 1; }
+  .portal-wash { display: none; }
+}
