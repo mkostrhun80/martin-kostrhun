@@ -19,31 +19,54 @@ export function Motion() {
       const destination = sequence.querySelector<HTMLElement>('.about-portrait')!;
       const handoff = sequence.querySelector<HTMLElement>('.hero-photo-handoff')!;
       const destinationImage = handoff.querySelector<HTMLElement>('.handoff-to')!;
-      let sourceBox = { x: 0, y: 0, w: 0, h: 0 }, targetBox = { ...sourceBox };
-      const measureHandoff = () => {
-        const base = sequence.getBoundingClientRect(), from = origin.getBoundingClientRect();
-        const top = sequence.querySelector<HTMLElement>('.about-layout')!.getBoundingClientRect().top - base.top;
-        const to = destination.getBoundingClientRect();
-        sourceBox = { x: from.left - base.left, y: origin.offsetTop, w: from.width, h: from.height };
-        targetBox = { x: to.left - base.left, y: top, w: to.width, h: to.height };
-      };
-      measureHandoff();
+      const sourceImage = handoff.querySelector<HTMLElement>('.handoff-from')!;
+      const shrinkEase = gsap.parseEase('power3.inOut');
+      const popEase = gsap.parseEase('back.out(1.35)');
+      const mix = (from: number, to: number, progress: number) => from + (to - from) * progress;
       const drawHandoff = (progress: number) => {
-        const t = progress * progress * (3 - 2 * progress);
-        const mix = (a: number, b: number) => a + (b - a) * t;
-        const bend = Math.sin(Math.PI * t);
-        gsap.set(handoff, { x: mix(sourceBox.x, targetBox.x), y: mix(sourceBox.y, targetBox.y),
-          width: mix(sourceBox.w, targetBox.w), height: mix(sourceBox.h, targetBox.h),
-          borderRadius: `${bend * 32}% ${bend * 15}% ${bend * 28}% ${bend * 19}% / ${bend * 19}% ${bend * 32}% ${bend * 16}% ${bend * 29}%`,
-          visibility: progress > 0 && progress < 1 ? 'visible' : 'hidden' });
-        const reveal = gsap.utils.clamp(0, 1, (t - .28) / .55);
-        gsap.set(destinationImage, { opacity: 1, clipPath: `inset(${(1 - reveal) * 100}% 0 0 0)` });
-        sequence.dataset.handoff = progress > 0 && progress < 1 ? 'moving' : progress >= 1 ? 'complete' : 'start';
+        const from = origin.getBoundingClientRect(), to = destination.getBoundingClientRect();
+        const size = mobile ? 76 : 104;
+        const margin = mobile ? 18 : 32;
+        const corner = { x: margin, y: window.innerHeight - size - margin };
+        let x: number, y: number, width: number, height: number, roundness: number, purple: number;
+        let reveal = 0;
+        // First collapse into a purple portrait bubble, then pause in the corner.
+        if (progress < .5) {
+          const t = shrinkEase(progress / .5);
+          x = mix(from.left, corner.x, t); y = mix(from.top, corner.y, t);
+          width = mix(from.width, size, t); height = mix(from.height, size, t);
+          roundness = t; purple = t;
+          handoff.dataset.phase = 'shrinking';
+        } else if (progress < .64) {
+          x = corner.x; y = corner.y; width = height = size;
+          roundness = purple = 1;
+          handoff.dataset.phase = 'corner';
+        } else {
+          // Jump to the second portrait and pop open with a small overshoot.
+          // Start near its upper quarter so the bubble is visible on short screens.
+          const local = gsap.utils.clamp(0, 1, (progress - .64) / .36);
+          const t = popEase(local);
+          const anchorX = to.left + to.width / 2 - size / 2;
+          const anchorY = to.top + Math.min(to.height * .25, window.innerHeight * .17) - size / 2;
+          x = mix(anchorX, to.left, t); y = mix(anchorY, to.top, t);
+          width = mix(size, to.width, t); height = mix(size, to.height, t);
+          roundness = gsap.utils.clamp(0, 1, 1 - t);
+          purple = roundness;
+          reveal = gsap.utils.clamp(0, 1, local / .28);
+          handoff.dataset.phase = 'popping';
+        }
+        const active = progress > 0 && progress < 1;
+        gsap.set(handoff, { x, y, width, height, borderRadius: `${roundness * 50}%`,
+          '--handoff-tint': purple * .58, '--handoff-ring': `${purple * (mobile ? 5 : 7)}px`,
+          visibility: active ? 'visible' : 'hidden' });
+        gsap.set(sourceImage, { opacity: 1 - reveal });
+        gsap.set(destinationImage, { opacity: reveal });
+        sequence.dataset.handoff = active ? 'moving' : progress >= 1 ? 'complete' : 'start';
       };
       const handoffState = { progress: 0 };
       gsap.to(handoffState, { progress: 1, ease: 'none', onUpdate: () => drawHandoff(handoffState.progress),
-        scrollTrigger: { trigger: hero, start: 'top top', endTrigger: '.about-layout', end: 'top 24%', scrub: .25,
-          onRefresh: () => { measureHandoff(); drawHandoff(handoffState.progress); } } });
+        scrollTrigger: { trigger: hero, start: 'top top', endTrigger: '.about-layout', end: 'top 18%', scrub: .2,
+          onRefresh: () => drawHandoff(handoffState.progress) } });
       gsap.to(hero, { '--hero-scroll-back': mobile ? '-8vw' : '-16vw', '--hero-scroll-front': mobile ? '6vw' : '14vw',
         '--hero-scroll-meta': '-14px', '--hero-scroll-progress': 1, ease: 'none',
         scrollTrigger: { id: 'hero-scene', trigger: hero, start: 'top top', end: 'bottom 15%', scrub: .55 } });
@@ -102,7 +125,14 @@ export function Motion() {
         .from('.contact-intro', { opacity: .2, duration: .3 }, .45);
       gsap.from('.contact-links', { opacity: .55, scrollTrigger: {
         trigger: '.contact-links', start: 'top 97%', end: 'top 75%', scrub: .4 } });
-      return () => { delete sequence.dataset.handoff; approach.querySelectorAll('.process-progress li').forEach(el=>el.classList.remove('is-current')); };
+      return () => {
+        delete sequence.dataset.handoff;
+        delete handoff.dataset.phase;
+        handoff.removeAttribute('style');
+        sourceImage.removeAttribute('style');
+        destinationImage.removeAttribute('style');
+        approach.querySelectorAll('.process-progress li').forEach(el=>el.classList.remove('is-current'));
+      };
     });
     document.fonts.ready.then(() => { if (alive) refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh()); });
     return () => { alive = false; cancelAnimationFrame(refreshFrame); media.revert(); };
