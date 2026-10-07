@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./photography.css";
+import "./motion.css";
+import "./hero-flow.css";
+import "./service-motion.css";
+import "./process-layout.css";
+import "./partners.css";
+import "./refinement.css";
+import "./interaction-patch.css";
 export const metadata: Metadata = {
   title: "Martin Kostrhun | Finanční specialista",
   description: "Finance, ve kterých máte jasno. Martin Kostrhun, finanční specialista eDO finance v Hradci Králové. Bydlení, investice, pojištění a dlouhodobý plán.",

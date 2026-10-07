@@ -1,0 +1,130 @@
+/* Match the supplied photographs to their actual proportions and focal points. */
+.hero-with-lens {
+  --name-size: clamp(140px, min(21vw, 36svh), 345px);
+  --portrait-left: 42%;
+  --surname-indent: 15vw;
+}
+.hero-artwork:not(.hero-artwork-alternate) { background: #eae6ef; }
+.hero-name { top: 20%; }
+.hero-name-back { z-index: 3; color: white; mix-blend-mode: difference; }
+.hero-name-front {
+  top: calc(20% + var(--name-size) * var(--name-leading) + var(--name-gap));
+}
+.hero-photo-layer {
+  height: calc(100% - 150px);
+  width: auto;
+  aspect-ratio: 4 / 5;
+  max-width: 49%;
+}
+.hero-photo-layer img {
+  object-fit: cover;
+  object-position: 50% 75%;
+  filter: grayscale(1) contrast(1.12) brightness(.96);
+  transform: none;
+}
+.hero-artwork-alternate .hero-photo-layer img { transform: none; }
+.hero-with-lens .hero-note {
+  top: auto;
+  bottom: 95px;
+  left: 3.4vw;
+}
+.editorial-sticky figure {
+  left: 0;
+  width: 92%;
+  height: 72%;
+  aspect-ratio: auto;
+  top: 18%;
+}
+.editorial-sticky img {
+  object-position: 50% 43%;
+  transform: scale(1.65);
+  transform-origin: 50% 43%;
+  filter: brightness(.95);
+}
+.service-photo {
+  height: auto;
+  aspect-ratio: 3 / 2;
+}
+.service-photo img {
+  object-position: center;
+  transform: none;
+}
+.image-index {
+  font-size: 68px;
+  bottom: 16px;
+  right: 16px;
+}
+.about-layout { align-items: start; }
+.about-portrait {
+  position: sticky;
+  top: 110px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+}
+.about-portrait img {
+  object-position: center;
+  transform: none;
+}
+.about-copy { padding-top: 0; }
+.contact-composition {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  grid-template-rows: auto 1fr;
+  column-gap: 6%;
+  row-gap: 40px;
+  align-items: start;
+  min-height: 0;
+  padding: 55px 0 60px;
+}
+.contact-composition h2 {
+  grid-column: 1;
+  font-size: clamp(70px, 8.7vw, 140px);
+  margin: 0;
+}
+.contact-composition figure {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  position: relative;
+  right: auto;
+  top: auto;
+  z-index: auto;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  align-self: center;
+  justify-self: end;
+  margin: 0;
+}
+.contact-composition img {
+  object-position: center;
+  filter: none;
+}
+.contact-intro { grid-column: 1; margin: 0; }
+@media (max-width: 760px) {
+  .hero-with-lens { --name-size: 25vw; --portrait-left: 18%; --surname-indent: 0px; }
+  .hero-photo-layer { width: 77%; height: auto; max-width: none; }
+  .hero-artwork-alternate .hero-photo-layer img { transform: none; }
+  .hero-with-lens .hero-note { top: auto; bottom: 110px; left: 22px; }
+  .editorial-sticky { height: auto; }
+  .editorial-sticky figure {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    height: clamp(400px, 120vw, 620px);
+    margin: 30px 0 25px;
+  }
+  .editorial-caption { position: static; display: block; width: auto; }
+  .about-portrait { position: relative; top: auto; }
+  .contact-composition {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: 35px 0 45px;
+  }
+  .contact-composition h2 { font-size: 22vw; }
+  .contact-composition figure { align-self: center; }
+  .contact-intro p { width: auto; padding: 0; }
+}

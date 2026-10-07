@@ -1,6 +1,21 @@
-'use client';
 /* eslint-disable @next/next/no-img-element */
-import { useState } from 'react';
 import { services } from '@/lib/content';
 import { assets } from '@/lib/site-config';
-export function Services(){const [active,setActive]=useState<string|null>('investice');const service=services.find(s=>s.id===active)||services[0];return <section id="sluzby" className="section services"><div className="section-top"><p className="eyebrow">03 / S ČÍM POMÁHÁM</p><p>To, na čem vám záleží.<br/>To, co má smysl řešit.</p></div><div className="services-layout"><div className="service-groups">{['Budovat','Chránit'].map((group,gi)=><div className="service-group" key={group}><h2 className="display" data-reveal>{group}<span>.</span></h2>{services.filter(s=>s.group===group).map((s,i)=><div key={s.id} className={`service-row ${active===s.id?'active':''}`} onMouseEnter={()=>{if(matchMedia('(hover:hover)').matches)setActive(s.id)}}><h3><button aria-expanded={active===s.id} aria-controls={`detail-${s.id}`} onClick={()=>setActive(active===s.id?null:s.id)}><span className="service-number">0{gi*3+i+1}</span><span>{s.title}</span><span className="service-plus">{active===s.id?'−':'＋'}</span></button></h3><div id={`detail-${s.id}`} hidden={active!==s.id} className="service-description"><p>{s.description}</p><a href="#kontakt">PROBRAT MOŽNOSTI <span>↗</span></a></div></div>)}</div>)}</div><aside className="service-visual" aria-hidden="true"><div className="service-photo"><img src={assets.editorialPortrait01} alt="" width="1086" height="1448" loading="lazy" style={{objectPosition:service.position}}/>{assets.isPlaceholder&&<span className="photo-caption">ILUSTRAČNÍ PORTRÉT</span>}<span className="image-index">0{services.indexOf(service)+1}</span></div><p key={service.id}>{service.short}</p><span className="eyebrow">NEJDŘÍV CÍL. POTOM ŘEŠENÍ.</span></aside></div></section>}
+
+/** All six services stay visible in ordinary document flow, including without JS. */
+export function Services() {
+  return <section id="sluzby" className="section services services-editorial">
+    <div className="section-top"><p className="eyebrow">03 / S ČÍM POMÁHÁM</p><p>To, na čem vám záleží.<br/>To, co má smysl řešit.</p></div>
+    <p className="services-statement">NEJDŘÍV CÍL.<br/><em>POTOM ŘEŠENÍ.</em></p>
+    <nav className="services-index" aria-label="Přejít na službu">{services.map((s,i)=><a key={s.id} href={`#sluzba-${s.id}`}><span>0{i+1}</span>{s.title}<span aria-hidden="true">↘</span></a>)}</nav>
+    {['Budovat', 'Chránit'].map((group, gi) => <div className={`service-chapter ${gi ? 'service-chapter-protect' : ''}`} key={group}>
+      <div className="service-chapter-heading"><span className="eyebrow">{gi ? '04 — 06 / JISTOTA' : '01 — 03 / MOŽNOSTI'}</span><h2 className="display">{group}<em>.</em></h2>
+        <figure><img src={gi ? assets.aboutPortrait : assets.editorialPortrait01} alt="" width="1200" height="800" loading="lazy"/>{assets.isPlaceholder && <figcaption>ILUSTRAČNÍ PORTRÉT</figcaption>}</figure>
+      </div>
+      <div className="service-chapter-items">{services.filter(s=>s.group===group).map((s,i)=><article className="service-item" id={`sluzba-${s.id}`} key={s.id}>
+        <span className="service-item-number" aria-hidden="true">0{gi*3+i+1}</span>
+        <div><h3>{s.title}</h3><p className="service-item-short">{s.short}</p><p className="service-item-description">{s.description}</p><a className="text-link" href="#kontakt">PROBRAT MOŽNOSTI <span>↗</span></a></div>
+      </article>)}</div>
+    </div>)}
+  </section>;
+}

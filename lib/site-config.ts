@@ -1,14 +1,16 @@
-// Fictional model: NOT Martin Kostrhun. Replace the centrally configured images.
-const martinHeroPlaceholder = '/images/martinHeroPlaceholder.webp';
+// User-supplied gallery previews. Keep the embedded photographer watermark intact.
 export const assets = {
-  heroPortrait: martinHeroPlaceholder,
-  // Optional alternate portrait; use the same crop. CSS supplies the purple tint.
-  heroLensPortrait: martinHeroPlaceholder,
-  aboutPortrait: martinHeroPlaceholder,
-  editorialPortrait01: martinHeroPlaceholder, editorialPortrait02: martinHeroPlaceholder,
-  contactPortrait: martinHeroPlaceholder, isPlaceholder: true,
-  portraitAlt: 'Dočasný ilustrační portrét modela; nejde o Martina Kostrhuna',
-  heroPortraitSmall: '/images/martinHeroPlaceholder-small.webp',
+  heroPortrait: '/images/DSC01608.jpg',
+  heroLensPortrait: '/images/DSC01608.jpg',
+  aboutPortrait: '/images/DSC01657.jpg',
+  editorialPortrait01: '/images/DSC01638.jpg',
+  editorialPortrait02: '/images/DSC01624.jpg',
+  contactPortrait: '/images/DSC01638.jpg',
+  isPlaceholder: false,
+  portraitAlt: 'Martin Kostrhun, finanční specialista',
+  aboutAlt: 'Martin Kostrhun při chůzi po terase',
+  editorialAlt: 'Martin Kostrhun na terase vedle svého odrazu ve skle',
+  contactAlt: 'Martin Kostrhun pracuje na notebooku u venkovního stolu',
 };
 export const siteConfig = {
   name: 'Martin Kostrhun', email: 'martin.kostrhun@edofinance.cz',

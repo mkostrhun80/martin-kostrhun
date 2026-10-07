@@ -133,6 +133,7 @@ export function attachPurpleLens(hero: HTMLElement, button: HTMLButtonElement, l
     target = { x: spring.x, y: spring.y }; markExplored();
   }
   function scroll() {
+    if (hero.dataset.scrollMotion === 'true') return;
     if (currentPhase === 'exploring' && hero.getBoundingClientRect().top < -8) expand();
   }
   function resize() {
