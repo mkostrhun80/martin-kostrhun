@@ -23,7 +23,7 @@ Fotografie, kontakty a odkazy nastavíte v `lib/site-config.ts`. Aktuální port
 
 ## GitHub Pages
 
-`npm run build:pages` vytvoří statický web ve složce `out/` pro cestu `/personal-web/`.
+`npm run build:pages` vytvoří statický web ve složce `out/` pro cestu `/finance-hun/`.
 Proměnná `NEXT_PUBLIC_BASE_PATH` může cestu změnit (prázdná hodnota pro vlastní doménu).
 Workflow `.github/workflows/pages.yml` publikuje web po každém pushnutí na `main`.
 V nastavení GitHub Pages musí být jako zdroj vybrané GitHub Actions.
