@@ -3,10 +3,10 @@ import { stepSpring, type LensSpring } from './lens-physics';
 const clamp = (n: number, low: number, high: number) => Math.max(low, Math.min(high, n));
 type Point = { x: number; y: number };
 
-/** A smooth ribbon follows the pointer; both edges share the same wave. */
+/** A compact, feathered cursor light reveals original colour and highlights type. */
 export function attachHeroFlow(hero: HTMLElement, svg: SVGSVGElement) {
   const photo = hero.querySelector<HTMLElement>('.hero-photo-layer')!;
-  const wave = svg.querySelector<SVGPathElement>('[data-wave]')!;
+  const glow = svg.querySelector<SVGCircleElement>('[data-cursor-glow]')!;
   const clip = svg.querySelector<SVGRectElement>('[data-photo-clip]')!;
   const outside = svg.querySelector<SVGRectElement>('[data-outside-photo]')!;
   const image = svg.querySelector<SVGImageElement>('[data-color-photo]')!;
@@ -15,31 +15,13 @@ export function attachHeroFlow(hero: HTMLElement, svg: SVGSVGElement) {
   let box = { x: 0, y: 0, w: 1, h: 1 }, width = 1, height = 1;
   let target: Point = { x: 0, y: 0 };
   let spring: LensSpring = { ...target, vx: 0, vy: 0 };
-  let frame = 0, previous = 0, time = 0, lastInteraction = 0;
+  let frame = 0, previous = 0, lastInteraction = 0;
   let visible = false, disposed = false, touching = false, active = false;
   const attr = (node: Element, values: Record<string, number>) => {
     for (const [key, value] of Object.entries(values)) node.setAttribute(key, value.toFixed(2));
   };
-  function curve(points: Point[]) {
-    let d = '';
-    for (let i = 1; i < points.length; i++) {
-      const a = points[i - 1], b = points[i], before = points[Math.max(0, i - 2)], after = points[Math.min(points.length - 1, i + 1)];
-      d += `C${a.x + (b.x - before.x) / 6},${a.y + (b.y - before.y) / 6} ${b.x - (after.x - a.x) / 6},${b.y - (after.y - a.y) / 6} ${b.x},${b.y}`;
-    }
-    return d;
-  }
   function paint() {
-    const top: Point[] = [], bottom: Point[] = [];
-    const thickness = clamp(width * .055, 24, 64), amplitude = clamp(height * .065, 25, 60);
-    for (let i = 0; i <= 32; i++) {
-      const x = -40 + (width + 80) * i / 32;
-      const phase = (x - spring.x) / Math.max(160, width * .24) + time * .75;
-      const y = spring.y + Math.sin(phase) * amplitude + Math.sin(phase * 1.8 + 1.2) * amplitude * .22;
-      const half = thickness * (.85 + .15 * Math.cos(phase * .7));
-      top.push({ x, y: y - half }); bottom.push({ x, y: y + half });
-    }
-    bottom.reverse();
-    wave.setAttribute('d', `M${top[0].x},${top[0].y}${curve(top)}L${bottom[0].x},${bottom[0].y}${curve(bottom)}Z`);
+    attr(glow, { cx: spring.x, cy: spring.y, r: clamp(width * .055, 42, 72) });
   }
   function reset() {
     target = { x: width * .58, y: height * .48 };
@@ -79,7 +61,7 @@ export function attachHeroFlow(hero: HTMLElement, svg: SVGSVGElement) {
     frame = 0;
     if (!canRun()) return;
     const dt = previous ? Math.min((now - previous) / 1000, .04) : 1 / 60;
-    previous = now; time += dt; spring = stepSpring(spring, target, dt); paint();
+    previous = now; spring = stepSpring(spring, target, dt); paint();
     if (now - lastInteraction < 1200 || Math.hypot(spring.vx, spring.vy) > 1) frame = requestAnimationFrame(tick);
     else previous = 0;
   }
@@ -90,16 +72,17 @@ export function attachHeroFlow(hero: HTMLElement, svg: SVGSVGElement) {
     const x = event.clientX - rect.left, y = event.clientY - rect.top;
     active = x >= 0 && x <= rect.width && y >= 0 && y <= rect.height;
     hero.dataset.fluidActive = String(active);
-    target = { x: clamp(x, 0, width), y: clamp(y, height * .22, height * .8) };
+    target = { x: clamp(x, 0, width), y: clamp(y, 0, height) };
     lastInteraction = performance.now(); hero.dataset.flowExplored = 'true'; wake();
   }
   function down(event: PointerEvent) { touching = event.pointerType === 'touch'; move(event); }
-  function end() { touching = false; }
+  function end(event: PointerEvent) { if (event.pointerType === 'touch') leave(); else touching = false; }
   function leave() { active = false; touching = false; hero.dataset.fluidActive = 'false'; }
   function preference() { stop(); reset(); hero.dataset.fluidActive = 'false'; }
   function visibility() { if (document.hidden) stop(); else { lastInteraction = performance.now(); wake(); } }
   const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) { lastInteraction = performance.now(); wake(); } else stop(); });
   const sizing = new ResizeObserver(resize);
+  hero.dataset.fluidActive = 'false';
   resize(); observer.observe(hero); sizing.observe(hero); sizing.observe(photo);
   // Font loading can change both the mask text and its alignment.
   document.fonts.ready.then(() => { if (!disposed) alignNames(); });

@@ -100,8 +100,8 @@
 .approach { border-top: 1px solid #d6cedd; }
 .hero-flow-hint { font-size: 9px; }
 .hero-flow-hint > span:first-child { font-size: inherit; }
-.hero-with-flow { --fluid-presence: .45; }
-.hero-with-flow[data-fluid-active=true] { --fluid-presence: .85; }
+.hero-with-flow { --fluid-presence: 0; }
+.hero-with-flow[data-fluid-active=true] { --fluid-presence: 1; }
 @media (max-width: 760px) {
   .hero-with-flow .hero-note { width: 300px; max-width: calc(100% - 44px); }
   .hero-note .hero-appointment { min-height: 64px; margin-top: 14px; padding: 19px 18px; font-size: 14px; }

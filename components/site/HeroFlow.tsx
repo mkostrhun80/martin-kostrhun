@@ -13,7 +13,13 @@ export function HeroFlow({ heroRef }: { heroRef: RefObject<HTMLElement | null> }
   return <>
     <svg ref={svgRef} className="hero-flow-reveal hero-fluid-svg" width="100%" height="100%" aria-hidden="true" focusable="false">
       <defs>
-        <path id={`${id}-shapes`} data-wave fill="white" d=""/>
+        <radialGradient id={`${id}-glow`}>
+          <stop offset="0%" stopColor="white" stopOpacity="1"/>
+          <stop offset="40%" stopColor="white" stopOpacity="1"/>
+          <stop offset="70%" stopColor="white" stopOpacity=".45"/>
+          <stop offset="100%" stopColor="white" stopOpacity="0"/>
+        </radialGradient>
+        <circle id={`${id}-shapes`} data-cursor-glow cx="0" cy="0" r="0" fill={`url(#${id}-glow)`}/>
         <mask id={`${id}-outside`} maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%" style={{ maskType: 'luminance' }}>
           <rect width="100%" height="100%" fill="white"/>
           <rect data-outside-photo width="0" height="0" fill="black"/>
@@ -24,12 +30,12 @@ export function HeroFlow({ heroRef }: { heroRef: RefObject<HTMLElement | null> }
         <clipPath id={`${id}-photo`}><rect data-photo-clip width="0" height="0"/></clipPath>
       </defs>
       <g mask={`url(#${id}-outside)`}>
-        <rect width="100%" height="100%" fill="#8024d9" mask={`url(#${id})`}/>
+        <rect width="100%" height="100%" fill="#9d52ff" opacity=".22" mask={`url(#${id})`}/>
       </g>
       <g clipPath={`url(#${id}-photo)`}><g mask={`url(#${id})`}>
         <image data-color-photo href={assets.heroLensPortrait} width="0" height="0" preserveAspectRatio="none"/>
       </g></g>
-      <g mask={`url(#${id})`} className="hero-fluid-type" fill="#fff" aria-hidden="true">
+      <g mask={`url(#${id})`} className="hero-fluid-type" fill="#b77aff" aria-hidden="true">
         <text data-fluid-name="back">MARTIN</text>
         <text data-fluid-name="front">KOSTRHUN.</text>
       </g>

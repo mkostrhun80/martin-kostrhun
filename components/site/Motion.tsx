@@ -27,24 +27,24 @@ export function Motion() {
         const from = origin.getBoundingClientRect(), to = destination.getBoundingClientRect();
         const size = mobile ? 76 : 104;
         const margin = mobile ? 18 : 32;
-        const corner = { x: margin, y: window.innerHeight - size - margin };
+        const corner = { x: margin, y: (window.innerHeight - size) / 2 };
         let x: number, y: number, width: number, height: number, roundness: number, purple: number;
         let reveal = 0;
-        // First collapse into a purple portrait bubble, then pause in the corner.
+        // First collapse into a purple portrait bubble, then pause at the middle of the left edge.
         if (progress < .5) {
           const t = shrinkEase(progress / .5);
           x = mix(from.left, corner.x, t); y = mix(from.top, corner.y, t);
           width = mix(from.width, size, t); height = mix(from.height, size, t);
           roundness = t; purple = t;
           handoff.dataset.phase = 'shrinking';
-        } else if (progress < .64) {
+        } else if (progress < .58) {
           x = corner.x; y = corner.y; width = height = size;
           roundness = purple = 1;
           handoff.dataset.phase = 'corner';
         } else {
           // Jump to the second portrait and pop open with a small overshoot.
           // Start near its upper quarter so the bubble is visible on short screens.
-          const local = gsap.utils.clamp(0, 1, (progress - .64) / .36);
+          const local = gsap.utils.clamp(0, 1, (progress - .58) / .42);
           const t = popEase(local);
           const anchorX = to.left + to.width / 2 - size / 2;
           const anchorY = to.top + Math.min(to.height * .25, window.innerHeight * .17) - size / 2;
