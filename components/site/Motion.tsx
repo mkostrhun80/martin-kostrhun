@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { portraitHandoff } from '@/lib/portrait-handoff';
 
 /** Native document scrolling; sticky content never adds artificial scroll distance. */
 export function Motion() {
@@ -20,44 +21,16 @@ export function Motion() {
       const handoff = sequence.querySelector<HTMLElement>('.hero-photo-handoff')!;
       const destinationImage = handoff.querySelector<HTMLElement>('.handoff-to')!;
       const sourceImage = handoff.querySelector<HTMLElement>('.handoff-from')!;
-      const shrinkEase = gsap.parseEase('power3.inOut');
-      const popEase = gsap.parseEase('back.out(1.35)');
-      const mix = (from: number, to: number, progress: number) => from + (to - from) * progress;
       const drawHandoff = (progress: number) => {
         const from = origin.getBoundingClientRect(), to = destination.getBoundingClientRect();
         const size = mobile ? 76 : 104;
         const margin = mobile ? 18 : 32;
-        const corner = { x: margin, y: (window.innerHeight - size) / 2 };
-        let x: number, y: number, width: number, height: number, roundness: number, purple: number;
-        let reveal = 0;
-        // First collapse into a purple portrait bubble, then pause at the middle of the left edge.
-        if (progress < .5) {
-          const t = shrinkEase(progress / .5);
-          x = mix(from.left, corner.x, t); y = mix(from.top, corner.y, t);
-          width = mix(from.width, size, t); height = mix(from.height, size, t);
-          roundness = t; purple = t;
-          handoff.dataset.phase = 'shrinking';
-        } else if (progress < .58) {
-          x = corner.x; y = corner.y; width = height = size;
-          roundness = purple = 1;
-          handoff.dataset.phase = 'corner';
-        } else {
-          // Jump to the second portrait and pop open with a small overshoot.
-          // Start near its upper quarter so the bubble is visible on short screens.
-          const local = gsap.utils.clamp(0, 1, (progress - .58) / .42);
-          const t = popEase(local);
-          const anchorX = to.left + to.width / 2 - size / 2;
-          const anchorY = to.top + Math.min(to.height * .25, window.innerHeight * .17) - size / 2;
-          x = mix(anchorX, to.left, t); y = mix(anchorY, to.top, t);
-          width = mix(size, to.width, t); height = mix(size, to.height, t);
-          roundness = gsap.utils.clamp(0, 1, 1 - t);
-          purple = roundness;
-          reveal = gsap.utils.clamp(0, 1, local / .28);
-          handoff.dataset.phase = 'popping';
-        }
+        const corner = { x: margin, y: (window.innerHeight - size) / 2, size };
+        const { x, y, width, height, roundness, reveal, phase } = portraitHandoff(progress, from, to, corner);
+        handoff.dataset.phase = phase;
         const active = progress > 0 && progress < 1;
         gsap.set(handoff, { x, y, width, height, borderRadius: `${roundness * 50}%`,
-          '--handoff-tint': purple * .58, '--handoff-ring': `${purple * (mobile ? 5 : 7)}px`,
+          '--handoff-tint': roundness * .58, '--handoff-ring': `${roundness * (mobile ? 5 : 7)}px`,
           visibility: active ? 'visible' : 'hidden' });
         gsap.set(sourceImage, { opacity: 1 - reveal });
         gsap.set(destinationImage, { opacity: reveal });
@@ -65,7 +38,7 @@ export function Motion() {
       };
       const handoffState = { progress: 0 };
       gsap.to(handoffState, { progress: 1, ease: 'none', onUpdate: () => drawHandoff(handoffState.progress),
-        scrollTrigger: { trigger: hero, start: 'top top', endTrigger: '.about-layout', end: 'top 18%', scrub: .2,
+        scrollTrigger: { trigger: hero, start: 'top top', endTrigger: '.about-layout', end: mobile ? 'top 12%' : 'top top', scrub: 1.4,
           onRefresh: () => drawHandoff(handoffState.progress) } });
       gsap.to(hero, { '--hero-scroll-back': mobile ? '-8vw' : '-16vw', '--hero-scroll-front': mobile ? '6vw' : '14vw',
         '--hero-scroll-meta': '-14px', '--hero-scroll-progress': 1, ease: 'none',

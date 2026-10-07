@@ -21,7 +21,7 @@ export function attachHeroFlow(hero: HTMLElement, svg: SVGSVGElement) {
     for (const [key, value] of Object.entries(values)) node.setAttribute(key, value.toFixed(2));
   };
   function paint() {
-    attr(glow, { cx: spring.x, cy: spring.y, r: clamp(width * .055, 42, 72) });
+    attr(glow, { cx: spring.x, cy: spring.y, r: clamp(width * .09, 68, 120) });
   }
   function reset() {
     target = { x: width * .58, y: height * .48 };
