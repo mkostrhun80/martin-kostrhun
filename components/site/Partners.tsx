@@ -1,6 +1,7 @@
 'use client';
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { sitePath } from '@/lib/site-path';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { partners, partnerCategories, partnersSource, type PartnerCategory } from '@/lib/partners';
@@ -58,7 +59,7 @@ export function Partners() {
       tabIndex={duplicate ? -1 : undefined} aria-pressed={selected === partner.name} aria-label={partner.name}
       title={partner.name} onClick={() => setSelected(selected === partner.name ? null : partner.name)}>
       <div className="partner-logo" aria-hidden="true">{partner.logo ? <img className={partner.logoLight ? 'logo-light' : undefined}
-        src={partner.logo} alt="" loading="lazy" width="160" height="64"/> : <strong>{partner.shortName}</strong>}</div>
+        src={sitePath(partner.logo)} alt="" loading="lazy" width="160" height="64"/> : <strong>{partner.shortName}</strong>}</div>
       <span className="partner-name" aria-hidden="true">{partner.shortName}</span>
     </button></li>;
   }
