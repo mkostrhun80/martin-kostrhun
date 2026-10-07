@@ -9,7 +9,7 @@ const result = spawnSync(process.execPath, [
   env: {
     ...process.env,
     GITHUB_PAGES: 'true',
-    NEXT_PUBLIC_BASE_PATH: process.env.NEXT_PUBLIC_BASE_PATH ?? '/finance-hun',
+    NEXT_PUBLIC_BASE_PATH: process.env.NEXT_PUBLIC_BASE_PATH ?? '/martin-kostrhun',
     NEXT_TELEMETRY_DISABLED: '1',
   },
 });
