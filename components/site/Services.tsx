@@ -7,7 +7,6 @@ export function Services() {
   return <section id="sluzby" className="section services services-editorial">
     <div className="section-top"><p className="eyebrow">03 / S ČÍM POMÁHÁM</p><p>To, na čem vám záleží.<br/>To, co má smysl řešit.</p></div>
     <p className="services-statement">NEJDŘÍV CÍL.<br/><em>POTOM ŘEŠENÍ.</em></p>
-    <nav className="services-index" aria-label="Přejít na službu">{services.map((s,i)=><a key={s.id} href={`#sluzba-${s.id}`}><span>0{i+1}</span>{s.title}<span aria-hidden="true">↘</span></a>)}</nav>
     {['Budovat', 'Chránit'].map((group, gi) => <div className={`service-chapter ${gi ? 'service-chapter-protect' : ''}`} key={group}>
       <div className="service-chapter-heading"><span className="eyebrow">{gi ? '04 — 06 / JISTOTA' : '01 — 03 / MOŽNOSTI'}</span><h2 className="display">{group}<em>.</em></h2>
         <figure><img src={gi ? assets.aboutPortrait : assets.editorialPortrait01} alt="" width="1200" height="800" loading="lazy"/>{assets.isPlaceholder && <figcaption>ILUSTRAČNÍ PORTRÉT</figcaption>}</figure>
