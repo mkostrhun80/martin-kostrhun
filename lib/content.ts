@@ -7,10 +7,10 @@ export const services = [
  {id:'podnikani', group:'Chránit', title:'Podnikatelské finance', short:'Prostor věnovat se podnikání.', description:'Pomáhám řešit finanční ochranu podnikatelů, pojištění odpovědnosti, majetku a další související oblasti.', position:'65% 25%'},
 ];
 export const steps = [
- ['Pochopit','Nejdřív potřebuji vědět, kde jste a kam se chcete dostat.'],
- ['Porovnat','Dívám se na dostupné možnosti a vysvětluji jejich výhody i rizika.'],
- ['Nastavit','Společně vybereme řešení, které odpovídá vašim skutečným potřebám.'],
- ['Starat se','Spolupráce podpisem smlouvy nekončí. Finance se mění spolu s vaším životem.'],
+ ['Úvodní schůzka','Nejdřív potřebuji vědět, kde jste a kam se chcete dostat.'],
+ ['Návrh možností','Dívám se na dostupné možnosti a vysvětluji jejich výhody i rizika.'],
+ ['Realizace','Vybrané řešení společně uvedeme do praxe. Provedu vás jednotlivými kroky i potřebnými dokumenty.'],
+ ['Dlouhodobá péče','Spolupráce podpisem smlouvy nekončí. Finance se mění spolu s vaším životem.'],
 ];
 export const documents = [
  {title:'Právní informace', href:'/dokumenty/pravni-informace'},

@@ -1,0 +1,120 @@
+/* Shared action buttons with a sliding highlight and tactile hover. */
+.site-button {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  max-width: 100%;
+  padding: 15px 24px;
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  background: var(--primary);
+  color: white;
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-align: center;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+}
+.site-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 20%, #ffffff35 50%, transparent 80%);
+  transform: translateX(-120%);
+  transition: transform .6s ease;
+}
+.site-button:is(:hover, :focus-visible) {
+  transform: translateY(-3px);
+  background: #6420b3;
+  box-shadow: 0 9px 24px #7821d92e;
+}
+.site-button:is(:hover, :focus-visible)::before { transform: translateX(120%); }
+.site-button:active { transform: translateY(0) scale(.98); }
+.hero-with-flow .hero-note { width: 340px; max-width: calc(100% - 88px); }
+.hero-note .hero-appointment {
+  width: 100%;
+  min-height: 70px;
+  margin-top: 24px;
+  padding: 22px 28px;
+  border: 2px solid #b47aff;
+  border-radius: 12px;
+  background: #7821d9;
+  color: white;
+  font-size: 16px;
+  letter-spacing: .045em;
+  box-shadow: 0 12px 35px #7821d952;
+  animation: appointment-halo 3.2s ease-in-out infinite;
+}
+.hero-note .tiny-cross { display: none; }
+@keyframes appointment-halo {
+  0%, 100% { box-shadow: 0 12px 35px #7821d952, 0 0 0 0 #8b2cff30; }
+  50% { box-shadow: 0 15px 42px #7821d975, 0 0 0 9px #8b2cff00; }
+}
+.hero-bottom { z-index: 6; }
+.hero-bottom .site-button-quiet {
+  min-height: 34px;
+  padding: 8px 13px;
+  border-color: #15101835;
+  background: #f5f3f680;
+  color: var(--ink);
+  font-size: 9px;
+}
+.hero-bottom .site-button-quiet:hover { background: white; }
+.service-item .site-button { margin-top: 22px; font-size: 11px; }
+.partners .section-top .site-button { padding: 14px 20px; }
+.partner-belt-controls .site-button { padding: 14px 20px; border: 1px solid var(--primary); background: var(--primary); color: white; }
+.partners-bottom .site-button { padding: 12px 18px; font-size: 10px; }
+.social .site-button { gap: 0; padding: 18px 28px; font-size: 13px; border: 1px solid var(--primary); }
+.contact-intro .site-button { margin-top: 24px; }
+.contact { color: var(--ink); }
+.contact-links > div > .site-button { margin-left: auto; }
+.contact-intro p { color: #625967; }
+.contact-links { border-color: var(--border); }
+.contact-links > .contact-action {
+  margin-top: 16px;
+  padding: 24px;
+  border: 1px solid #cfc5d8;
+  border-radius: 10px;
+  background: #ece7f1;
+  transition: background .25s, transform .25s, border-color .25s;
+}
+.contact-links > .contact-action:is(:hover, :focus-visible) { background: #e1d2f0; transform: translateX(4px); border-color: var(--primary); }
+.contact-links > .contact-action > span, .contact-links > div > span { color: #655c6f; }
+.menu-links > a { transition: background .25s, padding .25s; }
+.menu-links > a:is(:hover, :focus-visible) { background: #8b2cff16; padding-left: 18px; }
+
+/* Tighter framing keeps the whole figure, from head to shoes, in view. */
+.about-portrait { height: auto; width: 100%; aspect-ratio: 2 / 3; }
+.about-portrait img, .hero-photo-handoff .handoff-to {
+  transform: scale(1.65);
+  transform-origin: 50% 68%;
+  object-position: center;
+}
+.approach-heading h2 { font-size: clamp(64px, 7.1vw, 110px); line-height: .96; }
+.approach { border-top: 1px solid #d6cedd; }
+.hero-flow-hint { font-size: 9px; }
+.hero-flow-hint > span:first-child { font-size: inherit; }
+.hero-with-flow { --fluid-presence: .45; }
+.hero-with-flow[data-fluid-active=true] { --fluid-presence: .85; }
+@media (max-width: 760px) {
+  .hero-with-flow .hero-note { width: 300px; max-width: calc(100% - 44px); }
+  .hero-note .hero-appointment { min-height: 64px; margin-top: 14px; padding: 19px 18px; font-size: 14px; }
+  .hero-with-flow .hero-note p { width: fit-content; font-size: 23px; }
+  .approach-heading h2 { font-size: 14vw; }
+  .about-portrait { height: auto; width: 100%; }
+  .partners-bottom { flex-wrap: wrap; gap: 20px; }
+  .contact-links > .contact-action { padding: 20px 16px; }
+  .contact-links > div > .site-button { margin: 20px 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-button, .site-button::before, .contact-action, .menu-links > a { transition: none; }
+  .hero-note .hero-appointment { animation: none; }
+  .site-button:is(:hover, :focus-visible), .site-button:active, .contact-links > .contact-action:is(:hover, :focus-visible) { transform: none; }
+  .hero-fluid-svg { display: none; }
+}

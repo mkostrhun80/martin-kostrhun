@@ -45,7 +45,7 @@
  .hero-photo-layer img,.about-portrait img,.editorial-sticky img,.service-chapter-heading img{transition:none}
 }
 
-/* Hero-only replacement: image reveal through five independent metaballs. */
+/* A single wave reveals colour across the portrait and typography. */
 .hero-fluid-svg{z-index:4;overflow:hidden;background:none;opacity:calc(clamp(0,calc(1 - var(--hero-scroll-progress,0) * 1.8),1) * var(--fluid-presence,.8));transition:opacity .45s}
 .hero-with-flow[data-fluid-active=true]{--fluid-presence:1}
 .hero-with-flow[data-fluid-active=false]{--fluid-presence:0}

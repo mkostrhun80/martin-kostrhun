@@ -13,13 +13,7 @@ export function HeroFlow({ heroRef }: { heroRef: RefObject<HTMLElement | null> }
   return <>
     <svg ref={svgRef} className="hero-flow-reveal hero-fluid-svg" width="100%" height="100%" aria-hidden="true" focusable="false">
       <defs>
-        <filter id={`${id}-goo`} x="-30%" y="-30%" width="160%" height="160%" colorInterpolationFilters="sRGB">
-          <feGaussianBlur stdDeviation="8"/>
-          <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -8"/>
-        </filter>
-        <g id={`${id}-shapes`} filter={`url(#${id}-goo)`} fill="white">
-          {[0,1,2,3,4].map(i => <ellipse key={i} data-metaball={i} cx="0" cy="0" rx="0" ry="0"/>)}
-        </g>
+        <path id={`${id}-shapes`} data-wave fill="white" d=""/>
         <mask id={`${id}-outside`} maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%" style={{ maskType: 'luminance' }}>
           <rect width="100%" height="100%" fill="white"/>
           <rect data-outside-photo width="0" height="0" fill="black"/>
@@ -40,7 +34,7 @@ export function HeroFlow({ heroRef }: { heroRef: RefObject<HTMLElement | null> }
         <text data-fluid-name="front">KOSTRHUN.</text>
       </g>
     </svg>
-    <div className="hero-flow-hint" aria-hidden="true"><span>↗</span><span className="pointer-hint">POHYBEM OBJEVUJ</span><span className="touch-hint">DOTYKEM OBJEVUJ</span></div>
+    <div className="hero-flow-hint" aria-hidden="true"><span className="pointer-hint">POHYBEM OBJEVUJ</span><span className="touch-hint">DOTYKEM OBJEVUJ</span></div>
   </>;
 }
 
