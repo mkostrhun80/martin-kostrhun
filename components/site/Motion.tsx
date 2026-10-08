@@ -94,10 +94,7 @@ export function Motion() {
       const contact = gsap.timeline({ scrollTrigger: { trigger: '.contact', start: 'top 96%', end: 'top 18%', scrub: .6 } });
       contact.from('.contact-curtain', { clipPath: 'inset(15% 0 0 0 round 50% 50% 0 0)', duration: .5, ease: 'power3.out' }, 0)
         .from('.contact-composition .motion-title-line', { clipPath: 'inset(0 0 100% 0)', y: 28, stagger: .12, duration: .5, ease: 'power3.out' }, .12)
-        .from('.contact-composition figure', { clipPath: 'inset(0% 0% 100% 0%)', duration: .5, ease: 'power3.inOut' }, .2)
-        .from('.contact-intro', { opacity: .2, duration: .3 }, .45);
-      gsap.from('.contact-links', { opacity: .55, scrollTrigger: {
-        trigger: '.contact-links', start: 'top 97%', end: 'top 75%', scrub: .4 } });
+        .from('.contact-composition figure', { clipPath: 'inset(0% 0% 100% 0%)', duration: .5, ease: 'power3.inOut' }, .2);
       return () => {
         delete sequence.dataset.handoff;
         delete handoff.dataset.phase;

@@ -72,20 +72,20 @@
 .partners-bottom .site-button { padding: 12px 18px; font-size: 10px; }
 .social .site-button { gap: 0; padding: 18px 28px; font-size: 13px; border: 1px solid var(--primary); }
 .contact-intro .site-button { margin-top: 24px; }
-.contact { color: var(--ink); }
+.contact { background: var(--ink); color: var(--paper); }
 .contact-links > div > .site-button { margin-left: auto; }
-.contact-intro p { color: #625967; }
-.contact-links { border-color: var(--border); }
+.contact-intro p { color: #e5dfec; }
+.contact-links { border-color: #ffffff35; }
 .contact-links > .contact-action {
   margin-top: 16px;
   padding: 24px;
-  border: 1px solid #cfc5d8;
+  border: 1px solid #ffffff35;
   border-radius: 10px;
-  background: #ece7f1;
+  background: #211a29;
   transition: background .25s, transform .25s, border-color .25s;
 }
-.contact-links > .contact-action:is(:hover, :focus-visible) { background: #e1d2f0; transform: translateX(4px); border-color: var(--primary); }
-.contact-links > .contact-action > span, .contact-links > div > span { color: #655c6f; }
+.contact-links > .contact-action:is(:hover, :focus-visible) { background: #302039; transform: translateX(4px); border-color: #ab66ff; }
+.contact-links > .contact-action > span, .contact-links > div > span { color: #d4cadf; }
 .menu-links > a { transition: background .25s, padding .25s; }
 .menu-links > a:is(:hover, :focus-visible) { background: #8b2cff16; padding-left: 18px; }
 
