@@ -1,5 +1,6 @@
 'use client';
 /* eslint-disable @next/next/no-img-element */
+import { ButtonLabel } from './ButtonLabel';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { sitePath } from '@/lib/site-path';
 import { gsap } from 'gsap';
@@ -65,7 +66,7 @@ export function Partners() {
   }
   return <section ref={root} id="zazemi" className="section partners partners-with-belt" data-expanded={expanded} data-paused={paused}>
     <div className="section-top"><p className="eyebrow">ZÁZEMÍ / PARTNEŘI eDO FINANCE</p>
-      <a className="site-button" href={partnersSource} target="_blank" rel="noreferrer">OFICIÁLNÍ PŘEHLED</a></div>
+      <a className="site-button" href={partnersSource} target="_blank" rel="noreferrer"><ButtonLabel>OFICIÁLNÍ PŘEHLED</ButtonLabel></a></div>
     <div className="partners-heading">
       <h2 className="display"><span className="partners-title-line"><span>NAPŘÍČ</span></span><span className="partners-title-line"><span>FINANČNÍM</span></span><span className="partners-title-line"><span>TRHEM<em>.</em></span></span></h2>
       <div className="partners-count"><span className="partners-orbit" aria-hidden="true">✳</span><strong>{partners.length}</strong><p>partnerů eDO finance<br/>5 oblastí. Široké možnosti.</p></div>
@@ -88,12 +89,12 @@ export function Partners() {
     </div>
     <div className="partner-belt-controls">
       <button className="site-button" type="button" aria-expanded={expanded} aria-controls="partner-overview" onClick={toggleExpanded}>
-        {expanded ? 'SKRÝT' : 'ZOBRAZIT VŠECHNY'}
+        <ButtonLabel>{expanded ? 'SKRÝT' : 'ZOBRAZIT VŠECHNY'}</ButtonLabel>
       </button>
       {!expanded && <button className="partner-belt-pause" type="button" aria-pressed={paused} onClick={() => setPaused(!paused)}>
         {paused ? 'SPUSTIT POHYB' : 'POZASTAVIT POHYB'}
       </button>}
     </div>
-    <div className="partners-bottom"><p className="partners-note">Konkrétní možnosti vždy posuzujeme podle vaší situace a aktuální nabídky.</p><a className="site-button" href={partnersSource} target="_blank" rel="noreferrer">PARTNEŘI eDO FINANCE</a></div>
+    <div className="partners-bottom"><p className="partners-note">Konkrétní možnosti vždy posuzujeme podle vaší situace a aktuální nabídky.</p><a className="site-button" href={partnersSource} target="_blank" rel="noreferrer"><ButtonLabel>PARTNEŘI eDO FINANCE</ButtonLabel></a></div>
   </section>;
 }

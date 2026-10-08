@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { ButtonLabel } from './ButtonLabel';
 import { services } from '@/lib/content';
 import { assets } from '@/lib/site-config';
 
@@ -13,7 +14,7 @@ export function Services() {
       </div>
       <div className="service-chapter-items">{services.filter(s=>s.group===group).map((s,i)=><article className="service-item" id={`sluzba-${s.id}`} key={s.id}>
         <span className="service-item-number" aria-hidden="true">0{gi*3+i+1}</span>
-        <div><h3>{s.title}</h3><p className="service-item-short">{s.short}</p><p className="service-item-description">{s.description}</p><a className="site-button" href="#kontakt">PROBRAT MOŽNOSTI</a></div>
+        <div><h3>{s.title}</h3><p className="service-item-short">{s.short}</p><p className="service-item-description">{s.description}</p><a className="site-button" href="#kontakt"><ButtonLabel>PROBRAT MOŽNOSTI</ButtonLabel></a></div>
       </article>)}</div>
     </div>)}
   </section>;

@@ -1,4 +1,4 @@
-/* Shared action buttons with a sliding highlight and tactile hover. */
+/* Shared action buttons with a vertical rolling label. */
 .site-button {
   position: relative;
   isolation: isolate;
@@ -18,24 +18,33 @@
   letter-spacing: .04em;
   text-align: center;
   overflow: hidden;
-  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
-}
-.site-button::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(110deg, transparent 20%, #ffffff35 50%, transparent 80%);
-  transform: translateX(-120%);
-  transition: transform .6s ease;
+  transition: background .25s ease;
 }
 .site-button:is(:hover, :focus-visible) {
-  transform: translateY(-3px);
   background: #6420b3;
-  box-shadow: 0 9px 24px #7821d92e;
 }
-.site-button:is(:hover, :focus-visible)::before { transform: translateX(120%); }
-.site-button:active { transform: translateY(0) scale(.98); }
+.site-button:focus-visible, .submit-button:focus-visible {
+  outline: 2px solid #b77aff;
+  outline-offset: 4px;
+}
+.button-label {
+  display: inline-grid;
+  overflow: hidden;
+  vertical-align: middle;
+  line-height: 1.4;
+}
+.button-label-line {
+  display: block;
+  grid-area: 1 / 1;
+  transition: transform .48s cubic-bezier(.22, 1, .36, 1);
+}
+.button-label-copy { transform: translateY(100%); }
+:is(.site-button, .submit-button):is(:hover, :focus-visible):not(:disabled) .button-label-line {
+  transform: translateY(-100%);
+}
+:is(.site-button, .submit-button):is(:hover, :focus-visible):not(:disabled) .button-label-copy {
+  transform: translateY(0);
+}
 .hero-with-flow .hero-note { width: 340px; max-width: calc(100% - 88px); }
 .hero-note .hero-appointment {
   width: 100%;
@@ -140,7 +149,9 @@
   .contact-links .contact-value { font-size: 13px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .site-button, .site-button::before, .contact-action, .menu-links > a { transition: none; }
+  .site-button, .button-label-line, .contact-action, .menu-links > a { transition: none; }
+  :is(.site-button, .submit-button):is(:hover, :focus-visible):not(:disabled) .button-label-line { transform: none; }
+  .button-label-copy { display: none; }
   .hero-note .hero-appointment { animation: none; }
   .site-button:is(:hover, :focus-visible), .site-button:active, .contact-links > .contact-action:is(:hover, :focus-visible) { transform: none; }
   .hero-fluid-svg { display: none; }
