@@ -243,3 +243,28 @@
     text-align: center;
   }
 }
+
+/* On touch screens, every overlapping glyph stays distinct on light and dark
+   parts of the portrait; this registered layer follows the handoff as well. */
+.hero-photo-type { display: none; }
+@media (max-width: 760px) {
+  .hero-with-flow > .hero-artwork > .hero-name {
+    color: var(--ink);
+    mix-blend-mode: normal;
+  }
+  .hero-photo-type {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    pointer-events: none;
+    clip-path: var(--hero-photo-type-clip, inset(100%));
+  }
+  .hero-photo-type .hero-name {
+    color: #b77aff;
+    mix-blend-mode: normal;
+    -webkit-text-stroke: .6px #29163d;
+    paint-order: stroke fill;
+  }
+  .hero-photo-type .hero-name-dot { color: var(--purple); }
+}

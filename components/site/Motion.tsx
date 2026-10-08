@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { portraitHandoff } from '@/lib/portrait-handoff';
+import { syncHeroPhotoType } from '@/lib/hero-photo-type';
 
 /** Native document scrolling; sticky content never adds artificial scroll distance. */
 export function Motion() {
@@ -33,6 +34,8 @@ export function Motion() {
         const radiusX = photoRadius + (width / 2 - photoRadius) * roundness;
         const radiusY = photoRadius + (height / 2 - photoRadius) * roundness;
         handoff.style.borderRadius = `${radiusX}px / ${radiusY}px`;
+        syncHeroPhotoType(hero, active ? { left: x, top: y, width, height } : from,
+          active ? radiusX : photoRadius, active ? radiusY : photoRadius);
         gsap.set(handoff, { x, y, width, height,
           '--handoff-tint': roundness * .58, '--handoff-ring': `${roundness * (mobile ? 5 : 7)}px`,
           visibility: active ? 'visible' : 'hidden' });

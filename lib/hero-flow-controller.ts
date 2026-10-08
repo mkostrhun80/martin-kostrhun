@@ -1,4 +1,5 @@
 import { stepSpring, type LensSpring } from './lens-physics';
+import { syncHeroPhotoType } from './hero-photo-type';
 
 const clamp = (n: number, low: number, high: number) => Math.max(low, Math.min(high, n));
 type Point = { x: number; y: number };
@@ -36,6 +37,9 @@ export function attachHeroFlow(hero: HTMLElement, svg: SVGSVGElement) {
     const style = getComputedStyle(photo);
     box = { x: parseFloat(style.left), y: parseFloat(style.top), w: parseFloat(style.width), h: parseFloat(style.height) };
     const radius = parseFloat(style.borderTopLeftRadius) || 0;
+    if (hero.closest('.hero-about-sequence')?.getAttribute('data-handoff') !== 'moving') {
+      syncHeroPhotoType(hero, photo.getBoundingClientRect(), radius);
+    }
     attr(clip, { x: box.x, y: box.y, width: box.w, height: box.h, rx: radius, ry: radius });
     attr(outside, { x: box.x, y: box.y, width: box.w, height: box.h, rx: radius, ry: radius });
     const w = Math.max(box.w, box.h * 2 / 3), h = w * 1.5;
@@ -71,6 +75,7 @@ export function attachHeroFlow(hero: HTMLElement, svg: SVGSVGElement) {
   const sizing = new ResizeObserver(resize);
   hero.dataset.fluidActive = 'false';
   resize(); observer.observe(hero); sizing.observe(hero); sizing.observe(photo);
+  photo.addEventListener('animationend', resize);
   hero.addEventListener('pointermove', move, { passive: true });
   hero.addEventListener('pointerdown', down, { passive: true });
   hero.addEventListener('pointerup', end, { passive: true });
@@ -80,10 +85,11 @@ export function attachHeroFlow(hero: HTMLElement, svg: SVGSVGElement) {
   document.addEventListener('visibilitychange', visibility);
   return () => {
     disposed = true; stop(); observer.disconnect(); sizing.disconnect();
+    photo.removeEventListener('animationend', resize);
     hero.removeEventListener('pointermove', move); hero.removeEventListener('pointerdown', down);
     hero.removeEventListener('pointerup', end); hero.removeEventListener('pointercancel', end); hero.removeEventListener('pointerleave', leave);
     reduced.removeEventListener('change', preference); document.removeEventListener('visibilitychange', visibility);
     delete hero.dataset.fluidActive; delete hero.dataset.flowExplored;
-    for (const key of ['--cursor-glow-x', '--cursor-glow-y', '--cursor-glow-radius']) hero.style.removeProperty(key);
+    for (const key of ['--cursor-glow-x', '--cursor-glow-y', '--cursor-glow-radius', '--hero-photo-type-clip']) hero.style.removeProperty(key);
   };
 }

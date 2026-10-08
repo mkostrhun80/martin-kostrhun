@@ -18,6 +18,10 @@ function HeroArtwork({ alternate = false, heroRef }: { alternate?: boolean; hero
     </div>
     {heroRef && <HeroFlow heroRef={heroRef}/>}
     <span className="hero-name hero-name-front">KOSTRHUN<span className="hero-name-dot">.</span></span>
+    <div className="hero-photo-type" aria-hidden="true">
+      <span className="hero-name hero-name-back">MARTIN</span>
+      <span className="hero-name hero-name-front">KOSTRHUN<span className="hero-name-dot">.</span></span>
+    </div>
   </div>;
 }
 
