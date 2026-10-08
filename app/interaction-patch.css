@@ -55,6 +55,5 @@
 
 /* Keep the original neutral/purple palette when the fluid fill crosses type. */
 .hero-with-flow>.hero-artwork>.hero-name{color:#eae6ef}
-.hero-fluid-type{pointer-events:none}
 
 .hero-with-flow>.hero-artwork>.hero-name .hero-name-dot{color:var(--purple);mix-blend-mode:normal}

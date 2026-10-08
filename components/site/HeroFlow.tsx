@@ -35,11 +35,11 @@ export function HeroFlow({ heroRef }: { heroRef: RefObject<HTMLElement | null> }
       <g clipPath={`url(#${id}-photo)`}><g mask={`url(#${id})`}>
         <image data-color-photo href={assets.heroLensPortrait} width="0" height="0" preserveAspectRatio="none"/>
       </g></g>
-      <g mask={`url(#${id})`} className="hero-fluid-type" fill="#b77aff" aria-hidden="true">
-        <text data-fluid-name="back">MARTIN</text>
-        <text data-fluid-name="front">KOSTRHUN.</text>
-      </g>
     </svg>
+    <div className="hero-glow-type" aria-hidden="true">
+      <span className="hero-name hero-name-back" data-glow-name="back">MARTIN</span>
+      <span className="hero-name hero-name-front" data-glow-name="front">KOSTRHUN<span className="hero-name-dot">.</span></span>
+    </div>
     <div className="hero-flow-hint" aria-hidden="true"><span className="pointer-hint">POHYBEM OBJEVUJ</span><span className="touch-hint">DOTYKEM OBJEVUJ</span></div>
   </>;
 }

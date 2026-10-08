@@ -10,7 +10,6 @@ export function attachHeroFlow(hero: HTMLElement, svg: SVGSVGElement) {
   const clip = svg.querySelector<SVGRectElement>('[data-photo-clip]')!;
   const outside = svg.querySelector<SVGRectElement>('[data-outside-photo]')!;
   const image = svg.querySelector<SVGImageElement>('[data-color-photo]')!;
-  const nameCopies = [...svg.querySelectorAll<SVGTextElement>('[data-fluid-name]')];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let box = { x: 0, y: 0, w: 1, h: 1 }, width = 1, height = 1;
   let target: Point = { x: 0, y: 0 };
@@ -21,29 +20,16 @@ export function attachHeroFlow(hero: HTMLElement, svg: SVGSVGElement) {
     for (const [key, value] of Object.entries(values)) node.setAttribute(key, value.toFixed(2));
   };
   function paint() {
-    attr(glow, { cx: spring.x, cy: spring.y, r: clamp(width * .09, 68, 120) });
+    const radius = clamp(width * .09, 68, 120);
+    attr(glow, { cx: spring.x, cy: spring.y, r: radius });
+    // HTML copies share the originals' font/layout and scroll transforms.
+    hero.style.setProperty('--cursor-glow-x', `${spring.x.toFixed(2)}px`);
+    hero.style.setProperty('--cursor-glow-y', `${spring.y.toFixed(2)}px`);
+    hero.style.setProperty('--cursor-glow-radius', `${radius.toFixed(2)}px`);
   }
   function reset() {
     target = { x: width * .58, y: height * .48 };
     spring = { ...target, vx: 0, vy: 0 }; paint();
-  }
-  function alignNames() {
-    const origin = hero.getBoundingClientRect();
-    nameCopies.forEach(copy => {
-      const source = hero.querySelector<HTMLElement>(copy.dataset.fluidName === 'back' ? '.hero-artwork > .hero-name-back' : '.hero-artwork > .hero-name-front')!;
-      const style = getComputedStyle(source);
-      // A text range includes font ascenders/descenders, unlike the compressed
-      // CSS line box used by the large display names.
-      const range = document.createRange();
-      range.selectNodeContents(source);
-      const bounds = range.getBoundingClientRect();
-      copy.style.fontFamily = style.fontFamily; copy.style.fontSize = style.fontSize;
-      copy.style.fontWeight = style.fontWeight; copy.style.letterSpacing = style.letterSpacing;
-      copy.setAttribute('x', '0'); copy.setAttribute('y', '0'); copy.removeAttribute('textLength');
-      const ink = copy.getBBox();
-      attr(copy, { x: bounds.left - origin.left - ink.x, y: bounds.top - origin.top - ink.y });
-      copy.setAttribute('textLength', bounds.width.toFixed(2)); copy.setAttribute('lengthAdjust', 'spacing');
-    });
   }
   function resize() {
     width = hero.clientWidth; height = hero.clientHeight;
@@ -53,7 +39,7 @@ export function attachHeroFlow(hero: HTMLElement, svg: SVGSVGElement) {
     attr(outside, { x: box.x, y: box.y, width: box.w, height: box.h });
     const w = Math.max(box.w, box.h * 2 / 3), h = w * 1.5;
     attr(image, { x: box.x + (box.w - w) * .5, y: box.y + (box.h - h) * .75, width: w, height: h });
-    alignNames(); reset();
+    reset();
   }
   const stop = () => { cancelAnimationFrame(frame); frame = 0; previous = 0; };
   const canRun = () => visible && !disposed && !document.hidden && !reduced.matches;
@@ -84,8 +70,6 @@ export function attachHeroFlow(hero: HTMLElement, svg: SVGSVGElement) {
   const sizing = new ResizeObserver(resize);
   hero.dataset.fluidActive = 'false';
   resize(); observer.observe(hero); sizing.observe(hero); sizing.observe(photo);
-  // Font loading can change both the mask text and its alignment.
-  document.fonts.ready.then(() => { if (!disposed) alignNames(); });
   hero.addEventListener('pointermove', move, { passive: true });
   hero.addEventListener('pointerdown', down, { passive: true });
   hero.addEventListener('pointerup', end, { passive: true });
@@ -99,5 +83,6 @@ export function attachHeroFlow(hero: HTMLElement, svg: SVGSVGElement) {
     hero.removeEventListener('pointerup', end); hero.removeEventListener('pointercancel', end); hero.removeEventListener('pointerleave', leave);
     reduced.removeEventListener('change', preference); document.removeEventListener('visibilitychange', visibility);
     delete hero.dataset.fluidActive; delete hero.dataset.flowExplored;
+    for (const key of ['--cursor-glow-x', '--cursor-glow-y', '--cursor-glow-radius']) hero.style.removeProperty(key);
   };
 }

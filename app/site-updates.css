@@ -73,19 +73,45 @@
 .social .site-button { gap: 0; padding: 18px 28px; font-size: 13px; border: 1px solid var(--primary); }
 .contact-intro .site-button { margin-top: 24px; }
 .contact { background: var(--ink); color: var(--paper); }
-.contact-links > div > .site-button { margin-left: auto; }
 .contact-intro p { color: #e5dfec; }
 .contact-links { border-color: #ffffff35; }
 .contact-links > .contact-action {
   margin-top: 16px;
-  padding: 24px;
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px;
+  min-height: 80px;
+  padding: 16px 20px;
   border: 1px solid #ffffff35;
   border-radius: 10px;
   background: #211a29;
   transition: background .25s, transform .25s, border-color .25s;
 }
 .contact-links > .contact-action:is(:hover, :focus-visible) { background: #302039; transform: translateX(4px); border-color: #ab66ff; }
-.contact-links > .contact-action > span, .contact-links > div > span { color: #d4cadf; }
+.contact-links > .contact-action > span {
+  color: #d4cadf;
+  margin: 0;
+  width: auto;
+  min-width: 0;
+  font-size: 9px;
+  letter-spacing: .06em;
+}
+.contact-links .contact-value {
+  min-width: 0;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+.contact-links .site-button-small {
+  min-height: 34px;
+  margin: 0;
+  padding: 9px 14px;
+  font-size: 9px;
+}
 .menu-links > a { transition: background .25s, padding .25s; }
 .menu-links > a:is(:hover, :focus-visible) { background: #8b2cff16; padding-left: 18px; }
 
@@ -109,8 +135,9 @@
   .approach-heading h2 { font-size: 14vw; }
   .about-portrait { height: auto; width: 100%; }
   .partners-bottom { flex-wrap: wrap; gap: 20px; }
-  .contact-links > .contact-action { padding: 20px 16px; }
-  .contact-links > div > .site-button { margin: 20px 0 0; }
+  .contact-links > .contact-action { grid-template-columns: minmax(0, 1fr) auto; gap: 6px 14px; min-height: 0; padding: 16px; }
+  .contact-links > .contact-action > span { grid-column: 1 / -1; }
+  .contact-links .contact-value { font-size: 13px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .site-button, .site-button::before, .contact-action, .menu-links > a { transition: none; }
@@ -118,3 +145,20 @@
   .site-button:is(:hover, :focus-visible), .site-button:active, .contact-links > .contact-action:is(:hover, :focus-visible) { transform: none; }
   .hero-fluid-svg { display: none; }
 }
+
+/* Registered HTML typography keeps the highlight on the original glyphs,
+   including Safari font metrics and the shared scroll transforms. */
+.hero-glow-type {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle var(--cursor-glow-radius, 0px) at var(--cursor-glow-x, 0px) var(--cursor-glow-y, 0px), #000 0%, #000 40%, #00000073 70%, transparent 100%);
+  mask-image: radial-gradient(circle var(--cursor-glow-radius, 0px) at var(--cursor-glow-x, 0px) var(--cursor-glow-y, 0px), #000 0%, #000 40%, #00000073 70%, transparent 100%);
+  opacity: calc(clamp(0, calc(1 - var(--hero-scroll-progress, 0) * 1.8), 1) * var(--fluid-presence, 0));
+  transition: opacity .45s;
+}
+.hero-glow-type .hero-name { color: #b77aff; mix-blend-mode: normal; }
+.hero-glow-type .hero-name-dot { color: inherit; }
+.hero-about-sequence[data-handoff=moving] .hero-glow-type { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) { .hero-glow-type { display: none; } }
