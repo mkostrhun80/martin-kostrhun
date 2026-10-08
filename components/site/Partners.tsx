@@ -65,11 +65,11 @@ export function Partners() {
     </button></li>;
   }
   return <section ref={root} id="zazemi" className="section partners partners-with-belt" data-expanded={expanded} data-paused={paused}>
-    <div className="section-top"><p className="eyebrow">ZÁZEMÍ / PARTNEŘI eDO FINANCE</p>
-      <a className="site-button" href={partnersSource} target="_blank" rel="noreferrer"><ButtonLabel>OFICIÁLNÍ PŘEHLED</ButtonLabel></a></div>
+    <div className="section-top"><p className="eyebrow">ZÁZEMÍ / PARTNEŘI PRO SPOLUPRÁCI</p>
+      <a className="site-button" href={partnersSource} target="_blank" rel="noreferrer"><ButtonLabel>SÍŤ eDO FINANCE</ButtonLabel></a></div>
     <div className="partners-heading">
       <h2 className="display"><span className="partners-title-line"><span>NAPŘÍČ</span></span><span className="partners-title-line"><span>FINANČNÍM</span></span><span className="partners-title-line"><span>TRHEM<em>.</em></span></span></h2>
-      <div className="partners-count"><span className="partners-orbit" aria-hidden="true">✳</span><strong>{partners.length}</strong><p>partnerů eDO finance<br/>5 oblastí. Široké možnosti.</p></div>
+      <div className="partners-count"><span className="partners-orbit" aria-hidden="true">✳</span><strong>{partners.length}</strong><p>partnerů<br/>5 oblastí. Široké možnosti.</p></div>
     </div>
     <div ref={viewport} id="partner-overview" className="partner-overview">
       {expanded ? <div className="partner-expanded">

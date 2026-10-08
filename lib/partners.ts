@@ -1,5 +1,5 @@
-// Partners listed in the five current eDO finance partner registers, checked 2026-10-06.
-// The list describes eDO finance's institutional network, not personal endorsements.
+// Reconciled with the eight partner exports supplied by the site owner on 2026-10-08.
+// Public source links describe the wider eDO network; the internal exports stay private.
 export type PartnerCategory = 'Pojištění' | 'Investice' | 'Penzijní spoření' | 'Banky a úvěry' | 'Další služby';
 export interface Partner {
   name: string;
@@ -10,7 +10,7 @@ export interface Partner {
   source: string;
 }
 export const partnersSource = 'https://edofinance.cz/cz/ke-stazeni';
-export const partnersCheckedAt = '2026-10-06';
+export const partnersCheckedAt = '2026-10-08';
 export const partnerCategories: PartnerCategory[] = ['Pojištění', 'Investice', 'Penzijní spoření', 'Banky a úvěry', 'Další služby'];
 export const partners: Partner[] = [
   {
@@ -54,14 +54,6 @@ export const partners: Partner[] = [
     "source": "https://edofinance.cz/dt/74b48adb0a.pdf"
   },
   {
-    "name": "ERGO Cestovní Pojišťovna, a.s.",
-    "shortName": "ERGO Cestovní Pojišťovna",
-    "category": "Pojištění",
-    "logo": "/images/partners/ervpojistovna-cz.svg",
-    "logoLight": false,
-    "source": "https://edofinance.cz/dt/74b48adb0a.pdf"
-  },
-  {
     "name": "Generali Česká pojišťovna a.s.",
     "shortName": "Generali Česká pojišťovna",
     "category": "Pojištění",
@@ -86,12 +78,12 @@ export const partners: Partner[] = [
     "source": "https://edofinance.cz/dt/74b48adb0a.pdf"
   },
   {
-    "name": "INTER PARTNER ASSISTANCE, organizační složka",
+    "name": "AXA ASSISTANCE CZ",
     "shortName": "AXA Assistance",
     "category": "Pojištění",
     "logo": "/images/partners/axa-assistance-cz.svg",
     "logoLight": false,
-    "source": "https://edofinance.cz/dt/74b48adb0a.pdf"
+    "source": "https://edofinance.cz/cz/ke-stazeni"
   },
   {
     "name": "Komerční pojišťovna, a.s.",
@@ -206,14 +198,6 @@ export const partners: Partner[] = [
     "source": "https://edofinance.cz/dt/74b48adb0a.pdf"
   },
   {
-    "name": "YOUPLUS Assurance AG",
-    "shortName": "YOUPLUS Assurance AG",
-    "category": "Pojištění",
-    "logo": "/images/partners/youplus-cz.svg",
-    "logoLight": false,
-    "source": "https://edofinance.cz/dt/74b48adb0a.pdf"
-  },
-  {
     "name": "AMISTA investiční společnost, a.s.",
     "shortName": "AMISTA investiční společnost",
     "category": "Investice",
@@ -262,12 +246,12 @@ export const partners: Partner[] = [
     "source": "https://edofinance.cz/dt/5ef2712066.pdf"
   },
   {
-    "name": "CONSEQ Investment Management, a.s.",
-    "shortName": "CONSEQ Investment Management",
+    "name": "Conseq Funds investiční společnost, a.s.",
+    "shortName": "Conseq Funds investiční společnost",
     "category": "Investice",
     "logo": "/images/partners/conseq-cz.svg",
     "logoLight": false,
-    "source": "https://edofinance.cz/dt/5ef2712066.pdf"
+    "source": "https://edofinance.cz/cz/ke-stazeni"
   },
   {
     "name": "CYRRUS, a.s.",
@@ -334,12 +318,12 @@ export const partners: Partner[] = [
     "source": "https://edofinance.cz/dt/5ef2712066.pdf"
   },
   {
-    "name": "WOOD & Company Financial Services, a.s.",
-    "shortName": "WOOD & Company Financial Services",
+    "name": "Wood & Company Investiční společnost",
+    "shortName": "WOOD & Company Investiční společnost",
     "category": "Investice",
     "logo": "/images/partners/wood-com.svg",
     "logoLight": false,
-    "source": "https://edofinance.cz/dt/5ef2712066.pdf"
+    "source": "https://edofinance.cz/cz/ke-stazeni"
   },
   {
     "name": "Allianz penzijní společnost, a.s.",
@@ -406,12 +390,12 @@ export const partners: Partner[] = [
     "source": "https://edofinance.cz/dt/7712f76a62.pdf"
   },
   {
-    "name": "AS Inbank, odštěpný závod",
-    "shortName": "AS Inbank, odštěpný závod",
+    "name": "Inbank AS",
+    "shortName": "Inbank",
     "category": "Banky a úvěry",
     "logo": "/images/partners/inbank-cz.svg",
     "logoLight": false,
-    "source": "https://edofinance.cz/dt/60ccdfe204.pdf"
+    "source": "https://edofinance.cz/cz/ke-stazeni"
   },
   {
     "name": "Česká spořitelna, a.s.",
@@ -422,12 +406,12 @@ export const partners: Partner[] = [
     "source": "https://edofinance.cz/dt/60ccdfe204.pdf"
   },
   {
-    "name": "Československá obchodní banka, a.s.",
-    "shortName": "ČSOB",
-    "category": "Banky a úvěry",
+    "name": "ČSOB - platební terminály POS",
+    "shortName": "ČSOB – platební terminály",
+    "category": "Další služby",
     "logo": "",
     "logoLight": false,
-    "source": "https://edofinance.cz/dt/60ccdfe204.pdf"
+    "source": "https://edofinance.cz/cz/ke-stazeni"
   },
   {
     "name": "ČSOB Hypoteční banka, a.s.",
@@ -536,18 +520,18 @@ export const partners: Partner[] = [
   {
     "name": "EKKA-Gold s.r.o.",
     "shortName": "EKKA-Gold",
-    "category": "Další služby",
+    "category": "Investice",
     "logo": "/images/partners/ekka-gold-cz.svg",
     "logoLight": false,
     "source": "https://edofinance.cz/dt/591572996f.pdf"
   },
   {
-    "name": "EUCS Osobní likvidátor s.r.o.",
-    "shortName": "EUCS Osobní likvidátor",
+    "name": "EUCS Analytics s.r.o.",
+    "shortName": "EUCS Analytics",
     "category": "Další služby",
     "logo": "/images/partners/eucs-cz.png",
     "logoLight": false,
-    "source": "https://edofinance.cz/dt/591572996f.pdf"
+    "source": "https://edofinance.cz/cz/ke-stazeni"
   },
   {
     "name": "EVO Czech Republic s.r.o.",
@@ -560,7 +544,7 @@ export const partners: Partner[] = [
   {
     "name": "IBIS InGold, a.s.",
     "shortName": "IBIS InGold",
-    "category": "Další služby",
+    "category": "Investice",
     "logo": "",
     "logoLight": false,
     "source": "https://edofinance.cz/dt/591572996f.pdf"

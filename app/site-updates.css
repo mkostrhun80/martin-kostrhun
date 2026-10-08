@@ -226,7 +226,7 @@
   }
   .hero-actions {
     width: min(260px, 100%);
-    align-self: center;
+    align-self: flex-start;
   }
   .hero-note .hero-appointment {
     min-height: 50px;
