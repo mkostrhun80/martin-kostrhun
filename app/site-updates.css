@@ -212,11 +212,6 @@
     height: auto;
     aspect-ratio: auto;
   }
-  /* Opaque foreground type avoids mobile blend/compositing differences. */
-  .hero-with-flow > .hero-artwork > .hero-name {
-    color: var(--ink);
-    mix-blend-mode: normal;
-  }
   .hero-with-flow .hero-note {
     width: calc(100% - 44px);
     max-width: none;
