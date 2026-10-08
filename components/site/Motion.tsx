@@ -92,7 +92,7 @@ export function Motion() {
       gsap.from('.social h2', { x: -distance / 2, scrollTrigger: {
         trigger: '.social', start: 'top 90%', end: 'top 30%', scrub: .6 } });
       const contact = gsap.timeline({ scrollTrigger: { trigger: '.contact', start: 'top 96%', end: 'top 18%', scrub: .6 } });
-      contact.from('.contact-curtain', { clipPath: 'inset(15% 0 0 0 round 50% 50% 0 0)', duration: .5, ease: 'power3.out' }, 0)
+      contact.from('.contact-curtain', { clipPath: 'inset(15% 0 0 0)', duration: .5, ease: 'power3.out' }, 0)
         .from('.contact-composition .motion-title-line', { clipPath: 'inset(0 0 100% 0)', y: 28, stagger: .12, duration: .5, ease: 'power3.out' }, .12)
         .from('.contact-composition figure', { clipPath: 'inset(0% 0% 100% 0%)', duration: .5, ease: 'power3.inOut' }, .2);
       return () => {

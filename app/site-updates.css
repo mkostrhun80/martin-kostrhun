@@ -66,15 +66,17 @@
   50% { box-shadow: 0 15px 42px #7821d975, 0 0 0 9px #8b2cff00; }
 }
 .hero-bottom { z-index: 6; }
-.hero-bottom .site-button-quiet {
-  min-height: 34px;
-  padding: 8px 13px;
+.hero-note .site-button-quiet {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 12px;
+  padding: 12px 18px;
   border-color: #15101835;
   background: #f5f3f680;
   color: var(--ink);
-  font-size: 9px;
+  font-size: 11px;
 }
-.hero-bottom .site-button-quiet:hover { background: white; }
+.hero-note .site-button-quiet:hover { background: white; }
 .service-item .site-button { margin-top: 22px; font-size: 11px; }
 .partners .section-top .site-button { padding: 14px 20px; }
 .partner-belt-controls .site-button { padding: 14px 20px; border: 1px solid var(--primary); background: var(--primary); color: white; }
@@ -173,3 +175,20 @@
 .hero-glow-type .hero-name-dot { color: inherit; }
 .hero-about-sequence[data-handoff=moving] .hero-glow-type { visibility: hidden; }
 @media (prefers-reduced-motion: reduce) { .hero-glow-type { display: none; } }
+
+/* Both scenes share a stacking context, keeping type above the travelling photo. */
+.hero-about-sequence .hero,
+.hero-with-flow > .hero-artwork { isolation: auto; }
+.hero-with-flow > .hero-artwork > .hero-name { z-index: 6; }
+.hero-glow-type { z-index: 7; }
+.hero-about-sequence .about { z-index: auto; }
+.hero-about-sequence .about-copy,
+.hero-about-sequence .about > .eyebrow { position: relative; z-index: 6; }
+.navigation { border-bottom: 0; }
+.hero-with-flow { min-height: min(780px, 100svh); }
+.hero-with-flow .hero-note { bottom: 40px; }
+@media (max-width: 760px) {
+  .hero-with-flow { min-height: min(730px, 100svh); }
+  .hero-with-flow .hero-note { bottom: 54px; }
+  .hero-flow-hint { display: none; }
+}

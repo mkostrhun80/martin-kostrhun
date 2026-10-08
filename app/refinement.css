@@ -18,7 +18,7 @@
 .statement-rule>span,.statement-rule>strong{display:block;font-weight:700}
 .statement-rule>strong{color:var(--purple)}
 .statement-rule>small{display:block;font-family:Body,sans-serif;font-size:12px;letter-spacing:.1em;margin-top:24px}
-.editorial{border-radius:0 0 32px 32px;z-index:2}
+.editorial{border-radius:0;z-index:2}
 .editorial .story-steps>div{min-height:75svh}
 .approach{padding-top:105px;padding-bottom:105px}
 .approach-heading{position:sticky;top:65px;align-self:start}
@@ -67,7 +67,7 @@
  .hero-with-flow{--name-size:23vw} .hero-with-flow .hero-note{max-width:210px}.hero-with-flow .hero-note p{font-size:25px;width:210px}.hero-flow-hint{bottom:66px}
  .about{margin-top:-15px;padding-top:65px}.about-layout{display:flex;gap:0}.about-copy .display{font-size:20vw;margin-top:30px}.about-copy h3{font-size:30px}.about-copy>p:not(.eyebrow){font-size:15px}.about-role{margin:22px 0 32px}
  .statement h2{font-size:10.5vw}.statement-rule{font-size:14vw;padding-top:30px;margin-top:55px}.statement-rule>small{font-size:10px;margin-top:18px}
- .editorial{border-radius:0 0 18px 18px}.editorial .story-steps>div{min-height:360px}
+ .editorial{border-radius:0}.editorial .story-steps>div{min-height:360px}
  .approach{padding-top:65px;padding-bottom:65px}.approach-heading{position:static}.approach-heading h2{font-size:24vw}.approach .steps article{min-height:190px;gap:22px;padding:30px 0}.approach .step-number{font-size:80px}.approach .steps h3{font-size:32px}
  .partners-heading{margin-bottom:28px}.partners .display{font-size:14vw}.partners-count>strong{font-size:23vw}.partner-filters{padding-top:15px;gap:5px}.partner-filters button{font-size:10px;padding:9px 8px}.partner-grid{gap:5px 12px}.partner-mark{padding:15px 0;min-height:117px;gap:12px}.partner-name{font-size:8px}.partner-mark img{opacity:.75}
  .contact{margin-top:-10px;padding-top:70px}.contact-intro p{font-size:16px}.contact-links>a{gap:10px;padding:23px 0}.contact-links>a>span{font-size:9px;min-width:0}.contact-links strong{font-size:clamp(14px,4.2vw,19px);overflow-wrap:anywhere}.contact-links b{font-size:21px}.contact-links>div>p{font-size:13px}.footer-columns>div{font-size:11px}.footer-bottom{font-size:9px}

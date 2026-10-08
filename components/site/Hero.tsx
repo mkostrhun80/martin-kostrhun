@@ -29,7 +29,7 @@ export function Hero() {
     <div className="hero-meta"><span>FINANČNÍ SPECIALISTA</span><span>HRADEC KRÁLOVÉ<br/>CZ / 2026</span></div>
     {assets.isPlaceholder && <p className="hero-photo-caption">ILUSTRAČNÍ PORTRÉT / DOČASNÁ FOTOGRAFIE</p>}
     <span className="sr-only">{assets.portraitAlt}</span>
-    <div className="hero-note"><span className="tiny-cross" aria-hidden="true">＋</span><p>FINANCE,<br/>VE KTERÝCH<br/><em>MÁTE JASNO.</em></p><ContactModal className="site-button hero-appointment"/></div>
-    <div className="hero-bottom"><a className="site-button site-button-quiet" href="#spoluprace"><ButtonLabel>PRŮBĚH SPOLUPRÁCE</ButtonLabel></a><span>OSOBNĚ. SROZUMITELNĚ. DLOUHODOBĚ.</span><span>01 — 07</span></div>
+    <div className="hero-note"><span className="tiny-cross" aria-hidden="true">＋</span><p>FINANCE,<br/>VE KTERÝCH<br/><em>MÁTE JASNO.</em></p><ContactModal className="site-button hero-appointment"/><a className="site-button site-button-quiet" href="#spoluprace"><ButtonLabel>PRŮBĚH SPOLUPRÁCE</ButtonLabel></a></div>
+    <div className="hero-bottom"><span>OSOBNĚ. SROZUMITELNĚ. DLOUHODOBĚ.</span><span>01 — 07</span></div>
   </section></>;
 }
