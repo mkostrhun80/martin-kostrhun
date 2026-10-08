@@ -29,7 +29,11 @@ export function Motion() {
         const { x, y, width, height, roundness, reveal, phase } = portraitHandoff(progress, from, to, corner);
         handoff.dataset.phase = phase;
         const active = progress > 0 && progress < 1;
-        gsap.set(handoff, { x, y, width, height, borderRadius: `${roundness * 50}%`,
+        const photoRadius = parseFloat(getComputedStyle(origin).borderTopLeftRadius) || 0;
+        const radiusX = photoRadius + (width / 2 - photoRadius) * roundness;
+        const radiusY = photoRadius + (height / 2 - photoRadius) * roundness;
+        handoff.style.borderRadius = `${radiusX}px / ${radiusY}px`;
+        gsap.set(handoff, { x, y, width, height,
           '--handoff-tint': roundness * .58, '--handoff-ring': `${roundness * (mobile ? 5 : 7)}px`,
           visibility: active ? 'visible' : 'hidden' });
         gsap.set(sourceImage, { opacity: 1 - reveal });

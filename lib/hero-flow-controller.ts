@@ -35,8 +35,9 @@ export function attachHeroFlow(hero: HTMLElement, svg: SVGSVGElement) {
     width = hero.clientWidth; height = hero.clientHeight;
     const style = getComputedStyle(photo);
     box = { x: parseFloat(style.left), y: parseFloat(style.top), w: parseFloat(style.width), h: parseFloat(style.height) };
-    attr(clip, { x: box.x, y: box.y, width: box.w, height: box.h });
-    attr(outside, { x: box.x, y: box.y, width: box.w, height: box.h });
+    const radius = parseFloat(style.borderTopLeftRadius) || 0;
+    attr(clip, { x: box.x, y: box.y, width: box.w, height: box.h, rx: radius, ry: radius });
+    attr(outside, { x: box.x, y: box.y, width: box.w, height: box.h, rx: radius, ry: radius });
     const w = Math.max(box.w, box.h * 2 / 3), h = w * 1.5;
     attr(image, { x: box.x + (box.w - w) * .5, y: box.y + (box.h - h) * .75, width: w, height: h });
     reset();

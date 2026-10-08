@@ -192,3 +192,14 @@
   .hero-with-flow .hero-note { bottom: 54px; }
   .hero-flow-hint { display: none; }
 }
+
+/* One subtle corner radius for every photographic frame. */
+:root { --photo-radius: 12px; }
+.hero-photo-layer,
+.about-portrait,
+.editorial-sticky figure,
+.service-chapter-heading figure,
+.contact-composition figure {
+  border-radius: var(--photo-radius);
+  overflow: hidden;
+}
