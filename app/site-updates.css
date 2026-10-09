@@ -268,3 +268,18 @@
   }
   .hero-photo-type .hero-name-dot { color: var(--purple); }
 }
+
+/* Readable legal documents, with the same navigation on every page. */
+.legal-navigation { display: flex; flex-wrap: wrap; gap: 12px; margin: -20px 0 40px; }
+.legal-navigation a { padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; line-height: 1.5; }
+.legal-navigation a[aria-current=page] { background: var(--primary); border-color: var(--primary); color: white; }
+.legal-content { max-width: 760px; }
+.legal-content a { text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.legal-content ul { margin: 0 0 24px; padding-left: 22px; font-size: 15px; line-height: 1.8; }
+.legal-content li + li { margin-top: 8px; }
+.legal-main .legal-updated { margin-top: 48px; color: #69616f; font-size: 12px; }
+@media (max-width: 760px) {
+  .legal-navigation { gap: 8px; }
+  .legal-navigation a { font-size: 11px; padding: 9px 12px; }
+  .legal-main h2 { font-size: 22px; line-height: 1.3; }
+}

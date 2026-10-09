@@ -2,12 +2,35 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Navigation } from '@/components/site/Navigation';
 import { Footer } from '@/components/site/Sections';
-import { siteConfig } from '@/lib/site-config';
-const pages={
- 'pravni-informace':{title:'Právní informace',text:siteConfig.originalLegalText},
- 'osobni-udaje':{title:'Ochrana osobních údajů',text:siteConfig.originalPrivacyText},
- 'cookies':{title:'Zásady cookies',text:siteConfig.originalCookiesText},
+import { LegalInformation, PrivacyInformation, CookiesInformation } from '@/components/site/LegalDocuments';
+
+const pages = {
+  'pravni-informace': { title: 'Právní informace', Content: LegalInformation },
+  'osobni-udaje': { title: 'Ochrana osobních údajů', Content: PrivacyInformation },
+  'cookies': { title: 'Zásady cookies', Content: CookiesInformation },
 };
-export function generateStaticParams() { return Object.keys(pages).map(slug => ({ slug })); }
-export async function generateMetadata({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const page=pages[slug as keyof typeof pages];return {title:page?`${page.title} | Martin Kostrhun`:'Stránka nenalezena',robots:{index:false,follow:true}}}
-export default async function LegalPage({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const page=pages[slug as keyof typeof pages];if(!page)notFound();return <><Navigation isHome={false}/><main id="main" className="legal-main"><p className="eyebrow">MARTIN KOSTRHUN / DOKUMENTY</p><h1>{page.title}</h1>{page.text?<div style={{whiteSpace:'pre-line'}}>{page.text}</div>:<p className="legal-notice">Tato stránka je součástí pracovní verze webu. Původní znění dokumentu zatím není k dispozici a bude doplněno beze změny jeho právního významu.</p>}{slug==='pravni-informace'&&<><h2>Identifikační údaje</h2><p>Martin Kostrhun<br/>IČO: {siteConfig.ico}<br/>Datová schránka: {siteConfig.dataBox}<br/>{siteConfig.address}<br/>{siteConfig.city}<br/>Fyzická osoba zapsaná v živnostenském rejstříku.</p><h2>Dokumenty a užitečné odkazy</h2><div className="legal-links"><a href="https://www.edofinance.cz/cz/ke-stazeni" target="_blank" rel="noreferrer">Aktuální dokumenty eDO finance ↗</a><a href="https://www.cnb.cz/cnb/jerrs" target="_blank" rel="noreferrer">Seznam regulovaných a registrovaných subjektů ČNB ↗</a><a href="https://financniarbitr.cz/cs/informace-pro-verejnost/caste-otazky.html" target="_blank" rel="noreferrer">Finanční arbitr — informace pro veřejnost ↗</a><a href="https://coi.gov.cz/informace-o-adr/" target="_blank" rel="noreferrer">Česká obchodní inspekce — informace o ADR ↗</a></div></>}{slug==='osobni-udaje'&&<><h2>Kontakt a informace eDO</h2><p>Formulář v této pracovní verzi připravuje zprávu ve vaší e-mailové aplikaci. Web sám poptávku neodesílá ani neukládá její obsah.</p><div className="legal-links"><a href="https://www.edofinance.cz/cz/gdpr" target="_blank" rel="noreferrer">Informace eDO finance o zpracování osobních údajů ↗</a></div></>}{slug==='cookies'&&<><h2>Fungování této pracovní verze</h2><p>Do webu nejsou zapojené analytické ani reklamní nástroje. Interakce v úvodu pracuje pouze po dobu otevření stránky a nic neukládá do úložiště prohlížeče.</p><p>Přístup k soukromému náhledu zajišťuje hostitelská platforma a její vlastní přihlašování. Původní zásady cookies bude nutné doplnit podle finálního provozu webu.</p></>}<Link className="back" href="/">← ZPĚT NA WEB</Link></main><Footer/></>}
+
+export function generateStaticParams() {
+  return Object.keys(pages).map(slug => ({ slug }));
+}
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const page = pages[slug as keyof typeof pages];
+  return { title: page ? `${page.title} | Martin Kostrhun` : 'Stránka nenalezena', robots: { index: false, follow: true } };
+}
+export default async function LegalPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const page = pages[slug as keyof typeof pages];
+  if (!page) notFound();
+  const { Content } = page;
+  return <><Navigation isHome={false}/><main id="main" className="legal-main">
+    <p className="eyebrow">MARTIN KOSTRHUN / DOKUMENTY</p>
+    <h1>{page.title}</h1>
+    <nav className="legal-navigation" aria-label="Právní dokumenty">
+      {Object.entries(pages).map(([id, document]) => <Link key={id} href={`/dokumenty/${id}`} aria-current={id === slug ? 'page' : undefined}>{document.title}</Link>)}
+    </nav>
+    <div className="legal-content"><Content/></div>
+    <p className="legal-updated">Poslední aktualizace: <time dateTime="2026-10-09">9. října 2026</time></p>
+    <Link className="back" href="/">← ZPĚT NA WEB</Link>
+  </main><Footer/></>;
+}

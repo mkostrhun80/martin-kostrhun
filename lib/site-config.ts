@@ -20,13 +20,10 @@ export const siteConfig = {
   address: 'Gočárova třída 1620/30', city: '500 02 Hradec Králové',
   ico: '23315598', dataBox: 'q2xdru4',
   instagramUrl: null as string | null,
-  linkedinUrl: 'https://cz.linkedin.com/in/martin-kostrhun-61059936b',
+  linkedinUrl: 'https://www.linkedin.com/in/martin-kostrhun-61059936b/',
   facebookUrl: null as string | null,
   appointmentUrl: null as string | null,
   contactEndpoint: null as string | null,
-  // Original source was absent. Never invent regulatory statements.
-  originalRegulatoryFooter: null as string | null,
-  originalPrivacyText: null as string | null,
-  originalLegalText: null as string | null,
-  originalCookiesText: null as string | null,
+  // Scope of tied representation confirmed by the owner on 2026-10-09.
+  originalRegulatoryFooter: 'Martin Kostrhun, IČO 23315598, působí jako vázaný zástupce eDO finance, a.s., IČO 24783421, V parku 2335/20, 148 00 Praha 4, pro investice, spotřebitelské úvěry, pojištění a doplňkové penzijní spoření. Aktuální rozsah oprávnění lze ověřit v registru České národní banky. Podrobnosti a odkazy na dokumenty eDO jsou v sekci Právní informace.',
 };
