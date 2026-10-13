@@ -20,3 +20,4 @@ html{scroll-padding-top:100px}section[id],[id=spoluprace]{scroll-margin-top:100p
 @media(max-width:760px){.hero-meta{top:95px;left:22px;right:22px}.hero-with-flow .hero-note{flex-direction:row;align-items:end}.hero-note>p{font-size:31px!important}.hero-actions{width:210px;align-self:auto}.hero-bottom>span{display:block!important}.hero-note .hero-appointment{font-size:10px!important;padding:14px 12px!important}}
 html{scroll-padding-top:0}.contact.section{padding-top:90px}
 @media(max-width:760px){.contact.section{padding-top:65px}}
+@media(max-width:760px){.hero-with-flow .hero-photo-layer img{object-position:50% 25%}}
