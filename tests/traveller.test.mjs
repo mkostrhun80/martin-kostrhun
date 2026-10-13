@@ -6,7 +6,8 @@ test('travelling dot ends at heading and follows same path in reverse at desktop
     const start = travelPoint(0, width, 720, 1000, target);
     const end = travelPoint(1, width, 720, 1000, target);
     assert.deepEqual(end, target);
-    assert.ok(start.x > width * .8);
+    if (width > 760) assert.ok(start.x > width * .8);
+    else assert.equal(start.x,12);
     for (let i = 0; i <= 100; i++) {
         const p = i / 100, frame = travelPoint(p, width, 720, 1000, target);
         assert.ok(Number.isFinite(frame.x) && Number.isFinite(frame.y));
@@ -15,7 +16,7 @@ test('travelling dot ends at heading and follows same path in reverse at desktop
         assert.ok(Math.abs(frame.x - reverse.x) < 1e-8 && Math.abs(frame.y - reverse.y) < 1e-8);
     }
 } });
-test('mobile route takes the left gutter after crossing above the contents', () => {
+test('mobile route stays in the left gutter through the contents', () => {
     const target = { x: 27, y: 1150 };
     for (const p of [.4, .6, .8]) {
         const point = travelPoint(p, 375, 720, 1000, target);
@@ -38,4 +39,28 @@ test('trail keeps compact geometric spacing along the same route',async()=>{
  assert.deepEqual(routePoint(route,0),travelPoint(0,1440,900,1400,{x:318,y:2200}));
  assert.deepEqual(routePoint(route,route.length),{x:318,y:2200});
  for(let d=100;d<route.length;d+=23){const head=routePoint(route,d),tail=routePoint(route,d-18);assert.ok(Math.hypot(head.x-tail.x,head.y-tail.y)<=18.001);}
+});
+
+test('mobile journey leaves a dead zone and more scroll room for expansion', async()=>{
+ const {journeyTiming}=await import('../lib/traveller.ts');
+ for(const height of [667,812,932]){
+   const t=journeyTiming(height,2100,height,true);
+   assert.ok(t.start>=24);
+   assert.ok(t.collapseEnd>height*.8);
+   assert.ok(t.travelEnd-t.collapseEnd>=300);
+   assert.ok(t.expandEnd-t.travelEnd>=400);
+ }
+});
+test('scroll damping settles with no overshoot at 60 and 120 Hz, also in reverse', async()=>{
+ const {settleScroll}=await import('../lib/traveller.ts');
+ const values=[];
+ for(const fps of [60,120]){
+   let current=0;
+   for(let i=0;i<fps;i++){current=settleScroll(current,700,1/fps,true);assert.ok(current>=0&&current<=700);}
+   values.push(current);
+   for(let i=0;i<fps*2;i++){current=settleScroll(current,0,1/fps,true);assert.ok(current>=0);}
+   assert.equal(current,0);
+ }
+ assert.ok(Math.abs(values[0]-values[1])<.001);
+ assert.ok(values[0]>697);
 });
