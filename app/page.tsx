@@ -1,8 +1,11 @@
-import { HeroHandoff } from '@/components/site/HeroHandoff';
+import { pageMetadata } from '@/lib/metadata';
 import { Navigation } from '@/components/site/Navigation';
 import { Hero } from '@/components/site/Hero';
+import { Contents, ScrollContents } from '@/components/site/Contents';
 import { Motion } from '@/components/site/Motion';
 import { Services } from '@/components/site/Services';
+import { About, Contact, Footer } from '@/components/site/Sections';
+import { Trust, FAQ } from '@/components/site/TrustAndFAQ';
 import { Partners } from '@/components/site/Partners';
-import { MartinStatement, EditorialStory, Approach, About, Social, Contact, Footer } from '@/components/site/Sections';
-export default function Home(){return <><Motion/><Navigation/><main id="main"><div className="hero-about-sequence"><Hero/><About/><HeroHandoff/></div><Approach/><MartinStatement/><EditorialStory/><Services/><Partners/><Social/><Contact/></main><Footer/></>}
+export const metadata = pageMetadata('Martin Kostrhun | Finanční specialista');
+export default function Home() { return <><Navigation /><main id="main"><Hero /><Contents /><Services /><About /><Trust /><FAQ /><Contact /><Partners /></main><ScrollContents /><Motion /><Footer /></>; }

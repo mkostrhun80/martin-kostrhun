@@ -1,0 +1,8 @@
+{
+  "name": "martin-kostrhun-web",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-12",
+  "assets": { "directory": "../out", "binding": "ASSETS", "run_worker_first": ["/api/*", "/sprava", "/sprava/*"] },
+  "d1_databases": [{ "binding": "DB", "database_name": "martin-kostrhun", "database_id": "00000000-0000-4000-8000-000000000000", "migrations_dir": "migrations" }],
+  "vars": { "ACCESS_TEAM_DOMAIN": "", "ACCESS_AUD": "", "ADMIN_EMAIL": "" }
+}

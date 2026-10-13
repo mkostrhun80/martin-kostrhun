@@ -1,3 +1,4 @@
+import { SiteData } from "@/components/site/SiteData";
 import type { Metadata } from "next";
 import { sitePath } from "@/lib/site-path";
 import "./globals.css";
@@ -10,10 +11,8 @@ import "./partners.css";
 import "./refinement.css";
 import "./interaction-patch.css";
 import "./site-updates.css";
-export const metadata: Metadata = {
-  title: "Martin Kostrhun | Finanční specialista",
-  description: "Finance, ve kterých máte jasno. Martin Kostrhun, finanční specialista eDO finance v Hradci Králové. Bydlení, investice, pojištění a dlouhodobý plán.",
-  openGraph: { title: "Martin Kostrhun | Finanční specialista", description: "Finance, ve kterých máte jasno. Osobně. Srozumitelně. Dlouhodobě.", locale: "cs_CZ", type: "website" },
-  icons: { icon: sitePath("/favicon.svg"), shortcut: sitePath("/favicon.svg") },
-};
-export default function RootLayout({children}: Readonly<{children: React.ReactNode}>) { return <html lang="cs"><body>{children}</body></html> }
+import "./professional.css";
+export const metadata: Metadata = { description: "Martin Kostrhun, finanční specialista eDO finance. Bydlení, investice, pojištění a finanční plán.", icons: { icon: sitePath('/favicon.svg'), shortcut: sitePath('/favicon.svg') } };
+export default function RootLayout({ children }: Readonly<{
+    children: React.ReactNode;
+}>) { return <html lang="cs"><body><SiteData>{children}</SiteData></body></html>; }

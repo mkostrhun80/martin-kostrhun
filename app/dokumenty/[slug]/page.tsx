@@ -30,7 +30,7 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
       {Object.entries(pages).map(([id, document]) => <Link key={id} href={`/dokumenty/${id}`} aria-current={id === slug ? 'page' : undefined}>{document.title}</Link>)}
     </nav>
     <div className="legal-content"><Content/></div>
-    <p className="legal-updated">Poslední aktualizace: <time dateTime="2026-10-09">9. října 2026</time></p>
+    <p className="legal-updated">Poslední aktualizace: <time dateTime="2026-10-12">12. října 2026</time></p>
     <Link className="back" href="/">← ZPĚT NA WEB</Link>
   </main><Footer/></>;
 }
