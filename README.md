@@ -1,29 +1,39 @@
-# Martin Kostrhun — Personal Website
+# Martin Kostrhun — osobní web
 
-Osobní web Martina Kostrhuna s interaktivním Purple Lens. React, TypeScript a Vinext/Vite. Vyžaduje Node.js 22.13 nebo novější a npm.
+React, TypeScript, Next/Vinext a GSAP. Fotografické soubory a fonty jsou původní. Redesign pracuje s nativním scrollováním, jedním seznamem sekcí a kontaktem dostupným v navigaci.
 
-## Development
+## Plný lokální náhled
 
-```sh
-npm install
-npm run dev
-```
-
-Otevřete http://localhost:5173. Pro lokální spuštění nejsou potřeba žádné tajné klíče.
-
-## Production build
+Vyžaduje Node.js 24.13 nebo novější (lokální SQLite).
 
 ```sh
-npm run build
+npm ci
+npm run build:full
+npm run preview:full
 ```
 
-Zdrojový kód je v `app/`, `components/` a `lib/`; lokální obrázky a fonty v `public/`. Vinext používá `app/page.tsx` a `app/layout.tsx` místo samostatného `index.html`.
+Web: http://localhost:4173/ · Administrace: http://localhost:4173/sprava/
+Přístupový klíč najdete v ignorovaném `work/local-preview/admin-key`.
+Zprávy a zpětná vazba se ukládají do `work/local-preview/data.sqlite`. Tyto soubory nesmí být zveřejněné. Lokální přihlašování není součástí produkčního Workeru.
 
-Fotografie, kontakty a odkazy nastavíte v `lib/site-config.ts`. Aktuální portréty jsou dodané fotografie; formulář připravuje e-mail k odeslání. Podrobnosti jsou v [IMPLEMENTATION.md](./IMPLEMENTATION.md).
+## Kontroly
 
-## GitHub Pages
+```sh
+npm test
+npm run lint
+npm run check:types
+npm run build:worker
+npm run build:pages
+```
 
-`npm run build:pages` vytvoří statický web ve složce `out/` pro cestu `/martin-kostrhun/`.
-Proměnná `NEXT_PUBLIC_BASE_PATH` může cestu změnit (prázdná hodnota pro vlastní doménu).
-Workflow `.github/workflows/pages.yml` publikuje web po každém pushnutí na `main`.
-V nastavení GitHub Pages musí být jako zdroj vybrané GitHub Actions.
+`npm test` zahrnuje serverové scénáře, novou trasu fotografie i původní testy. `npm run build:pages` zachovává cestu `/martin-kostrhun/`; `build:full` vytváří export v kořeni. Na samostatných GitHub Pages jsou bez připojeného serveru dostupné přímé kontakty a prezentační obsah, formuláře úspěch nepředstírají.
+
+## Produkční plná verze
+
+Samostatný Worker v `server/worker.mjs` obsluhuje veřejné soubory z `out/`, API a chráněnou administraci. Databáze D1 používá verzované SQL v `server/migrations/`. Přístup ke správě ověřuje podpis Cloudflare Access JWT, vydavatele, publikum, platnost i vlastníka.
+
+GitHub Pages publikuje statickou prezentační verzi z větve `main`. Publikační workflow nastavuje skutečnou adresu webu pro canonical odkazy, sdílení a sitemap. Další úpravy dělejte v projektu na pracovní větvi a po ověření je slučte do `main`.
+
+Pro serverovou plnou verzi postupujte podle `SPUSTENI.md`. Cloudflare a rezervace do iCloudu ještě nebyly aktivované; DNS nebylo změněné.
+
+Původní vývojové příkazy Vinext (`npm run dev`, `npm run build`) zůstávají k dispozici; pro plnou verzi s tímto samostatným Workerem použijte výše uvedený postup.

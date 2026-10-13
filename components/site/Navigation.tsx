@@ -1,10 +1,17 @@
 'use client';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { sitePath } from '@/lib/site-path';
-import { siteConfig } from '@/lib/site-config';
-const links=[['Domů','domu'],['Služby','sluzby'],['O mně','o-mne'],['Kontakt','kontakt']];
-export function Navigation({isHome=true}:{isHome?:boolean}) {
- const [open,setOpen]=useState(false); const prefix=isHome?'':sitePath('/');
- return <><a className="skip-link" href="#main">Přejít k obsahu</a><header className="navigation"><a href={`${prefix}#domu`} className="monogram" aria-label="Martin Kostrhun – domů">MK<span>.</span></a><span className="nav-description">MARTIN KOSTRHUN<br/>FINANČNÍ SPECIALISTA</span><nav aria-label="Hlavní navigace">{links.slice(1).map(([name,id])=><a key={id} href={`${prefix}#${id}`}>{name.toUpperCase()}</a>)}<Dialog open={open} onOpenChange={setOpen}><DialogTrigger className="menu-trigger">MENU <span>＋</span></DialogTrigger><DialogContent className="fullscreen-menu" showCloseButton={false}><div className="menu-top"><a className="monogram" href={`${prefix}#domu`} onClick={()=>setOpen(false)}>MK<span>.</span></a><DialogClose className="close-link">ZAVŘÍT <span>×</span></DialogClose></div><DialogTitle className="sr-only">Navigace webu</DialogTitle><DialogDescription className="sr-only">Vyberte část webu Martina Kostrhuna.</DialogDescription><nav className="menu-links" aria-label="Rozšířená navigace">{links.map(([name,id],i)=><a key={id} href={`${prefix}#${id}`} onClick={()=>setOpen(false)}><span>0{i+1}</span>{name}</a>)}</nav><div className="menu-bottom"><a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a><a href={siteConfig.linkedinUrl} target="_blank" rel="noreferrer">LINKEDIN</a><span>HRADEC KRÁLOVÉ / CZ</span></div></DialogContent></Dialog></nav></header></>;
+import { visibleSections } from '@/lib/public-data';
+import { useSiteData } from './SiteData';
+import { AppointmentLink } from './AppointmentLink';
+export function Navigation({ isHome = true }: {
+    isHome?: boolean;
+}) {
+    const [open, setOpen] = useState(false);
+    const target = useRef<string | null>(null);
+    const choose = (id: string) => { target.current = id; setOpen(false); };
+    const prefix = isHome ? '' : sitePath('/');
+    const sections = visibleSections(useSiteData());
+    return <><a className="skip-link" href="#main">Přejít k obsahu</a><header className="site-header"><a href={`${prefix}#domu`} className="monogram" aria-label="Martin Kostrhun – domů">MK<span>.</span></a><span className="header-identity">MARTIN KOSTRHUN<br /><span>FINANČNÍ SPECIALISTA · eDO finance</span></span><nav className="header-links" aria-label="Hlavní navigace">{sections.filter(s => ['sluzby', 'o-mne', 'otazky'].includes(s.id)).map(s => <a key={s.id} href={`${prefix}#${s.id}`}>{s.short}</a>)}</nav><AppointmentLink isHome={isHome} className="site-button header-appointment"/><Dialog open={open} onOpenChange={setOpen}><DialogTrigger className="contents-trigger">Obsah <span aria-hidden="true">＋</span></DialogTrigger><DialogContent className="contents-dialog" showCloseButton={false} onCloseAutoFocus={e => { if (isHome && target.current) { e.preventDefault(); const id = target.current; target.current = null; requestAnimationFrame(() => { const el = document.getElementById(id); el?.setAttribute('tabindex', '-1'); el?.focus({preventScroll:true}); }); } }}><DialogTitle>Na webu najdete</DialogTitle><DialogDescription>Vyberte část, která vás zajímá.</DialogDescription><nav aria-label="Obsah webu"><a href={`${prefix}#domu`} onClick={() => choose('domu')}>Úvod <span>↗</span></a>{sections.map(s => <a key={s.id} href={`${prefix}#${s.id}`} onClick={() => choose(s.id)}>{s.label}<span>↗</span></a>)}</nav><DialogClose className="site-button site-button-quiet">Zavřít obsah</DialogClose></DialogContent></Dialog></header></>;
 }
