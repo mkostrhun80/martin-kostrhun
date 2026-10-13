@@ -8,14 +8,14 @@ export function bezier(t: number, a: Point, b: Point, c: Point, d: Point): Point
 export function travelPoint(progress: number, width: number, indexTop: number, indexBottom: number, target: Point): Point {
     const p = clamp(progress);
     if(p === 1) return {...target};
-    const left = width < 760 ? 12 : 28, right = width - (width < 760 ? 14 : 48);
+    const left = width <= 760 ? 12 : 28, right = width - (width <= 760 ? 14 : 48);
     const top = indexTop + 26, bottom = indexBottom - 24;
     const a = { x: right, y: top }, b = { x: left, y: top }, c = { x: left, y: bottom }, d = { x: right, y: bottom };
-    if (width < 760) {
-        if (p < .35)
-            return bezier(p / .35, a, { x: width * .68, y: top - 12 }, { x: width * .24, y: top + 8 }, b);
+    if (width <= 760) {
+        // A short gutter route avoids crossing text and controls on touch screens.
+        const start = { x: left, y: top };
         if (p < .85)
-            return bezier((p - .35) / .5, b, { x: left, y: top + 60 }, { x: left, y: bottom - 60 }, c);
+            return bezier(p / .85, start, { x: left, y: top + 80 }, { x: left, y: bottom - 80 }, c);
         return bezier((p - .85) / .15, c, { x: left, y: target.y - 32 }, { x: target.x, y: target.y - 24 }, target);
     }
     if (p < .35)
@@ -31,10 +31,10 @@ export function travelPoint(progress: number, width: number, indexTop: number, i
 
 export type Frame = {left:number;top:number;width:number;height:number};
 /** Pure interpolation: exact endpoints make forward and reverse handoffs seamless. */
-export function photoFrame(a:Frame,b:Frame,progress:number,expanding=false){
+export function photoFrame(a:Frame,b:Frame,progress:number,expanding=false,photoRadius=12){
  const t=ease(progress), width=a.width+(b.width-a.width)*t, height=a.height+(b.height-a.height)*t;
  const half=Math.min(width,height)/2;
- return {left:a.left+(b.left-a.left)*t,top:a.top+(b.top-a.top)*t,width,height,radius:Math.min(half,expanding?7+5*t:half*t+12*(1-t))};
+ return {left:a.left+(b.left-a.left)*t,top:a.top+(b.top-a.top)*t,width,height,radius:Math.min(half,expanding?7+(photoRadius-7)*t:half*t+photoRadius*(1-t))};
 }
 export function sampleRoute(fn:(p:number)=>Point){
  const points=[{...fn(0),distance:0}];let length=0;
@@ -46,4 +46,19 @@ export function routePoint(route:ReturnType<typeof sampleRoute>,distance:number)
  while(lo<hi){const mid=Math.floor((lo+hi)/2);if(route.points[mid].distance<d)lo=mid+1;else hi=mid;}
  const b=route.points[lo],a=route.points[Math.max(0,lo-1)],t=(d-a.distance)/(b.distance-a.distance||1);
  return {x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t};
+}
+
+/** Longer mobile phases and a small dead zone avoid reacting to the first touch. */
+export function journeyTiming(heroHeight: number, targetTop: number, viewportHeight: number, mobile: boolean) {
+  const start = mobile ? 32 : 12;
+  const collapseEnd = Math.max(start + 240, heroHeight * (mobile ? .86 : .66));
+  const travelEnd = Math.max(collapseEnd + 300, targetTop - viewportHeight * .76);
+  const expandEnd = Math.max(travelEnd + (mobile ? 400 : 320), targetTop - viewportHeight * .12);
+  return { start, collapseEnd, travelEnd, expandEnd };
+}
+
+/** Time-based damping settles without overshoot, regardless of display refresh rate. */
+export function settleScroll(current: number, target: number, seconds: number, mobile: boolean) {
+  if (Math.abs(target - current) < .25) return target;
+  return current + (target - current) * (1 - Math.exp(-Math.max(0, seconds) / (mobile ? .17 : .11)));
 }
