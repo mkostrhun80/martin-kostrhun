@@ -2,7 +2,7 @@
 
 ## Stav
 
-Zdrojový web je na větvi `redesign/professional-presentation`. Stávající GitHub Pages nebyly změněné. Před redesignem byl vytvořen záložní tag, Git bundle a archiv zdrojů včetně fotografií. Přesná identita a kontrolní součty jsou v předaném manifestu zálohy.
+Redesign vznikl na větvi `redesign/professional-presentation`; statická verze se publikuje na GitHub Pages sloučením do `main`. Serverové ukládání a administrace vyžadují následnou aktivaci Cloudflare. Před redesignem byl vytvořen záložní tag, Git bundle a archiv zdrojů včetně fotografií. Přesná identita a kontrolní součty jsou v předaném manifestu zálohy.
 
 Lokální náhled používá oddělenou SQLite databázi se stejnými tabulkami jako D1. Administrační data ani klíč nejsou součástí Gitu. Záznamy z lokálních testů se nepřenášejí do produkce.
 

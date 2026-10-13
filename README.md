@@ -32,6 +32,8 @@ npm run build:pages
 
 Samostatný Worker v `server/worker.mjs` obsluhuje veřejné soubory z `out/`, API a chráněnou administraci. Databáze D1 používá verzované SQL v `server/migrations/`. Přístup ke správě ověřuje podpis Cloudflare Access JWT, vydavatele, publikum, platnost i vlastníka.
 
-Před spuštěním postupujte podle `SPUSTENI.md`. Produkce nebyla nasazená, DNS nebylo změněné a rezervace nebyly připojené k iCloudu.
+GitHub Pages publikuje statickou prezentační verzi z větve `main`. Publikační workflow nastavuje skutečnou adresu webu pro canonical odkazy, sdílení a sitemap. Další úpravy dělejte v projektu na pracovní větvi a po ověření je slučte do `main`.
+
+Pro serverovou plnou verzi postupujte podle `SPUSTENI.md`. Cloudflare a rezervace do iCloudu ještě nebyly aktivované; DNS nebylo změněné.
 
 Původní vývojové příkazy Vinext (`npm run dev`, `npm run build`) zůstávají k dispozici; pro plnou verzi s tímto samostatným Workerem použijte výše uvedený postup.
