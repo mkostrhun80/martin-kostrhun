@@ -3,55 +3,88 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { syncHeroPhotoType } from '@/lib/hero-photo-type';
 import { assets } from '@/lib/site-config';
-import { clamp, ease, travelPoint } from '@/lib/traveller';
+import { clamp, ease, travelPoint, sampleRoute, routePoint, photoFrame } from '@/lib/traveller';
 export function Motion() {
-    const ref = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        gsap.registerPlugin(ScrollTrigger);
-        const media = gsap.matchMedia();
-        media.add('(prefers-reduced-motion: no-preference)', () => {
-            const hero = document.querySelector<HTMLElement>('.hero'), photo = document.querySelector<HTMLElement>('.hero > .hero-artwork > .hero-photo-layer'), index = document.querySelector<HTMLElement>('#obsah'), target = document.querySelector<HTMLElement>('#service-dot'), root = ref.current;
-            if (!hero || !photo || !index || !target || !root)
-                return;
-            const main = root.querySelector<HTMLElement>('.traveller-main')!, image = main.querySelector('img')!, tails = Array.from(root.querySelectorAll<HTMLElement>('.traveller-tail'));
-            let from = { left: 0, top: 0, width: 0, height: 0 }, top = 0, bottom = 0, point = { x: 0, y: 0 }, end = 1;
-            const state = { p: 0 };
-            const measure = () => { const rect = photo.getBoundingClientRect(), ir = index.getBoundingClientRect(), tr = target.getBoundingClientRect(); from = { left: rect.left, top: rect.top + scrollY, width: rect.width, height: rect.height }; top = ir.top + scrollY; bottom = ir.bottom + scrollY; point = { x: tr.left + tr.width / 2, y: tr.top + scrollY + tr.height / 2 }; end = Math.max(1, point.y - innerHeight * .35); };
-            const draw = () => {
-                const p = clamp(state.p), small = 14;
-                root.style.visibility = p > 0 && p < 1 ? 'visible' : 'hidden';
-                photo.style.opacity = p > 0 ? '0' : '1';
-                target.style.opacity = p >= 1 ? '1' : '0';
-                let x, y, w, h, round;
-                if (p < .35) {
-                    const t = ease(p / .35), start = travelPoint(0, hero.clientWidth, top, bottom, point);
-                    x = from.left + (start.x - small / 2 - from.left) * t;
-                    y = from.top + (start.y - small / 2 - from.top) * t;
-                    w = from.width + (small - from.width) * t;
-                    h = from.height + (small - from.height) * t;
-                    round = t;
-                    image.style.opacity = String(1 - ease((t - .45) / .55));
-                }
-                else {
-                    const pos = travelPoint((p - .35) / .65, hero.clientWidth, top, bottom, point);
-                    x = pos.x - small / 2;
-                    y = pos.y - small / 2;
-                    w = h = small;
-                    round = 1;
-                    image.style.opacity = '0';
-                }
-                gsap.set(main, { x, y: y - scrollY, width: w, height: h, borderRadius: round * w / 2, backgroundColor: '#6b6572' });
-                tails.forEach((tail, i) => { const t = (p - .35) / .65 - (i + 1) * .025; const pos = travelPoint(Math.max(0, t), hero.clientWidth, top, bottom, point); gsap.set(tail, { x: pos.x - (10 - i * 2) / 2, y: pos.y - scrollY - (10 - i * 2) / 2, width: 10 - i * 2, height: 10 - i * 2, opacity: p > .37 && p < .99 ? (.42 - i * .08) * clamp(t * 8) : 0 }); });
-            };
-            measure();
-            const tween = gsap.to(state, { p: 1, ease: 'none', onUpdate: draw, scrollTrigger: { trigger: hero, start: 'top top', end: () => `+=${end}`, scrub: .45, onRefresh: () => { measure(); draw(); }, onUpdate: draw } });
-            const resize = new ResizeObserver(() => ScrollTrigger.refresh());
-            resize.observe(index);
-            document.fonts.ready.then(() => ScrollTrigger.refresh());
-            return () => { resize.disconnect(); tween.kill(); photo.style.removeProperty('opacity'); target.style.removeProperty('opacity'); root.style.visibility = 'hidden'; };
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const media = gsap.matchMedia();
+    media.add('(prefers-reduced-motion: no-preference)', () => {
+      const hero = document.querySelector<HTMLElement>('.hero');
+      const photo = document.querySelector<HTMLElement>('.hero > .hero-artwork > .hero-photo-layer');
+      const contents = document.querySelector<HTMLElement>('#obsah');
+      const target = document.querySelector<HTMLElement>('.journey-destination');
+      const root = ref.current;
+      if (!hero || !photo || !contents || !target || !root) return;
+      const scene = hero.closest<HTMLElement>('.hero-about-sequence')!;
+      const main = root.querySelector<HTMLElement>('.traveller-main')!;
+      const images = main.querySelectorAll('img');
+      const tails = Array.from(root.querySelectorAll<HTMLElement>('.traveller-tail'));
+      let source = {left:0,top:0,width:0,height:0};
+      let route = sampleRoute(p => ({x:p,y:p}));
+      let collapseEnd = 1, travelEnd = 2, expandEnd = 3;
+      const measure = () => {
+        [photo.querySelector('img')!, target.querySelector('img')!].forEach((image, i) => {
+          const style = getComputedStyle(image);
+          images[i].style.objectPosition = style.objectPosition;
+          images[i].style.filter = style.filter;
         });
-        return () => media.revert();
-    }, []);
-    return <div ref={ref} className="portrait-traveller" aria-hidden="true"><div className="traveller-main"><img src={assets.heroPortrait} alt=""/></div>{[0, 1, 2, 3].map(i => <i key={i} className="traveller-tail"/>)}</div>;
+        const r = photo.getBoundingClientRect(), cr = contents.getBoundingClientRect();
+        source = {left:r.left, top:r.top + scrollY, width:r.width, height:r.height};
+        const parent = target.parentElement!;
+        const position = parent.style.position;
+        parent.style.position = 'static';
+        const tr = target.getBoundingClientRect();
+        const endPoint = {x:tr.left+tr.width/2,y:tr.top+scrollY+tr.height/2};
+        parent.style.position = position;
+        route = sampleRoute(p => travelPoint(p, innerWidth, cr.top+scrollY, cr.bottom+scrollY, endPoint));
+        collapseEnd = hero.offsetHeight * .55;
+        travelEnd = Math.max(collapseEnd+250, tr.top+scrollY-innerHeight*.65);
+        expandEnd = Math.max(travelEnd+220, tr.top+scrollY-innerHeight*.12);
+      };
+      const draw = () => {
+        const y = scrollY, shrinking = y < collapseEnd, travelling = y >= collapseEnd && y < travelEnd;
+        const finished = y >= expandEnd;
+        scene.dataset.handoff = y > 0 ? 'moving' : 'idle';
+        root.style.visibility = y > 0 && !finished ? 'visible' : 'hidden';
+        photo.style.opacity = y > 0 ? '0' : '1';
+        target.style.opacity = finished || y <= 0 ? '1' : '0';
+        const distance = clamp((y-collapseEnd)/(travelEnd-collapseEnd))*route.length;
+        const dot = routePoint(route, distance);
+        let frame;
+        if(shrinking){
+          const start = routePoint(route,0);
+          frame = photoFrame(source, {left:start.x-7,top:start.y-7,width:14,height:14}, y/collapseEnd);
+          frame.top -= y;
+          images[0].style.opacity = String(1-ease((y/collapseEnd-.55)/.45));
+          images[1].style.opacity = '0';
+        } else if(travelling){
+          frame = {left:dot.x-7,top:dot.y-y-7,width:14,height:14,radius:7};
+          images[0].style.opacity = images[1].style.opacity = '0';
+        } else {
+          const tr=target.getBoundingClientRect(), end=routePoint(route,route.length);
+          const p=clamp((y-travelEnd)/(expandEnd-travelEnd));
+          frame=photoFrame({left:end.x-7,top:end.y-y-7,width:14,height:14},tr,p,true);
+          images[0].style.opacity='0';images[1].style.opacity=String(ease(p*1.7));
+        }
+        syncHeroPhotoType(hero, shrinking ? frame : {left:0,top:-100,width:0,height:0}, frame.radius);
+        gsap.set(main,{x:frame.left,y:frame.top,width:frame.width,height:frame.height,borderRadius:frame.radius});
+        tails.forEach((tail,i)=>{
+          const pos=routePoint(route,Math.max(0,distance-[18,32,43,52][i]));
+          const size=9-i*1.8;
+          gsap.set(tail,{x:pos.x-size/2,y:pos.y-y-size/2,width:size,height:size,opacity:travelling?(.38-i*.075)*clamp(distance/65)*clamp((route.length-distance)/70):0});
+        });
+      };
+      measure();draw();
+      const trigger=ScrollTrigger.create({start:0,end:()=>expandEnd,onUpdate:draw,onRefresh:()=>{measure();draw();}});
+      const observer=new ResizeObserver(()=>ScrollTrigger.refresh());observer.observe(contents);observer.observe(hero);
+      const refresh=()=>ScrollTrigger.refresh();
+      document.fonts.ready.then(refresh);addEventListener('resize',refresh);
+      return()=>{observer.disconnect();removeEventListener('resize',refresh);trigger.kill();photo.style.removeProperty('opacity');target.style.removeProperty('opacity');root.style.visibility='hidden';delete scene.dataset.handoff;syncHeroPhotoType(hero,photo.getBoundingClientRect(),12);};
+    });
+    return()=>media.revert();
+  },[]);
+  return <div ref={ref} className="portrait-traveller" aria-hidden="true"><div className="traveller-main"><img src={assets.heroPortrait} alt=""/><img className="journey-arrival" src={assets.editorialPortrait01} alt=""/></div>{[0,1,2,3].map(i=><i key={i} className="traveller-tail"/>)}</div>;
 }

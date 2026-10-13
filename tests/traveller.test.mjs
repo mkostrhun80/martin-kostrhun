@@ -23,3 +23,19 @@ test('mobile route takes the left gutter after crossing above the contents', () 
         assert.ok(point.y >= 746 && point.y <= 976);
     }
 });
+
+test('portrait collapse and expansion have exact reversible endpoints', async()=>{
+ const {photoFrame}=await import('../lib/traveller.ts');
+ const photo={left:420,top:90,width:600,height:750},dot={left:100,top:1000,width:14,height:14},destination={left:72,top:200,width:494,height:329};
+ for(const [a,b,expanding] of [[photo,dot,false],[dot,destination,true]]){
+   for(const t of [0,1]){const frame=photoFrame(a,b,t,expanding);for(const key of ['left','top','width','height']) assert.equal(frame[key],(t?b:a)[key]);}
+   for(let i=0;i<=100;i++){const frame=photoFrame(a,b,i/100,expanding);assert.ok(frame.width>0&&frame.height>0);assert.ok(frame.radius>=0&&frame.radius<=Math.min(frame.width,frame.height)/2);}
+ }
+});
+test('trail keeps compact geometric spacing along the same route',async()=>{
+ const {sampleRoute,routePoint}=await import('../lib/traveller.ts');
+ const route=sampleRoute(p=>travelPoint(p,1440,900,1400,{x:318,y:2200}));
+ assert.deepEqual(routePoint(route,0),travelPoint(0,1440,900,1400,{x:318,y:2200}));
+ assert.deepEqual(routePoint(route,route.length),{x:318,y:2200});
+ for(let d=100;d<route.length;d+=23){const head=routePoint(route,d),tail=routePoint(route,d-18);assert.ok(Math.hypot(head.x-tail.x,head.y-tail.y)<=18.001);}
+});
