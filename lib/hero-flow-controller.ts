@@ -43,7 +43,10 @@ export function attachHeroFlow(hero: HTMLElement, svg: SVGSVGElement) {
     attr(clip, { x: box.x, y: box.y, width: box.w, height: box.h, rx: radius, ry: radius });
     attr(outside, { x: box.x, y: box.y, width: box.w, height: box.h, rx: radius, ry: radius });
     const w = Math.max(box.w, box.h * 2 / 3), h = w * 1.5;
-    attr(image, { x: box.x + (box.w - w) * .5, y: box.y + (box.h - h) * .75, width: w, height: h });
+    const photoImage = photo.querySelector('img');
+    const objectPosition = photoImage ? getComputedStyle(photoImage).objectPosition.split(' ') : ['50%', '75%'];
+    const verticalPosition = objectPosition[1]?.endsWith('%') ? parseFloat(objectPosition[1]) / 100 : .75;
+    attr(image, { x: box.x + (box.w - w) * .5, y: box.y + (box.h - h) * verticalPosition, width: w, height: h });
     reset();
   }
   const stop = () => { cancelAnimationFrame(frame); frame = 0; previous = 0; };
