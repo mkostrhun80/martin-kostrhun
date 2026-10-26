@@ -1,8 +1,8 @@
 /* Scoped interaction patch: hero handoff, photo colour and compact partners. */
-.hero-about-sequence{position:relative;isolation:isolate;background:#f9dec9}
+.hero-about-sequence{position:relative;isolation:isolate;background:#f5f3ee}
 .hero-about-sequence .about{border-top:0}
 .hero-photo-handoff{position:fixed;left:0;top:0;visibility:hidden;pointer-events:none;z-index:5;overflow:hidden;contain:paint;background:var(--purple)}
-.hero-photo-handoff::after{content:'';position:absolute;inset:0;z-index:2;border:var(--handoff-ring,0px) solid var(--purple);border-radius:inherit;background:rgb(169 113 75 / var(--handoff-tint,0))}
+.hero-photo-handoff::after{content:'';position:absolute;inset:0;z-index:2;border:var(--handoff-ring,0px) solid var(--purple);border-radius:inherit;background:rgb(50 107 114 / var(--handoff-tint,0))}
 .hero-photo-handoff img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero-photo-handoff .handoff-from{object-position:50% 75%;filter:grayscale(1) contrast(1.12) brightness(.96)}
 .hero-photo-handoff .handoff-to{opacity:0;object-position:center}
@@ -54,6 +54,6 @@
 @media(prefers-reduced-motion:reduce){.hero-fluid-svg{transition:none}}
 
 /* Keep the original neutral/purple palette when the fluid fill crosses type. */
-.hero-with-flow>.hero-artwork>.hero-name{color:#f9dec9}
+.hero-with-flow>.hero-artwork>.hero-name{color:#f5f3ee}
 
 .hero-with-flow>.hero-artwork>.hero-name .hero-name-dot{color:var(--purple);mix-blend-mode:normal}
