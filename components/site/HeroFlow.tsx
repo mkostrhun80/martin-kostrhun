@@ -30,7 +30,7 @@ export function HeroFlow({ heroRef }: { heroRef: RefObject<HTMLElement | null> }
         <clipPath id={`${id}-photo`}><rect data-photo-clip width="0" height="0"/></clipPath>
       </defs>
       <g mask={`url(#${id}-outside)`}>
-        <rect width="100%" height="100%" fill="#326b72" opacity=".22" mask={`url(#${id})`}/>
+        <rect width="100%" height="100%" fill="#c4a484" opacity=".22" mask={`url(#${id})`}/>
       </g>
       <g clipPath={`url(#${id}-photo)`}><g mask={`url(#${id})`}>
         <image data-color-photo href={assets.heroLensPortrait} width="0" height="0" preserveAspectRatio="none"/>

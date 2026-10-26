@@ -55,7 +55,7 @@
   mix-blend-mode: difference;
   transform: translate3d(calc(var(--portal-depth) * 28px), calc(var(--portal-depth) * 8px), 0);
 }
-.hero-name-dot { color: #326b72; }
+.hero-name-dot { color: #c4a484; }
 .hero-photo-layer {
   position: absolute;
   z-index: 2;
@@ -64,7 +64,7 @@
   height: var(--portrait-height);
   bottom: var(--portrait-bottom);
   overflow: hidden;
-  background: #617784;
+  background: #8490a0;
   transform: translate3d(var(--hero-parallax-x), var(--hero-parallax-y), 0);
 }
 .hero-photo-layer img {
@@ -81,7 +81,7 @@
   content: '';
   position: absolute;
   inset: 70% 0 0;
-  background: linear-gradient(transparent, #142a3b55);
+  background: linear-gradient(transparent, #14243a55);
 }
 .hero-photo-caption {
   position: absolute;
@@ -104,22 +104,22 @@
   opacity: var(--portal-opacity);
   contain: paint;
 }
-.hero-artwork-alternate { background: #326b72; }
-.hero-artwork-alternate .hero-photo-layer { background: #326b72; }
+.hero-artwork-alternate { background: #c4a484; }
+.hero-artwork-alternate .hero-photo-layer { background: #c4a484; }
 .hero-artwork-alternate .hero-photo-layer img {
   filter: grayscale(1) contrast(1.1);
   mix-blend-mode: luminosity;
   transform: translate(var(--lens-offset-x), var(--lens-offset-y)) scale(calc(1.055 + var(--portal-depth) * .065));
 }
-.hero-artwork-alternate .hero-name-back { color: #f5f3ee; }
+.hero-artwork-alternate .hero-name-back { color: #f5f2ec; }
 .hero-artwork-alternate .hero-name-front {
   color: transparent;
-  -webkit-text-stroke: 1.5px #f5f3ee;
+  -webkit-text-stroke: 1.5px #f5f2ec;
   mix-blend-mode: normal;
-  text-shadow: 2px 0 #326b7233;
+  text-shadow: 2px 0 #c4a48433;
 }
-.hero-artwork-alternate .hero-name-dot { color: #f5f3ee; -webkit-text-stroke: 0; }
-.portal-wash { position: absolute; inset: 0; z-index: 5; background: #326b72; opacity: var(--portal-wash); }
+.hero-artwork-alternate .hero-name-dot { color: #f5f2ec; -webkit-text-stroke: 0; }
+.portal-wash { position: absolute; inset: 0; z-index: 5; background: #c4a484; opacity: var(--portal-wash); }
 .lens-rim, .lens-hit {
   position: absolute;
   left: calc(var(--lens-x) - var(--lens-rx));
@@ -132,12 +132,12 @@
   z-index: 5;
   pointer-events: none;
   opacity: var(--lens-rim-opacity);
-  border: 1px solid #f5f3eebd;
+  border: 1px solid #f5f2ecbd;
   /* Two crisp, unequal edges read as optical glass, not an illuminated orb. */
-  box-shadow: inset 2px 0 0 #f5f3ee99, inset -3px -1px 0 #142a3bb3, 0 0 0 1px #326b7288;
+  box-shadow: inset 2px 0 0 #f5f2ec99, inset -3px -1px 0 #14243ab3, 0 0 0 1px #c4a48488;
 }
-.lens-rim::before { content: ''; position: absolute; inset: 5px; border: 1px solid #f5f3ee40; border-radius: inherit; }
-.lens-edge-mark { position: absolute; left: 50%; top: -5px; width: 1px; height: 9px; background: #f5f3ee; }
+.lens-rim::before { content: ''; position: absolute; inset: 5px; border: 1px solid #f5f2ec40; border-radius: inherit; }
+.lens-edge-mark { position: absolute; left: 50%; top: -5px; width: 1px; height: 9px; background: #f5f2ec; }
 .lens-edge-mark.second { top: auto; bottom: -5px; }
 .lens-hit {
   z-index: 7;
@@ -196,7 +196,7 @@
   .hero-photo-caption { font-size: 9px; }
   .hero-artwork-alternate .hero-photo-layer img { transform: scale(calc(1.035 + var(--portal-depth) * .04)); }
   .hero-artwork-alternate .hero-name-front { -webkit-text-stroke-width: 1px; text-shadow: none; }
-  .lens-rim { box-shadow: inset 1px 0 0 #f5f3ee99, 0 0 0 1px #326b7288; }
+  .lens-rim { box-shadow: inset 1px 0 0 #f5f2ec99, 0 0 0 1px #c4a48488; }
   .lens-rim::before { display: none; }
   .lens-annotation { top: calc(var(--lens-y) - var(--lens-ry) - 50px); left: clamp(22px, calc(var(--lens-x) - 50px), calc(100% - 156px)); }
 }

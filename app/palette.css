@@ -1,98 +1,96 @@
-/* Shared palette for the editorial site, glass controls and portrait effects.
-   --purple remains the legacy accent alias used by existing animations. */
+/* Navy and light brown palette shared by the site and portrait effects.
+   --purple remains the accent alias used by existing animation layers. */
 :root {
-  --ink-blue: #142a3b;
-  --warm-white: #f5f3ee;
-  --petrol: #326b72;
-  --mist-blue: #dce5e8;
-  --slate: #617784;
+  --navy: #14243a;
+  --warm-white: #f5f2ec;
+  --light-brown: #c4a484;
+  --sand: #e8dac9;
+  --slate: #8490a0;
   --background: var(--warm-white);
-  --foreground: var(--ink-blue);
+  --foreground: var(--navy);
   --paper: var(--warm-white);
-  --ink: var(--ink-blue);
+  --ink: var(--navy);
   --card: var(--warm-white);
-  --card-foreground: var(--ink-blue);
+  --card-foreground: var(--navy);
   --popover: var(--warm-white);
-  --popover-foreground: var(--ink-blue);
-  --primary: var(--petrol);
+  --popover-foreground: var(--navy);
+  --primary: var(--navy);
   --primary-foreground: var(--warm-white);
-  --secondary: var(--mist-blue);
-  --secondary-foreground: var(--ink-blue);
-  --muted: var(--mist-blue);
-  --muted-foreground: #526977;
-  --accent: var(--mist-blue);
-  --accent-foreground: var(--ink-blue);
-  --border: #b6c6cc;
-  --input: #b6c6cc;
-  --ring: var(--petrol);
-  --purple: var(--petrol);
-  --glass-line: rgba(220,229,232,.72);
-  --glass-shadow: 0 18px 55px rgba(20,42,59,.09), inset 0 1px 0 rgba(245,243,238,.8);
+  --secondary: var(--sand);
+  --secondary-foreground: var(--navy);
+  --muted: var(--sand);
+  --muted-foreground: #586579;
+  --accent: var(--sand);
+  --accent-foreground: var(--navy);
+  --border: #c9bbaa;
+  --input: #c9bbaa;
+  --ring: var(--navy);
+  --purple: var(--light-brown);
+  --glass-line: rgba(232,218,201,.72);
+  --glass-shadow: 0 18px 55px rgba(20,36,58,.09), inset 0 1px 0 rgba(245,242,236,.8);
 }
-html { scrollbar-color: var(--slate) var(--warm-white); }
-::selection { background: var(--petrol); color: var(--warm-white); }
+html { scrollbar-color: var(--light-brown) var(--warm-white); }
+::selection { background: var(--navy); color: var(--warm-white); }
 a:focus-visible, button:focus-visible, input:focus-visible,
-textarea:focus-visible, select:focus-visible, summary:focus-visible {
-  outline-color: var(--petrol);
-}
+textarea:focus-visible, select:focus-visible, summary:focus-visible { outline-color: var(--ring); }
 .site-button, .hero-note .hero-appointment,
 .service-item .site-button, .header-appointment {
-  background: var(--petrol);
-  color: var(--warm-white);
-  box-shadow: inset 0 1px 1px rgba(245,243,238,.32), 0 6px 20px rgba(20,42,59,.16)!important;
+  background: var(--light-brown);
+  color: var(--navy);
+  box-shadow: inset 0 1px 1px rgba(245,242,236,.32), 0 6px 20px rgba(20,36,58,.16)!important;
 }
 .site-button:hover:not(:disabled), .hero-note .hero-appointment:hover,
 .service-item .site-button:hover, .header-appointment:hover {
-  background: var(--ink-blue);
+  background: var(--navy);
   color: var(--warm-white);
 }
 .index-section {
-  background: radial-gradient(ellipse at 85% 40%, rgba(220,229,232,.8), transparent 60%), var(--warm-white);
+  background: radial-gradient(ellipse at 85% 40%, rgba(232,218,201,.65), transparent 60%), var(--warm-white);
 }
-.about, .trust-new { background: var(--mist-blue); }
-.about { --primary: var(--petrol); --border: rgba(20,42,59,.22); }
-.about-copy .display { color: var(--ink-blue); mix-blend-mode: normal; }
-.about-copy .display span { color: var(--petrol); }
-.about-proof { border-color: rgba(20,42,59,.22); }
-.trust-new { --primary: var(--ink-blue); --border: rgba(20,42,59,.22); }
+.about, .trust-new { background: var(--sand); }
+.about { --primary: var(--navy); --border: rgba(20,36,58,.22); }
+.about-copy .display { color: var(--navy); mix-blend-mode: normal; }
+.about-copy .display span { color: var(--navy); }
+.about-proof { border-color: rgba(20,36,58,.22); }
+.trust-new { --primary: var(--navy); --border: rgba(20,36,58,.22); }
 .trust-new .section-heading > p, .trust-new .empty-note,
 .trust-new .review-method, .trust-new .review-card time,
-.trust-new .review-card > div > span, .trust-new .client-stat small { color: var(--ink-blue); }
+.trust-new .review-card > div > span, .trust-new .client-stat small { color: var(--navy); }
 .service-chapter-protect {
-  background: radial-gradient(ellipse at 0% 60%, rgba(50,107,114,.2), transparent 70%), var(--ink-blue);
+  background: radial-gradient(ellipse at 0% 60%, rgba(132,144,160,.12), transparent 70%), var(--navy);
 }
 .service-chapter-protect, .contact, .footer {
   --primary: var(--warm-white);
-  --purple: var(--mist-blue);
+  --purple: var(--light-brown);
   --ring: var(--warm-white);
 }
-.service-chapter-protect .service-item h4,
+.service-chapter-protect .service-item h4 { color: var(--warm-white); }
 .service-chapter-protect .service-item-number,
-.service-chapter-protect em, .service-chapter-protect .text-link { color: var(--warm-white); }
+.service-chapter-protect em, .service-chapter-protect .text-link { color: var(--light-brown); }
 .contact.section {
-  background: radial-gradient(ellipse at 85% 35%, rgba(50,107,114,.2), transparent 60%), var(--ink-blue);
+  background: radial-gradient(ellipse at 85% 35%, rgba(132,144,160,.12), transparent 60%), var(--navy);
 }
 .contact-editorial .contact-tabs button[aria-selected=true] { color: var(--warm-white); }
-.contact-state-icon { color: var(--mist-blue); }
+.contact-state-icon { color: var(--light-brown); }
 .contact-topic select:focus, .contact-form input:focus, .contact-form textarea:focus {
-  border-color: var(--warm-white);
-  box-shadow: 0 0 0 3px rgba(220,229,232,.2);
+  border-color: var(--light-brown);
+  box-shadow: 0 0 0 3px rgba(196,164,132,.2);
 }
-.contact .text-inline:hover, .contact a:hover { color: var(--warm-white); }
-.contact .site-button { background: var(--warm-white); color: var(--ink-blue); }
-.contact .site-button:hover { background: var(--mist-blue); color: var(--ink-blue); }
-.footer { background: var(--ink-blue); }
+.contact .text-inline:hover, .contact a:hover { color: var(--light-brown); }
+.contact .site-button { background: var(--light-brown); color: var(--navy); }
+.contact .site-button:hover { background: var(--sand); color: var(--navy); }
+.footer { background: var(--navy); }
 .footer-name { color: var(--slate); }
-.footer-columns a:hover { color: var(--warm-white); }
-.partners-new .site-button-quiet { background: transparent; color: var(--petrol); }
-.partners-new .site-button-quiet:hover { background: var(--petrol); color: var(--warm-white); }
+.footer-columns a:hover { color: var(--light-brown); }
+.partners-new .site-button-quiet { background: transparent; color: var(--navy); }
+.partners-new .site-button-quiet:hover { background: var(--navy); color: var(--warm-white); }
 .contents-dialog[data-slot=dialog-content] {
-  background: linear-gradient(145deg, rgba(245,243,238,.97), rgba(220,229,232,.95));
+  background: linear-gradient(145deg, rgba(245,242,236,.97), rgba(232,218,201,.95));
 }
 @media(max-width:760px) {
-  .hero-photo-type .hero-name { color: var(--warm-white); -webkit-text-stroke: .6px var(--ink-blue); }
+  .hero-photo-type .hero-name { color: var(--warm-white); -webkit-text-stroke: .6px var(--navy); }
 }
 @supports not (backdrop-filter: blur(1px)) {
   .site-header, .scroll-trigger, .contents-dialog[data-slot=dialog-content] { background: var(--warm-white); }
-  .contact-editorial .contact-experience { background: var(--ink-blue); }
+  .contact-editorial .contact-experience { background: var(--navy); }
 }
