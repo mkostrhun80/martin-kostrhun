@@ -1,66 +1,84 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { travelPoint } from '../lib/traveller.ts';
-test('travelling dot ends at heading and follows same path in reverse at desktop and mobile widths', () => { for (const width of [375, 768, 1280, 1440]) {
-    const target = { x: width * .05 + 7, y: 1150 };
-    const start = travelPoint(0, width, 720, 1000, target);
-    const end = travelPoint(1, width, 720, 1000, target);
-    assert.deepEqual(end, target);
-    if (width > 760) assert.ok(start.x > width * .8);
-    else assert.equal(start.x,12);
+import { travelPoint, photoFrame, journeyTiming, sampleRoute, routePoint, settleScroll } from '../lib/traveller.ts';
+
+test('the short arc stays above the photo and out of the right-hand navigation', () => {
+  for (const width of [360, 390, 768, 1280, 1440, 2560]) {
+    const mobile = width <= 760, target = { x: width * (mobile ? .5 : .26), y: 1250 };
+    const start = travelPoint(0, width, 900, 1700, target);
+    assert.ok(start.y < 900);
+    let previous = start;
+    for (let i = 1; i <= 200; i++) {
+      const p = i / 200, point = travelPoint(p, width, 900, 1700, target);
+      assert.ok(point.x <= previous.x + 1e-8 && point.x >= target.x - 1e-8, 'no horizontal loops');
+      assert.ok(point.y >= previous.y - 1e-8 && point.y <= target.y, 'no vertical loops');
+      assert.ok(point.x >= 0 && point.x < width);
+      const reverse = travelPoint(1 - (1 - p), width, 900, 1700, target);
+      assert.ok(Math.abs(point.x - reverse.x) < 1e-8 && Math.abs(point.y - reverse.y) < 1e-8);
+      previous = point;
+    }
+    assert.deepEqual(previous, target);
+  }
+});
+
+test('source, 14 px dot and destination meet at exact reversible endpoints', () => {
+  const source = { left: 936, top: 243, width: 389, height: 486 };
+  const dot = { left: 400, top: 950, width: 14, height: 14 };
+  const destination = { left: 72, top: 1020, width: 594, height: 594 };
+  for (const [a, b, expanding] of [[source, dot, false], [dot, destination, true]]) {
+    const first = photoFrame(a, b, 0, expanding, 28), last = photoFrame(a, b, 1, expanding, 28);
+    for (const key of ['left', 'top', 'width', 'height']) {
+      assert.equal(first[key], a[key]); assert.equal(last[key], b[key]);
+    }
+    assert.equal(expanding ? first.radius : last.radius, 7);
+    assert.equal(expanding ? last.radius : first.radius, 28);
     for (let i = 0; i <= 100; i++) {
-        const p = i / 100, frame = travelPoint(p, width, 720, 1000, target);
-        assert.ok(Number.isFinite(frame.x) && Number.isFinite(frame.y));
-        assert.ok(frame.x >= 0 && frame.x <= width);
-        const reverse = travelPoint(1 - (1 - p), width, 720, 1000, target);
-        assert.ok(Math.abs(frame.x - reverse.x) < 1e-8 && Math.abs(frame.y - reverse.y) < 1e-8);
+      const frame = photoFrame(a, b, i / 100, expanding);
+      assert.ok(frame.width > 0 && frame.height > 0);
+      assert.ok(frame.radius >= 0 && frame.radius <= Math.min(frame.width, frame.height) / 2);
     }
-} });
-test('mobile route stays in the left gutter through the contents', () => {
-    const target = { x: 27, y: 1150 };
-    for (const p of [.4, .6, .8]) {
-        const point = travelPoint(p, 375, 720, 1000, target);
-        assert.ok(Math.abs(point.x - 12) < 1e-8);
-        assert.ok(point.y >= 746 && point.y <= 976);
-    }
+  }
 });
 
-test('portrait collapse and expansion have exact reversible endpoints', async()=>{
- const {photoFrame}=await import('../lib/traveller.ts');
- const photo={left:420,top:90,width:600,height:750},dot={left:100,top:1000,width:14,height:14},destination={left:72,top:200,width:494,height:329};
- for(const [a,b,expanding] of [[photo,dot,false],[dot,destination,true]]){
-   for(const t of [0,1]){const frame=photoFrame(a,b,t,expanding);for(const key of ['left','top','width','height']) assert.equal(frame[key],(t?b:a)[key]);}
-   for(let i=0;i<=100;i++){const frame=photoFrame(a,b,i/100,expanding);assert.ok(frame.width>0&&frame.height>0);assert.ok(frame.radius>=0&&frame.radius<=Math.min(frame.width,frame.height)/2);}
- }
-});
-test('trail keeps compact geometric spacing along the same route',async()=>{
- const {sampleRoute,routePoint}=await import('../lib/traveller.ts');
- const route=sampleRoute(p=>travelPoint(p,1440,900,1400,{x:318,y:2200}));
- assert.deepEqual(routePoint(route,0),travelPoint(0,1440,900,1400,{x:318,y:2200}));
- assert.deepEqual(routePoint(route,route.length),{x:318,y:2200});
- for(let d=100;d<route.length;d+=23){const head=routePoint(route,d),tail=routePoint(route,d-18);assert.ok(Math.hypot(head.x-tail.x,head.y-tail.y)<=18.001);}
+test('distance sampling preserves both endpoints and has no discontinuities', () => {
+  const target = { x: 330, y: 1250 };
+  const route = sampleRoute(p => travelPoint(p, 1440, 900, 1800, target));
+  assert.deepEqual(routePoint(route, -10), travelPoint(0, 1440, 900, 1800, target));
+  assert.deepEqual(routePoint(route, route.length + 10), target);
+  for (let d = 5; d <= route.length; d += 5) {
+    const a = routePoint(route, d - 5), b = routePoint(route, d);
+    assert.ok(Math.hypot(a.x - b.x, a.y - b.y) <= 5.001);
+  }
 });
 
-test('mobile journey leaves a dead zone and more scroll room for expansion', async()=>{
- const {journeyTiming}=await import('../lib/traveller.ts');
- for(const height of [667,812,932]){
-   const t=journeyTiming(height,2100,height,true);
-   assert.ok(t.start>=24);
-   assert.ok(t.collapseEnd>height*.8);
-   assert.ok(t.travelEnd-t.collapseEnd>=300);
-   assert.ok(t.expandEnd-t.travelEnd>=400);
- }
+test('arrival happens on the second screen below the fixed header, including short screens', () => {
+  for (const [height, viewport, mobile] of [[680, 640, true], [844, 844, true], [680, 390, false], [900, 900, false], [1100, 1215, false]]) {
+    const top = height + (mobile ? 96 : 120);
+    const t = journeyTiming(height, top, viewport, mobile);
+    assert.ok(t.start >= 16 && t.start < t.collapseEnd);
+    assert.ok(t.collapseEnd < t.travelEnd && t.travelEnd < t.expandEnd);
+    assert.ok(t.travelEnd - t.collapseEnd >= 100);
+    assert.ok(t.expandEnd - t.travelEnd >= 180);
+    assert.ok(top - t.expandEnd >= Math.min(89, viewport * .14) - .01);
+    assert.ok(top - t.expandEnd <= 120);
+    assert.ok(t.expandEnd < height + 150, 'the journey does not extend into services');
+  }
 });
-test('scroll damping settles with no overshoot at 60 and 120 Hz, also in reverse', async()=>{
- const {settleScroll}=await import('../lib/traveller.ts');
- const values=[];
- for(const fps of [60,120]){
-   let current=0;
-   for(let i=0;i<fps;i++){current=settleScroll(current,700,1/fps,true);assert.ok(current>=0&&current<=700);}
-   values.push(current);
-   for(let i=0;i<fps*2;i++){current=settleScroll(current,0,1/fps,true);assert.ok(current>=0);}
-   assert.equal(current,0);
- }
- assert.ok(Math.abs(values[0]-values[1])<.001);
- assert.ok(values[0]>697);
+
+test('scroll damping settles without overshoot in either direction at 60 and 120 Hz', () => {
+  for (const mobile of [true, false]) {
+    const values = [];
+    for (const fps of [60, 120]) {
+      let current = 0;
+      for (let i = 0; i < fps; i++) {
+        current = settleScroll(current, 700, 1 / fps, mobile);
+        assert.ok(current >= 0 && current <= 700);
+      }
+      values.push(current);
+      for (let i = 0; i < fps * 2; i++) { current = settleScroll(current, 0, 1 / fps, mobile); assert.ok(current >= 0); }
+      assert.equal(current, 0);
+    }
+    assert.ok(Math.abs(values[0] - values[1]) < .001);
+    assert.ok(values[0] > 699);
+  }
 });

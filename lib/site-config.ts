@@ -4,6 +4,7 @@ import { sitePath } from './site-path';
 export const assets = {
   heroPortrait: sitePath('/images/DSC01608.jpg'),
   heroLensPortrait: sitePath('/images/DSC01608.jpg'),
+  contentsPortrait: sitePath('/images/DSC01638.jpg'),
   aboutPortrait: sitePath('/images/DSC01657.jpg'),
   editorialPortrait01: sitePath('/images/DSC01638.jpg'),
   editorialPortrait02: sitePath('/images/DSC01624.jpg'),

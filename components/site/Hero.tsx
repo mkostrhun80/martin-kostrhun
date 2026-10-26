@@ -4,34 +4,25 @@ import { ButtonLabel } from './ButtonLabel';
 import { assets } from '@/lib/site-config';
 import { AppointmentLink } from './AppointmentLink';
 import { siteConfig } from '@/lib/site-config';
-import { useRef, type RefObject } from 'react';
-import { HeroFlow, HeroContours } from './HeroFlow';
+import { HeroContours } from './HeroFlow';
 
-/** The organic reveal stays registered with the photograph and typography. */
-function HeroArtwork({ alternate = false, heroRef }: { alternate?: boolean; heroRef?: RefObject<HTMLElement | null> }) {
-  return <div className={`hero-artwork${alternate ? ' hero-artwork-alternate' : ''}`} aria-hidden="true">
-    {!alternate && <HeroContours/>}
+function HeroArtwork() {
+  return <div className="hero-artwork" aria-hidden="true">
+    <HeroContours/>
     <span className="hero-name hero-name-back">MARTIN</span>
     <div className="hero-photo-layer">
-      <img src={alternate ? assets.heroLensPortrait : assets.heroPortrait}
+      <img src={assets.heroPortrait}
         alt="" width="800" height="1200"
-        fetchPriority={alternate ? 'auto' : 'high'} draggable={false}/>
+        fetchPriority="high" draggable={false}/>
     </div>
-    {heroRef && <HeroFlow heroRef={heroRef}/>}
     <span className="hero-name hero-name-front">KOSTRHUN<span className="hero-name-dot">.</span></span>
-    <span className="hero-name hero-name-front hero-dot-only">KOSTRHUN<span className="hero-name-dot">.</span></span>
-    <div className="hero-photo-type" aria-hidden="true">
-      <span className="hero-name hero-name-back">MARTIN</span>
-      <span className="hero-name hero-name-front">KOSTRHUN<span className="hero-name-dot">.</span></span>
-    </div>
   </div>;
 }
 
 export function Hero() {
-  const heroRef = useRef<HTMLElement>(null);
-  return <><div id="domu" aria-hidden="true"/><section ref={heroRef} className="hero hero-with-lens hero-with-flow" aria-labelledby="hero-title">
+  return <><div id="domu" aria-hidden="true"/><section className="hero hero-signature" aria-labelledby="hero-title">
     <h1 id="hero-title" className="sr-only">Martin Kostrhun — finanční specialista</h1>
-    <HeroArtwork heroRef={heroRef}/>
+    <HeroArtwork/>
     <div className="hero-meta"><span>Finanční specialista · eDO finance</span><span>Hradec Králové<br/>osobně i online</span></div>
     {assets.isPlaceholder && <p className="hero-photo-caption">ILUSTRAČNÍ PORTRÉT / DOČASNÁ FOTOGRAFIE</p>}
     <span className="sr-only">{assets.portraitAlt}</span>
