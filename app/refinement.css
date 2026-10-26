@@ -1,12 +1,12 @@
 /* Refinement: hierarchy and native vertical flow, with motion as enhancement. */
 .hero-with-flow .hero-note p{font-size:clamp(24px,2.45vw,38px);line-height:1.04;letter-spacing:-.045em}
 .hero-with-flow .hero-note{max-width:22vw}
-.hero-flow-reveal .hero-artwork-alternate{background:#326b72}
+.hero-flow-reveal .hero-artwork-alternate{background:#c4a484}
 .hero-flow-reveal .hero-photo-layer img{filter:grayscale(1) contrast(1.1);mix-blend-mode:luminosity;opacity:.88}
 .hero-flow-contours{opacity:.1}
 .hero-with-flow>.hero-artwork>.hero-photo-layer{animation:hero-photo-arrive 1.25s cubic-bezier(.16,1,.3,1) both}
 @keyframes hero-photo-arrive{from{clip-path:inset(5% 0 8% 0);opacity:.4;translate:0 18px}to{clip-path:inset(0);opacity:1;translate:0 0}}
-.about{position:relative;z-index:2;margin-top:-30px;padding-top:105px;background:#dce5e8;border-top:1px solid #b6c6cc}
+.about{position:relative;z-index:2;margin-top:-30px;padding-top:105px;background:#e8dac9;border-top:1px solid #c9bbaa}
 .about-layout{gap:9%;grid-template-columns:42% 49%}
 .about-copy .display{font-size:clamp(74px,8.1vw,130px);line-height:.94}
 .about-copy h3{font-size:clamp(27px,2.5vw,39px);margin-bottom:24px}
@@ -45,7 +45,7 @@
 .partner-grid[data-selection=true] .partner-mark{opacity:.4}
 .partner-grid[data-selection=true] .partner-mark[aria-pressed=true]{opacity:1}
 .partner-grid:has(.partner-mark:focus-visible) .partner-mark:not(:focus-visible){opacity:.4}
-.partner-name{font-size:10px;color:#526977}
+.partner-name{font-size:10px;color:#586579}
 @media(hover:hover){.partner-grid:has(.partner-mark:hover) .partner-mark{opacity:.4}.partner-grid:has(.partner-mark:hover) .partner-mark:hover{opacity:1}}
 .contact{margin-top:-20px;padding-top:105px;background:var(--paper)}
 .contact-curtain{border-top:0}
