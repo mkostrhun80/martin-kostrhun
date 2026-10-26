@@ -19,9 +19,9 @@
 .footer-name .footer-word > span { color:var(--purple); }
 .process-progress { grid-column:1; align-self:end; width:100%; max-width:360px; }
 .process-progress ol { display:flex; justify-content:space-between; list-style:none; margin:0 0 14px; padding:0; font-size:12px; letter-spacing:.08em; }
-.process-progress li { color:#54583d; transition:color .25s; }
+.process-progress li { color:#526977; transition:color .25s; }
 .process-progress li.is-current { color:var(--primary); }
-.process-progress-track { height:2px; background:#b7b396; }
+.process-progress-track { height:2px; background:#b6c6cc; }
 .process-progress-fill { display:block; width:100%; height:100%; background:var(--purple); transform-origin:left; }
 .approach .steps { grid-column:2; grid-row:1 / span 2; }
 .services-scroll-cue { display:none; }
@@ -48,9 +48,9 @@
   .motion-services .service-frame { animation:service-reveal .65s cubic-bezier(.22,1,.36,1) both; }
   .motion-services[data-service-group=Chránit] { background:var(--ink); color:var(--paper); }
   .motion-services[data-service-group=Chránit] .service-row { border-color:#ffffff30; }
-  .motion-services[data-service-group=Chránit] .service-row.active button,.motion-services[data-service-group=Chránit] .service-description a { color:#a9714b; }
+  .motion-services[data-service-group=Chránit] .service-row.active button,.motion-services[data-service-group=Chránit] .service-description a { color:#326b72; }
   .motion-services .services-scroll-cue { display:flex; align-items:center; gap:24px; position:absolute; bottom:30px; left:5vw; right:5vw; font-size:10px; letter-spacing:.08em; }
-  .services-scroll-cue i { height:2px; background:#a9714b33; flex:1; position:relative; }
+  .services-scroll-cue i { height:2px; background:#326b7233; flex:1; position:relative; }
   .services-scroll-cue i::after { content:''; position:absolute; inset:0; background:var(--purple); transform:scaleX(var(--services-progress,0)); transform-origin:left; }
   .motion-process { height:100svh; min-height:700px; grid-template-rows:1fr auto; gap:25px 7%; padding-top:80px; padding-bottom:80px; }
   .motion-process .approach-heading { position:static; align-self:center; }

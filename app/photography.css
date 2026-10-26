@@ -4,7 +4,7 @@
   --portrait-left: 42%;
   --surname-indent: 15vw;
 }
-.hero-artwork:not(.hero-artwork-alternate) { background: #f9dec9; }
+.hero-artwork:not(.hero-artwork-alternate) { background: #f5f3ee; }
 .hero-name { top: 20%; }
 .hero-name-back { z-index: 3; color: white; mix-blend-mode: difference; }
 .hero-name-front {
