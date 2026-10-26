@@ -1,7 +1,7 @@
 'use client';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { apiPath } from './SiteData';
-import { postJSON } from './ContactExperience';
+import { postJSON } from '@/lib/site-api';
 import { defaultFAQ, type FAQ } from '@/lib/public-data';
 import { sitePath } from '@/lib/site-path';
 type FeedbackRow = {

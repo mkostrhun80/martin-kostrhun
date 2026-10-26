@@ -6,19 +6,25 @@ Redesign vznikl na větvi `redesign/professional-presentation`; statická verze 
 
 Lokální náhled používá oddělenou SQLite databázi se stejnými tabulkami jako D1. Administrační data ani klíč nejsou součástí Gitu. Záznamy z lokálních testů se nepřenášejí do produkce.
 
-## 1. Rezervace a iCloud
+## 1. Kontaktní formulář a FormSubmit
 
-Vlastník zatím nemá Cal.com a pracovní události ukládá do iCloudu.
+Kontaktní sekce má pět vzhledů přepínaných bublinami 1–5. Sdílejí rozepsanou
+zprávu, validaci a doručování přes FormSubmit na martin.kostrhun@edofinance.cz.
+Rezervační kalendář byl z veřejného kontaktu odstraněný.
 
-1. Vytvořit vlastní účet Cal.com. Přijetí podmínek a autorizační kroky provede vlastník.
-2. Připojit Apple Calendar pomocí podporované integrace. Hlavní Apple heslo nezapisovat do projektu; případné heslo pro aplikaci zadat přímo do poskytovatele.
-3. Vybrat iCloud kalendáře kontrolované kvůli kolizím a kalendář pro nové rezervace. Soukromé události nezveřejňovat.
-4. Nastavit pracovní hodiny, délku schůzky, předstih, přestávky, blokování času a Europe/Prague.
-5. Vytvořit typy schůzky osobně, online a telefonicky. Potvrdit osobní adresu a u online schůzky způsob spojení.
-6. V administraci webu vložit odkazy konkrétních typů ve formátu `https://cal.com/jmeno/typ-schuzky`.
-7. Domluvit jednu testovací rezervaci. Zkontrolovat propsání do iCloudu, obsazený čas, souběžnou rezervaci, časové pásmo, změnu a zrušení.
+1. Po nasazení odeslat jednu aktivační/testovací zprávu z veřejného webu.
+2. Martin ve své pracovní schránce otevře aktivační e-mail FormSubmit a potvrdí
+   příjem zpráv. Pokud zpráva nepřijde, zkontrolovat také spam.
+3. Poté odeslat test znovu a ověřit skutečné doručení do schránky i Reply-To.
 
-Bez účtu nebylo možné ověřit skutečnou dostupnost, dvojí rezervaci v Cal.com, e-mailová potvrzení ani propsání do iCloudu. Integrace webu používá podporovaný vložený rezervační kalendář, nikoli vlastní výpočet volných časů. Do připojení funguje přímý kontakt.
+Příjemce je pevný v lib/email-contact.ts. E-mail návštěvníka je Reply-To.
+HTTP 200 samo o sobě nestačí: web kontroluje boolean nebo řetězec success=true,
+a odlišuje čekající aktivaci od odeslání. Při chybě údaje zůstávají vyplněné.
+Klíč ani registrace nejsou potřeba; příjemce musí sám potvrdit svou adresu.
+Údaje nejsou ukládané do místního úložiště prohlížeče. Odesílání nepoužívá
+neaktivní Cloudflare API ani nevyžaduje server na GitHub Pages.
+
+Oficiální dokumentace: https://formsubmit.co/ajax-documentation
 
 ## 2. Cloudflare a D1
 

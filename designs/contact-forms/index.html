@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Pět podob kontaktu — Martin Kostrhun</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="preview.js" defer></script>
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="m21 3-7 18-4-7-7-4L21 3ZM10 14 21 3"/></symbol>
+    <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="13" rx="2"/><path d="M8 21h8m-4-5v5"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 18h4"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5m6-6-6 6 6 6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+  </svg>
+  <aside class="gallery-sidebar">
+    <a class="gallery-brand" href="./"><span class="monogram">MK<span>.</span></span><span>DESIGN STUDY<br><strong>Kontaktní formulář</strong></span></a>
+    <div class="sidebar-intro"><span class="eyebrow">MARTIN KOSTRHUN</span><h1>Jeden kontakt.<br>Pět podob.</h1><p>Vyberte směr, který nejlépe sedí Martinovu webu.</p></div>
+    <nav class="variant-nav" aria-label="Návrhy kontaktního formuláře">
+      <button data-show="ciste-sklo" aria-current="true"><span class="variant-index">01</span><span><strong>Čisté sklo</strong><small>Klidná a přímočará karta</small></span><span class="nav-dot"></span></button>
+      <button data-show="osobni-dialog"><span class="variant-index">02</span><span><strong>Osobní dialog</strong><small>Portrét a osobní kontakt</small></span><span class="nav-dot"></span></button>
+      <button data-show="dopis-martinovi"><span class="variant-index">03</span><span><strong>Dopis Martinovi</strong><small>Inspirováno aplikací Mail</small></span><span class="nav-dot"></span></button>
+      <button data-show="krok-za-krokem"><span class="variant-index">04</span><span><strong>Krok za krokem</strong><small>Jedna otázka v jeden moment</small></span><span class="nav-dot"></span></button>
+      <button data-show="nocni-sklo"><span class="variant-index">05</span><span><strong>Noční sklo</strong><small>Tmavý formulář s náhledem</small></span><span class="nav-dot"></span></button>
+    </nav>
+    <div class="sidebar-bottom"><span class="study-status"><span></span>INTERAKTIVNÍ NÁVRHY</span><p>Ukázkové odesílání.<br>Žádný e-mail se neposílá.</p></div>
+  </aside>
+  <main class="gallery-main">
+    <header class="gallery-toolbar"><div><span class="eyebrow">APPLE GLASS · NAVY & SAND</span><h2 id="variant-name">Čisté sklo</h2></div><div class="toolbar-actions"><button class="sample-button" id="fill-sample" aria-label="Vyplnit ukázku"><svg class="icon"><use href="#i-spark"/></svg><span>Vyplnit ukázku</span></button><div class="device-control" role="group" aria-label="Velikost náhledu"><button data-device="desktop" aria-pressed="true" aria-label="Desktop"><svg class="icon"><use href="#i-monitor"/></svg></button><button data-device="mobile" aria-pressed="false" aria-label="Mobil"><svg class="icon"><use href="#i-phone"/></svg></button></div></div></header>
+    <div class="canvas-area"><div class="preview-canvas" id="preview-canvas" data-device="desktop">
+      <section class="concept" data-variant="ciste-sklo" aria-label="Čisté sklo"><div class="scene pearl-scene">
+        <div class="ambient" aria-hidden="true"></div>
+        <div class="site-mini-header"><span class="monogram">MK<span>.</span></span><span>Kontakt <i></i></span></div>
+        <div class="pearl-layout">
+          <div class="pearl-intro"><span class="eyebrow">PROSTOR PRO VAŠE PLÁNY</span><h2>Napište mi.<br><span>V klidu.</span></h2><p>Nemusíte mít všechno promyšlené.<br>Stačí napsat, co právě řešíte.</p><div class="recipient-person"><img src="assets/portrait.jpg" alt="" class="avatar"><div><strong>Martin Kostrhun</strong><span>Finanční specialista · eDO finance</span></div></div><span class="email-line">martin.kostrhun@edofinance.cz</span></div>
+          <form class="glass form-card pearl-card" data-form="pearl" novalidate>
+            <div class="card-heading"><span class="small-icon"><svg class="icon"><use href="#i-mail"/></svg></span><div><h3>Začněme zprávou.</h3><p>Ozvu se vám na uvedený e-mail.</p></div></div>
+            <div class="field-pair"><label>Vaše jméno<input name="name" autocomplete="name" placeholder="Jméno a příjmení" required minlength="2" maxlength="100"></label><label>E-mail<input name="email" type="email" autocomplete="email" placeholder="vas@email.cz" required maxlength="150"></label></div>
+            <label>S čím vám mohu pomoci?<textarea name="message" rows="4" placeholder="Pár slov o tom, co máte na mysli…" required minlength="10" maxlength="3000"></textarea></label>
+            <div class="form-end"><p class="privacy-note">Vaše údaje použiji k odpovědi<br>na tuto zprávu.</p><button class="send-button" type="submit">Odeslat zprávu<svg class="icon"><use href="#i-arrow"/></svg></button></div><p class="form-error" role="alert" hidden></p>
+          </form>
+        </div>
+        <div class="site-mini-footer"><span>HRADEC KRÁLOVÉ</span><span>OSOBNÍ PŘÍSTUP. SROZUMITELNÉ FINANCE.</span></div>
+      </div></section>
+      <section class="concept" data-variant="osobni-dialog" aria-label="Osobní dialog" hidden><div class="scene personal-scene">
+        <div class="ambient" aria-hidden="true"></div>
+        <div class="site-mini-header"><span class="monogram">MK<span>.</span></span><span>Kontakt <i></i></span></div>
+        <div class="personal-layout">
+          <div class="personal-photo"><img src="assets/portrait.jpg" alt="Martin Kostrhun na terase"><div class="portrait-label glass"><span class="person-dot"></span><div><strong>Martin Kostrhun</strong><span>Finanční specialista · eDO finance</span></div><svg class="icon"><use href="#i-arrow"/></svg></div></div>
+          <div class="personal-copy"><span class="eyebrow">POJĎME SE POZNAT</span><h2>Na dobrý plán<br><span>nejste sami.</span></h2><p>Na druhé straně zprávy jsem já.<br>Napište mi, s čím vám mohu pomoci.</p>
+            <form class="glass form-card personal-card" data-form="personal" novalidate>
+              <div class="field-pair"><label>Jak se jmenujete?<input name="name" autocomplete="name" placeholder="Vaše jméno" required minlength="2" maxlength="100"></label><label>Kam vám mohu napsat?<input name="email" type="email" autocomplete="email" placeholder="Váš e-mail" required maxlength="150"></label></div>
+              <label>Co právě řešíte?<textarea name="message" rows="3" placeholder="Bydlení, investice, nebo úplně něco jiného…" required minlength="10" maxlength="3000"></textarea></label>
+              <button class="send-button light-button" type="submit"><svg class="icon"><use href="#i-send"/></svg>Poslat Martinovi<svg class="icon"><use href="#i-arrow"/></svg></button><p class="privacy-note">Příjemce: <span>martin.kostrhun@edofinance.cz</span></p><p class="form-error" role="alert" hidden></p>
+            </form>
+          </div>
+        </div>
+        <div class="site-mini-footer"><span>HRADEC KRÁLOVÉ · OSOBNĚ I ONLINE</span><span>eDO finance</span></div>
+      </div></section>
+      <section class="concept" data-variant="dopis-martinovi" aria-label="Dopis Martinovi" hidden><div class="scene mail-scene">
+        <div class="ambient" aria-hidden="true"></div>
+        <div class="site-mini-header"><span class="monogram">MK<span>.</span></span><span>Kontakt <i></i></span></div>
+        <div class="mail-intro"><span class="eyebrow">OD VAŠICH MYŠLENEK KE SPOLEČNÉMU PLÁNU</span><h2>Jedna zpráva.<br><span>První krok.</span></h2></div>
+        <form class="glass mail-window" data-form="mail" novalidate>
+          <div class="mail-window-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span>Nová zpráva</span><svg class="icon"><use href="#i-mail"/></svg></div>
+          <div class="mail-address-row"><span>Komu</span><span class="recipient-chip"><span>MK</span>martin.kostrhun@edofinance.cz</span></div>
+          <div class="mail-sender-row"><label>Vaše jméno<input name="name" autocomplete="name" placeholder="Jméno a příjmení" required minlength="2" maxlength="100"></label><label>Váš e-mail<input name="email" type="email" autocomplete="email" placeholder="vas@email.cz" required maxlength="150"></label></div>
+          <label class="mail-subject">Předmět<input name="subject" placeholder="O čem si napíšeme? (nepovinné)" maxlength="120"></label>
+          <label class="mail-body"><span class="sr-only">Vaše zpráva</span><textarea name="message" rows="6" placeholder="Dobrý den, Martine,&#10;&#10;rád/a bych s vámi probral/a…" required minlength="10" maxlength="3000"></textarea></label>
+          <div class="mail-window-footer"><p class="privacy-note">Vaše údaje použiji pouze k vyřízení zprávy.</p><button class="send-button" type="submit">Odeslat zprávu<svg class="icon"><use href="#i-send"/></svg></button></div><p class="form-error" role="alert" hidden></p>
+        </form>
+        <div class="site-mini-footer"><span>MARTIN KOSTRHUN · eDO finance</span><span>ZPRÁVA PŘÍMO MARTINOVI</span></div>
+      </div></section>
+      <section class="concept" data-variant="krok-za-krokem" aria-label="Krok za krokem" hidden><div class="scene step-scene">
+        <div class="ambient" aria-hidden="true"></div>
+        <div class="site-mini-header"><span class="monogram">MK<span>.</span></span><span>Kontakt <i></i></span></div>
+        <div class="step-layout">
+          <div class="step-intro"><span class="eyebrow">MALÝ KROK PRO VELKÉ PLÁNY</span><h2>Začněme<br><span>jednoduše.</span></h2><p>Tři krátké kroky.<br>Jedna zpráva přímo mně.</p><div class="step-contact"><span class="small-icon glass"><svg class="icon"><use href="#i-mail"/></svg></span><span>Martin Kostrhun<strong>martin.kostrhun@edofinance.cz</strong></span></div></div>
+          <form class="glass step-card" data-form="steps" novalidate>
+            <div class="step-progress" aria-label="Postup formulářem"><span class="active"><i></i>Téma</span><span><i></i>Zpráva</span><span><i></i>Kontakt</span></div>
+            <div class="step-content" data-step="0"><span class="step-count">01 / 03</span><h3>Co máte na mysli?</h3><p>Vyberte oblast, kterou chcete probrat.</p><fieldset class="topic-options"><legend class="sr-only">Téma zprávy</legend><label><input type="radio" name="topic" value="Bydlení"><span>Bydlení<svg class="icon"><use href="#i-check"/></svg></span></label><label><input type="radio" name="topic" value="Investice"><span>Investice<svg class="icon"><use href="#i-check"/></svg></span></label><label><input type="radio" name="topic" value="Pojištění"><span>Pojištění<svg class="icon"><use href="#i-check"/></svg></span></label><label><input type="radio" name="topic" value="Finanční plán" checked><span>Finanční plán<svg class="icon"><use href="#i-check"/></svg></span></label><label class="wide-option"><input type="radio" name="topic" value="Něco jiného"><span>Něco jiného<svg class="icon"><use href="#i-check"/></svg></span></label></fieldset></div>
+            <div class="step-content" data-step="1" hidden><span class="step-count">02 / 03</span><h3>Co spolu probereme?</h3><p>Napište pár vět. Zbytek si vysvětlíme spolu.</p><label class="sr-only" for="step-message">Vaše zpráva</label><textarea id="step-message" name="message" rows="7" placeholder="Rád/a bych…" required minlength="10" maxlength="3000"></textarea></div>
+            <div class="step-content" data-step="2" hidden><span class="step-count">03 / 03</span><h3>A kam vám napíšu?</h3><p>Už jen kontakt, na kterém vás zastihnu.</p><label>Vaše jméno<input name="name" autocomplete="name" placeholder="Jméno a příjmení" required minlength="2" maxlength="100"></label><label>E-mail<input name="email" type="email" autocomplete="email" placeholder="vas@email.cz" required maxlength="150"></label><div class="step-summary"><span>Vaše zpráva · <strong data-step-topic>Finanční plán</strong></span><p data-step-summary></p></div></div>
+            <div class="step-actions"><button type="button" class="back-button" data-step-back disabled><svg class="icon"><use href="#i-back"/></svg>Zpět</button><button type="button" class="send-button" data-step-next>Pokračovat<svg class="icon"><use href="#i-arrow"/></svg></button><button type="submit" class="send-button" data-step-send hidden>Odeslat zprávu<svg class="icon"><use href="#i-send"/></svg></button></div><p class="privacy-note">Údaje použiji k odpovědi na vaši zprávu.</p><p class="form-error" role="alert" hidden></p>
+          </form>
+        </div>
+        <div class="site-mini-footer"><span>HRADEC KRÁLOVÉ · OSOBNĚ I ONLINE</span><span>eDO finance</span></div>
+      </div></section>
+      <section class="concept" data-variant="nocni-sklo" aria-label="Noční sklo" hidden><div class="scene nocturne-scene">
+        <div class="ambient" aria-hidden="true"></div>
+        <div class="site-mini-header"><span class="monogram">MK<span>.</span></span><span>Kontakt <i></i></span></div>
+        <div class="nocturne-heading"><span class="eyebrow">FINANCE ZAČÍNAJÍ ROZHOVOREM</span><h2>Váš další krok?<br><span>Napište mi.</span></h2></div>
+        <div class="nocturne-layout">
+          <form class="glass nocturne-card" data-form="nocturne" novalidate>
+            <div class="field-pair"><label>Jméno<input name="name" autocomplete="name" placeholder="Vaše jméno" required minlength="2" maxlength="100"></label><label>E-mail<input name="email" type="email" autocomplete="email" placeholder="vas@email.cz" required maxlength="150"></label></div>
+            <label>O čem si napíšeme?<select name="subject"><option>Obecný dotaz</option><option>Bydlení</option><option>Investice</option><option>Pojištění</option><option>Finanční plán</option></select></label>
+            <label>Vaše zpráva<textarea name="message" rows="4" placeholder="Napište mi, co byste chtěli změnit nebo vyřešit…" required minlength="10" maxlength="3000"></textarea></label>
+            <div class="nocturne-form-footer"><span class="character-count"><span data-character-count>0</span> / 3 000</span><button type="submit" class="send-button sand-button">Odeslat zprávu<svg class="icon"><use href="#i-send"/></svg></button></div><p class="form-error" role="alert" hidden></p>
+          </form>
+          <aside class="glass live-letter" aria-label="Náhled vaší zprávy"><div class="letter-top"><span class="letter-icon"><svg class="icon"><use href="#i-mail"/></svg></span><span>NÁHLED VAŠÍ ZPRÁVY</span><i></i></div><div class="letter-recipient"><span>Komu</span><strong>Martin Kostrhun</strong><small>martin.kostrhun@edofinance.cz</small></div><div class="letter-subject" data-letter-subject>Obecný dotaz</div><p class="letter-message is-placeholder" data-letter-message>Tady uvidíte zprávu tak, jak ji Martin obdrží.</p><div class="letter-signature"><strong data-letter-name>Vaše jméno</strong><span data-letter-email>vas@email.cz</span></div><div class="letter-bottom"><span class="person-dot"></span>Přímo do Martinovy schránky</div></aside>
+        </div>
+        <div class="site-mini-footer"><span>ÚDAJE POUŽIJI K ODPOVĚDI NA VAŠI ZPRÁVU.</span><span>MARTIN KOSTRHUN · eDO finance</span></div>
+      </div></section>
+    </div></div>
+    <footer class="gallery-description"><div><span class="description-index" id="description-index">01 / 05</span><p id="variant-description">Nejklidnější varianta. Jedna skleněná karta, tři pole a jasné odeslání. Nejblíž současnému webu.</p></div><div class="gallery-arrows"><button id="previous" aria-label="Předchozí návrh"><svg class="icon"><use href="#i-back"/></svg></button><button id="next" aria-label="Další návrh"><svg class="icon"><use href="#i-arrow"/></svg></button></div></footer>
+  </main>
+  <dialog id="demo-dialog" aria-labelledby="demo-heading"><button class="dialog-close" aria-label="Zavřít ukázku potvrzení"><svg class="icon"><use href="#i-close"/></svg></button><span class="demo-icon"><svg class="icon"><use href="#i-check"/></svg></span><span class="eyebrow">UKÁZKA POTVRZENÍ</span><h2 id="demo-heading">Zpráva je připravená.</h2><p>Po napojení formuláře ji dostane Martin na svůj pracovní e-mail.</p><div class="demo-recipient"><svg class="icon"><use href="#i-mail"/></svg><span>martin.kostrhun@edofinance.cz</span></div><p class="demo-disclaimer">Toto je interaktivní návrh. Žádná zpráva se neodeslala.</p><button class="send-button dialog-done">Zpět k návrhu<svg class="icon"><use href="#i-arrow"/></svg></button></dialog>
+</body>
+</html>

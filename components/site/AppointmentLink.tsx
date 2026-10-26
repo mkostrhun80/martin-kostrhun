@@ -6,6 +6,6 @@ export function AppointmentLink({ children = 'Domluvit schůzku', topic = '', cl
     className?: string;
     isHome?: boolean; onNavigate?: () => void;
 }) {
-    return <a className={className} href={`${isHome ? '' : sitePath('/')}#kontakt`} onClick={() => { onNavigate?.(); window.dispatchEvent(new CustomEvent('appointment', { detail: { topic, tab: 'booking' } })); if (!isHome)
-        sessionStorage.setItem('appointment-topic', topic); }}>{children}</a>;
+    return <a className={className} href={`${isHome ? '' : sitePath('/')}#kontakt`} onClick={() => { onNavigate?.(); window.dispatchEvent(new CustomEvent('appointment', { detail: { topic } })); if (!isHome)
+        try { sessionStorage.setItem('appointment-topic', topic); } catch { /* Direct navigation still works. */ } }}>{children}</a>;
 }

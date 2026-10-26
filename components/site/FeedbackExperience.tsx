@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
-import { postJSON, newSubmission } from './ContactExperience';
+import { postJSON, newSubmission } from '@/lib/site-api';
 import { useSiteData } from './SiteData';
 import { sitePath } from '@/lib/site-path';
 import { siteConfig } from '@/lib/site-config';

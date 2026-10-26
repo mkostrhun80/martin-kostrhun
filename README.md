@@ -37,3 +37,12 @@ GitHub Pages publikuje statickou prezentační verzi z větve `main`. Publikačn
 Pro serverovou plnou verzi postupujte podle `SPUSTENI.md`. Cloudflare a rezervace do iCloudu ještě nebyly aktivované; DNS nebylo změněné.
 
 Původní vývojové příkazy Vinext (`npm run dev`, `npm run build`) zůstávají k dispozici; pro plnou verzi s tímto samostatným Workerem použijte výše uvedený postup.
+
+## Kontaktní formulář
+
+Kontakt nabízí pět vzhledů s přepínačem 1–5. Rozepsaná zpráva zůstává zachovaná
+při změně vzhledu a neposílá se do úložiště prohlížeče. Všechny vzhledy doručují
+přes FormSubmit na martin.kostrhun@edofinance.cz; návštěvníkův e-mail je Reply-To.
+Doručování funguje i ze statických GitHub Pages. Příjemce musí jednou potvrdit
+aktivační e-mail FormSubmit; postup a skutečné ověření schránky jsou v SPUSTENI.md.
+Samostatné původní prototypy zůstávají v designs/contact-forms a nic neodesílají.

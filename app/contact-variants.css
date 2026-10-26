@@ -1,0 +1,241 @@
+/* Five production contact layouts, scoped to the contact section. */
+.contact-gallery.contact.section{background:var(--paper);color:var(--ink);padding:80px 5vw 90px;--primary:#14243a;--ring:#14243a;--purple:#c4a484;border-radius:0}
+.contact-gallery .contact-variants{max-width:1440px;margin:auto}
+.contact-variants .scene{border-radius:32px;border:1px solid #14243a0b;box-shadow:0 18px 55px #14243a07}
+.contact-variants .contact-picker-bar{height:85px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid #14243a0b;position:relative;z-index:1}
+.contact-variants .personal-scene .contact-picker-bar,.contact-variants .nocturne-scene .contact-picker-bar{border-color:#ffffff17}
+.contact-variants .contact-variant-picker{display:flex;align-items:center;gap:6px;padding:5px;border:1px solid #ffffff8c;background:#ffffff35;border-radius:999px;box-shadow:inset 0 1px 0 #ffffff99,0 6px 18px #14243a07;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.contact-variants .contact-variant-picker button{width:36px;height:36px;min-height:36px;padding:0;border:1px solid transparent;border-radius:50%;display:grid;place-items:center;background:transparent;color:inherit;font-size:12px;font-variant-numeric:tabular-nums;transition:background .2s,box-shadow .2s}
+.contact-variants .contact-variant-picker button:hover{background:#ffffff42}
+.contact-variants .contact-variant-picker button[aria-selected=true]{background:#14243a;color:#f5f2ec;box-shadow:0 3px 9px #14243a17}
+.contact-variants .personal-scene .contact-variant-picker,.contact-variants .nocturne-scene .contact-variant-picker{background:#ffffff0b;border-color:#ffffff27;box-shadow:inset 0 1px 0 #ffffff2a}
+.contact-variants .personal-scene .contact-variant-picker button[aria-selected=true],.contact-variants .nocturne-scene .contact-variant-picker button[aria-selected=true]{background:#d4b797;color:#14243a}
+.contact-variants .contact-variant-picker button:focus-visible{outline:2px solid #c4a484;outline-offset:2px}
+.contact-variants .contact-variant-picker button:disabled{opacity:.6;cursor:wait}
+.contact-variants .email-field-error{display:block;margin-top:7px;color:#923e38;font-size:11px;line-height:1.6;white-space:normal}
+.contact-variants .personal-scene .email-field-error,.contact-variants .nocturne-scene .email-field-error{color:#ffd4cc}
+.contact-variants .email-notice{display:flex;gap:10px;align-items:flex-start;margin:18px 0 0;padding:14px 16px;background:#ffffff80;border:1px solid #fff;border-radius:14px;color:#14243a;font-size:12px;line-height:1.7}
+.contact-variants .email-notice a{text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere;color:inherit}
+.contact-variants .email-notice-error,.contact-variants .email-notice-activation{background:#fff0e9cc;border-color:#d5aaa066;color:#7a3530}
+.contact-variants .personal-scene .email-notice,.contact-variants .nocturne-scene .email-notice{background:#ffffff10;border-color:#ffffff25;color:#f5f2ec}
+.contact-variants .personal-scene .email-notice-error,.contact-variants .personal-scene .email-notice-activation,.contact-variants .nocturne-scene .email-notice-error,.contact-variants .nocturne-scene .email-notice-activation{color:#ffd7cd;background:#a94d3814}
+.contact-variants .email-trap{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip-path:inset(50%)!important;opacity:0!important;margin:0!important;padding:0!important}
+.contact-variants .email-spinner{animation:email-spin .8s linear infinite}
+.contact-variants .privacy-note a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.contact-variants .nocturne-card>.privacy-note{margin-top:16px}
+.contact-variants .mail-window>.email-notice{margin:0 24px 22px}
+.contact-variants .mail-sender-row label{position:relative;flex-wrap:wrap;gap:4px 10px;min-width:0}
+.contact-variants .mail-sender-row label>input{flex:1;min-width:100px}
+.contact-variants .mail-sender-row .email-field-error{flex-basis:100%;padding-bottom:10px}
+.contact-variants .mail-body>span:first-child{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.contact-variants .step-content[data-step="2"] .field-pair{grid-template-columns:1fr;gap:0}
+.contact-variants .topic-options{min-width:0}
+.contact-variants .topic-options label{cursor:pointer}
+.contact-direct-bar{max-width:1440px;margin:28px auto 0;display:flex;justify-content:space-between;gap:24px;font-size:12px;line-height:1.7;flex-wrap:wrap}
+.contact-direct-bar a{color:var(--ink);overflow-wrap:anywhere}
+.contact-direct-bar a:hover{text-decoration:underline}
+.contact-direct-bar>span{color:#66737c}
+.contact-gallery .cooperation-brief{max-width:1440px;margin:58px auto 0;border-color:#14243a20}
+.contact-gallery .cooperation-brief p{color:#596a78}
+@keyframes email-spin{to{transform:rotate(360deg)}}
+@media(max-width:760px){.contact-gallery.contact.section{padding:65px 18px 70px}.contact-variants .scene{border-radius:25px}.contact-variants .contact-picker-bar{height:76px;gap:10px}.contact-variants .contact-variant-picker{gap:4px;padding:4px}.contact-variants .contact-variant-picker button{width:32px;height:32px;min-height:32px}.contact-direct-bar{display:grid;gap:10px;margin-top:23px;font-size:11px}.contact-gallery .cooperation-brief{margin-top:40px}}
+.contact-variants{container-type:inline-size;container-name:concept;--navy:#14243a;--sand:#c4a484;--paper:#f5f2ec;font-family:Body,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px}
+.contact-variants [hidden]{display:none!important}
+.contact-variants .icon{width:20px;height:20px;flex-shrink:0;stroke-width:1.65}
+.contact-variants .eyebrow{font-size:10px;line-height:1.6;letter-spacing:.14em;font-weight:500}
+.contact-variants .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip-path:inset(50%)}
+
+.contact-variants .scene{position:relative;overflow:hidden;isolation:isolate;color:var(--navy);min-height:720px;padding:0 5%;--form-ink:var(--navy);--form-muted:#64707a;--form-field:rgba(255,255,255,.42);--form-border:rgba(255,255,255,.8)}
+.contact-variants .site-mini-header{height:85px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #14243a0b;position:relative;z-index:1}
+.contact-variants .site-mini-header .monogram{font-size:26px}
+.contact-variants .site-mini-header>span:last-child{font-size:10px;display:flex;align-items:center;gap:14px}
+.contact-variants .site-mini-header i{width:5px;height:5px;border-radius:50%;background:var(--sand)}
+.contact-variants .site-mini-footer{display:flex;justify-content:space-between;gap:24px;font-size:9px;letter-spacing:.08em;line-height:1.7;padding:24px 0;position:relative;z-index:1}
+.contact-variants .ambient{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.contact-variants .ambient::before,.contact-variants .ambient::after{content:"";position:absolute;border-radius:50%}
+.contact-variants .glass{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.6),rgba(255,255,255,.25));border:1px solid rgba(255,255,255,.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 22px 60px rgba(38,47,56,.09),0 3px 10px rgba(38,47,56,.03);-webkit-backdrop-filter:blur(30px) saturate(1.3);backdrop-filter:blur(30px) saturate(1.3);border-radius:28px}
+.contact-variants .form-card{padding:32px}
+.contact-variants .card-heading{display:flex;align-items:center;gap:14px;margin-bottom:28px}
+.contact-variants .card-heading h3{font-size:20px;font-weight:500;letter-spacing:-.6px}
+.contact-variants .card-heading p{font-size:11px;line-height:1.6;margin-top:6px;color:var(--form-muted)}
+.contact-variants .small-icon{width:44px;height:44px;display:grid;place-items:center;background:#fff8;border:1px solid #fffa;border-radius:14px;color:var(--navy);flex-shrink:0}
+.contact-variants .field-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.contact-variants form label{display:block;font-size:11px;line-height:1.6;color:var(--form-ink);margin-bottom:20px}
+.contact-variants form input:not([type=radio]),.contact-variants form textarea,.contact-variants form select{appearance:none;display:block;width:100%;color:var(--form-ink);background:var(--form-field);border:1px solid var(--form-border);border-radius:13px;padding:14px;min-height:49px;margin-top:8px;box-shadow:inset 0 1px 2px #14243a02;font-size:12px;transition:border-color .2s,box-shadow .2s,background .2s}
+.contact-variants form textarea{resize:vertical;min-height:125px;line-height:1.8}
+.contact-variants form input::placeholder,.contact-variants form textarea::placeholder{color:var(--form-muted);opacity:.8}
+.contact-variants form input:focus,.contact-variants form textarea:focus,.contact-variants form select:focus{outline:none;border-color:var(--sand);box-shadow:0 0 0 3px #c4a48424;background:var(--form-field)}
+.contact-variants form [aria-invalid=true]{border-color:#a34b45!important}
+.contact-variants .privacy-note{font-size:10px;line-height:1.8;color:var(--form-muted)}
+.contact-variants .privacy-note>span{overflow-wrap:anywhere}
+.contact-variants .send-button{display:inline-flex;align-items:center;justify-content:center;gap:22px;min-height:49px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:var(--navy);color:#fff;padding:13px 23px;font-size:11px;box-shadow:inset 0 1px 1px #ffffff20,0 5px 13px #14243a12;white-space:nowrap;transition:transform .2s,background .2s,box-shadow .2s}
+.contact-variants .send-button:hover{background:#253b54;box-shadow:0 8px 20px #14243a20;transform:translateY(-1px)}
+.contact-variants .send-button:active{transform:translateY(0)}
+.contact-variants .send-button .icon{width:16px;height:16px}
+.contact-variants .send-button:disabled{opacity:.65;transform:none}
+.contact-variants .form-end{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-top:4px}
+.contact-variants .form-error{margin-top:16px;color:#8e3935;background:#ffefeaad;border:1px solid #ba6b5c3d;padding:12px 14px;border-radius:12px;font-size:11px;line-height:1.6}
+.contact-variants .pearl-scene{background:linear-gradient(145deg,#f7f5f0,#e9e9e2)}
+.contact-variants .pearl-scene .ambient::before{width:500px;height:500px;background:radial-gradient(circle at 35% 30%,#f4e2c9,#ccb59e);right:-60px;bottom:-190px;box-shadow:inset 3px 3px 5px #fff8,0 30px 80px #c4a48430}
+.contact-variants .pearl-scene .ambient::after{width:260px;height:260px;top:60px;right:36%;background:linear-gradient(145deg,#e0e7e5,#9badb3);opacity:.4;filter:blur(2px)}
+.contact-variants .pearl-layout{min-height:575px;display:grid;grid-template-columns:.85fr 1.15fr;align-items:center;gap:7%;padding:50px 0}
+.contact-variants .pearl-intro>.eyebrow{color:#727b7d;font-size:9px}
+.contact-variants .pearl-intro h2{font-size:clamp(36px,5.8cqw,74px);line-height:1.05;letter-spacing:-.06em;font-weight:400;margin:24px 0}
+.contact-variants .pearl-intro h2>span{color:#82918f}
+.contact-variants .pearl-intro>p{font-size:12px;line-height:1.9;color:#69737a}
+.contact-variants .recipient-person{display:flex;align-items:center;gap:11px;margin-top:36px}
+.contact-variants .avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;object-position:57% 34%;border:2px solid #fff}
+.contact-variants .recipient-person strong,.contact-variants .recipient-person span{display:block}
+.contact-variants .recipient-person strong{font-size:11px;font-weight:500}
+.contact-variants .recipient-person span{font-size:9px;margin-top:5px;color:#6b747b}
+.contact-variants .email-line{display:block;font-size:10px;margin-top:16px;overflow-wrap:anywhere;color:#596471}
+.contact-variants .pearl-card{max-width:560px;width:100%}
+.contact-variants .personal-scene{background:#172b3a;color:var(--paper);--form-ink:#f5f2ec;--form-muted:#c5cbd0;--form-field:#ffffff0c;--form-border:#ffffff25}
+.contact-variants .personal-scene .ambient::before{width:650px;height:650px;left:-100px;bottom:-480px;background:#c4a48480;filter:blur(50px)}
+.contact-variants .personal-scene .ambient::after{width:400px;height:400px;right:-180px;top:50px;background:#748e9560;filter:blur(45px)}
+.contact-variants .personal-scene .site-mini-header{border-color:#ffffff14}
+.contact-variants .personal-layout{display:grid;grid-template-columns:.82fr 1.18fr;gap:7%;padding:45px 0 28px;align-items:center}
+.contact-variants .personal-photo{position:relative;align-self:stretch;min-height:510px;border-radius:120px 120px 26px 26px;overflow:hidden;border:1px solid #ffffff35;background:#b3b7b3}
+.contact-variants .personal-photo>img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;object-position:52% 45%;filter:grayscale(1)}
+.contact-variants .portrait-label{position:absolute;bottom:17px;left:17px;right:17px;display:flex;align-items:center;gap:11px;padding:17px;border-radius:19px;color:#fff;background:linear-gradient(145deg,#12233399,#253d4f85);border-color:#ffffff4d;box-shadow:inset 0 1px 0 #ffffff40,0 6px 20px #14243a15}
+.contact-variants .person-dot{width:6px;height:6px;border-radius:50%;background:var(--sand);flex-shrink:0}
+.contact-variants .portrait-label strong,.contact-variants .portrait-label span{display:block}
+.contact-variants .portrait-label strong{font-size:12px;font-weight:500}
+.contact-variants .portrait-label>div>span{font-size:9px;margin-top:6px;color:#e0e2e3}
+.contact-variants .portrait-label>.icon{margin-left:auto;width:15px}
+.contact-variants .personal-copy>.eyebrow{color:#c4a484;font-size:9px}
+.contact-variants .personal-copy>h2{font-size:clamp(32px,4.5cqw,57px);font-weight:400;letter-spacing:-.055em;line-height:1.1;margin:15px 0}
+.contact-variants .personal-copy>h2>span{color:#b7c4ca}
+.contact-variants .personal-copy>p{color:#b7c4ca;font-size:11px;line-height:1.8}
+.contact-variants .personal-card{margin-top:24px;padding:25px;border-color:#ffffff26;box-shadow:inset 0 1px 0 #ffffff20,0 20px 50px #00000014;background:linear-gradient(145deg,#ffffff11,#ffffff05)}
+.contact-variants .personal-card label{font-size:11px}
+.contact-variants .personal-card textarea{min-height:100px}
+.contact-variants .light-button{width:100%;color:var(--navy);background:#f1f2ed}
+.contact-variants .light-button:hover{background:#fff}
+.contact-variants .personal-card>.privacy-note{margin-top:14px;font-size:9px;text-align:center}
+.contact-variants .personal-scene .site-mini-footer{color:#c7cdd0}
+.contact-variants .mail-scene{background:#e9ebe8;padding-bottom:5px}
+.contact-variants .mail-scene .ambient::before{width:420px;height:420px;right:-100px;top:90px;background:radial-gradient(circle at 30% 30%,#d5deda,#a9bcbe);opacity:.7}
+.contact-variants .mail-scene .ambient::after{width:520px;height:520px;left:-180px;bottom:-200px;background:radial-gradient(circle at 25% 20%,#e8d9c8,#c4ad94);opacity:.45}
+.contact-variants .mail-intro{text-align:center;margin:27px 0}
+.contact-variants .mail-intro>.eyebrow{font-size:9px;color:#687779}
+.contact-variants .mail-intro h2{font-size:clamp(32px,4cqw,52px);line-height:1.1;font-weight:400;letter-spacing:-.055em;margin-top:14px}
+.contact-variants .mail-intro h2>span{color:#7c8d8d}
+.contact-variants .mail-window{max-width:700px;margin:0 auto 28px;border-radius:22px;overflow:hidden;background:linear-gradient(135deg,#ffffffb8,#ffffff6b)}
+.contact-variants .mail-window-bar{display:flex;align-items:center;justify-content:space-between;padding:16px 23px;background:#ffffff2e;border-bottom:1px solid #14243a0b;font-size:10px;color:#66737c}
+.contact-variants .mail-window-bar>.icon{width:15px;height:15px}
+.contact-variants .window-dots{display:flex;gap:6px}
+.contact-variants .window-dots i{width:8px;height:8px;background:#c2c7c3;border-radius:50%;box-shadow:inset 0 1px 1px #0001}
+.contact-variants .window-dots i:first-child{background:#c4a484}
+.contact-variants .window-dots i:nth-child(2){background:#d8cbab}
+.contact-variants .window-dots i:nth-child(3){background:#a3b5ab}
+.contact-variants .mail-address-row{display:flex;align-items:center;gap:18px;padding:14px 25px;border-bottom:1px solid #14243a0b;font-size:11px}
+.contact-variants .mail-address-row>span:first-child{width:40px;color:#6b7882}
+.contact-variants .recipient-chip{display:inline-flex;align-items:center;gap:8px;border:1px solid #ffffffb3;background:#dbe2e18c;border-radius:999px;padding:4px 11px 4px 4px;font-size:10px}
+.contact-variants .recipient-chip>span{width:22px;height:22px;display:grid;place-items:center;border-radius:50%;background:#fff8;font-size:8px}
+.contact-variants .mail-sender-row{display:grid;grid-template-columns:1fr 1fr;gap:23px;margin:0 25px;border-bottom:1px solid #14243a0b}
+.contact-variants .mail-sender-row label{display:flex;align-items:center;gap:10px;margin:0;font-size:10px;color:#6b7882;white-space:nowrap}
+.contact-variants .mail-window .mail-sender-row input{border:none;background:transparent;box-shadow:none;font-size:11px;border-radius:5px;margin:0;padding:15px 0;min-width:0;min-height:49px}
+.contact-variants .mail-subject{display:flex;align-items:center;gap:19px;margin:0 25px;border-bottom:1px solid #14243a0b;color:#6b7882;font-size:10px}
+.contact-variants .mail-window .mail-subject input{background:transparent;border:none;box-shadow:none;margin:0;min-height:47px;padding:12px 0;border-radius:5px;font-size:11px}
+.contact-variants .mail-body{margin:0;padding:0 25px}
+.contact-variants .mail-window .mail-body textarea{background:transparent;border:0;box-shadow:none;min-height:146px;margin:0;padding:19px 0;font-size:12px;line-height:1.9}
+.contact-variants .mail-window-footer{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:16px 25px 22px}
+.contact-variants .mail-window-footer .send-button{min-height:43px;padding:11px 18px;font-size:10px}
+.contact-variants .mail-window>.form-error{margin:0 25px 20px}
+.contact-variants .step-scene{background:linear-gradient(135deg,#f4f1e9,#e8e8e0)}
+.contact-variants .step-scene .ambient::before{width:500px;height:500px;right:-110px;top:130px;background:radial-gradient(circle at 25% 20%,#faf8f2,#bdc8c4);box-shadow:inset 3px 3px 10px #fff9,0 30px 100px #819a8c35;opacity:.75}
+.contact-variants .step-scene .ambient::after{width:340px;height:340px;left:20%;bottom:-230px;background:#c4a484b3;filter:blur(12px)}
+.contact-variants .step-layout{display:grid;grid-template-columns:1fr 1.08fr;align-items:center;gap:7%;padding:56px 0 45px;min-height:565px}
+.contact-variants .step-intro>.eyebrow{font-size:9px;color:#757d7e}
+.contact-variants .step-intro h2{font-size:clamp(38px,5.5cqw,70px);line-height:1.04;letter-spacing:-.06em;font-weight:400;margin:24px 0}
+.contact-variants .step-intro h2>span{color:#8d9992}
+.contact-variants .step-intro>p{font-size:12px;line-height:1.9;color:#6b7579}
+.contact-variants .step-contact{display:flex;align-items:center;gap:12px;margin-top:42px;font-size:10px;color:#627278}
+.contact-variants .step-contact>span:last-child{min-width:0}
+.contact-variants .step-contact strong{display:block;font-size:9px;margin-top:6px;font-weight:400;color:var(--navy);overflow-wrap:anywhere}
+.contact-variants .step-contact .small-icon{border-radius:13px;width:40px;height:40px}
+.contact-variants .step-card{padding:30px;min-height:475px;background:linear-gradient(145deg,#ffffffa8,#ffffff66)}
+.contact-variants .step-progress{display:flex;gap:14px;margin-bottom:32px}
+.contact-variants .step-progress>span{flex:1;color:#7a868b;font-size:10px}
+.contact-variants .step-progress i{display:block;height:3px;border-radius:2px;background:#14243a15;margin-bottom:9px}
+.contact-variants .step-progress .active{color:var(--navy)}
+.contact-variants .step-progress .active i{background:var(--sand)}
+.contact-variants .step-count{font-size:9px;letter-spacing:.12em;color:#929791;font-variant-numeric:tabular-nums}
+.contact-variants .step-content{min-height:260px}
+.contact-variants .step-content h3{font-size:24px;font-weight:400;line-height:1.2;letter-spacing:-.8px;margin-top:13px}
+.contact-variants .step-content>p{font-size:11px;line-height:1.7;color:#6f7b82;margin:10px 0 23px}
+.contact-variants .topic-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;border:0;margin:22px 0 0;padding:0}
+.contact-variants .topic-options label{margin:0;position:relative}
+.contact-variants .topic-options input{position:absolute;opacity:0;width:100%;height:100%;margin:0}
+.contact-variants .topic-options label>span{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;background:#ffffff55;border:1px solid #ffffffc2;border-radius:12px;min-height:48px;font-size:11px}
+.contact-variants .topic-options .icon{width:14px;height:14px;opacity:0}
+.contact-variants .topic-options input:checked+span{background:#14243a;color:#fff;border-color:#14243a}
+.contact-variants .topic-options input:checked+span>.icon{opacity:1;color:#d8bda2}
+.contact-variants .topic-options input:focus-visible+span{outline:3px solid var(--sand);outline-offset:3px}
+.contact-variants .wide-option{grid-column:1/-1}
+.contact-variants .step-actions{display:flex;justify-content:space-between;gap:15px;margin-top:20px}
+.contact-variants .step-actions .send-button{min-height:45px;font-size:10px;gap:16px}
+.contact-variants .back-button{border:0;background:none;display:flex;align-items:center;gap:10px;font-size:11px;color:var(--navy);min-height:44px;padding:8px 0}
+.contact-variants .back-button .icon{width:15px}
+.contact-variants .back-button:disabled{opacity:.25}
+.contact-variants .step-card>.privacy-note{margin-top:17px;text-align:right;font-size:9px}
+.contact-variants .step-content textarea{margin-top:0;min-height:160px}
+.contact-variants .step-content[data-step="2"]>label{margin-bottom:12px;font-size:10px}
+.contact-variants .step-content[data-step="2"] input{padding:11px 13px;min-height:43px;margin-top:5px}
+.contact-variants .step-summary{padding:12px 14px;border:1px solid #ffffff9c;background:#ffffff3b;border-radius:12px}
+.contact-variants .step-summary>span{font-size:9px;color:#6f7b82}
+.contact-variants .step-summary strong{font-weight:500;color:var(--navy)}
+.contact-variants .step-summary>p{font-size:10px;line-height:1.6;max-height:50px;overflow:auto;margin-top:7px;white-space:pre-wrap;overflow-wrap:anywhere}
+.contact-variants .nocturne-scene{background:#11243a;color:#f5f2ec;--form-ink:#f5f2ec;--form-muted:#c1cbd2;--form-field:#ffffff0a;--form-border:#ffffff24}
+.contact-variants .nocturne-scene .site-mini-header{border-color:#ffffff14}
+.contact-variants .nocturne-scene .ambient::before{width:600px;height:600px;right:-160px;top:20px;background:radial-gradient(circle,#ad8f6c91,#38455960 55%,transparent 70%);filter:blur(30px)}
+.contact-variants .nocturne-scene .ambient::after{width:440px;height:440px;left:-160px;bottom:-220px;background:#56778166;filter:blur(40px)}
+.contact-variants .nocturne-heading{padding-top:35px}
+.contact-variants .nocturne-heading>.eyebrow{font-size:9px;color:#b8c1c7}
+.contact-variants .nocturne-heading h2{font-size:clamp(32px,4.3cqw,56px);font-weight:400;letter-spacing:-.055em;line-height:1.1;margin:16px 0 26px}
+.contact-variants .nocturne-heading h2>span{color:#ccb397}
+.contact-variants .nocturne-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center;padding-bottom:26px}
+.contact-variants .nocturne-card{padding:27px;background:linear-gradient(140deg,#ffffff0d,#ffffff06);border-color:#ffffff20;box-shadow:inset 0 1px 0 #ffffff22,0 25px 60px #0002}
+.contact-variants .nocturne-card label{font-size:11px;margin-bottom:17px}
+.contact-variants .nocturne-card input,.contact-variants .nocturne-card select{min-height:43px;margin-top:7px;padding:11px 13px;font-size:12px}
+.contact-variants .nocturne-card textarea{min-height:105px;font-size:12px}
+.contact-variants .nocturne-card select{appearance:auto;color-scheme:dark}
+.contact-variants .nocturne-card option{background:#14243a;color:#f5f2ec}
+.contact-variants .nocturne-form-footer{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.contact-variants .character-count{font-size:9px;color:#acbac3;font-variant-numeric:tabular-nums}
+.contact-variants .sand-button{background:#d4b797;color:#11243a;min-height:44px;font-size:11px}
+.contact-variants .sand-button:hover{background:#e4cbb0}
+.contact-variants .live-letter{background:linear-gradient(140deg,#ffffff15,#ffffff07);border-color:#ffffff38;padding:24px;min-height:340px;box-shadow:inset 0 1px 0 #ffffff3d,0 25px 50px #0002;transform:rotate(1.5deg)}
+.contact-variants .letter-top{display:flex;align-items:center;gap:10px;font-size:8px;letter-spacing:.1em;color:#ced7dc;padding-bottom:20px;border-bottom:1px solid #ffffff1c}
+.contact-variants .letter-top>i{height:5px;width:5px;background:#c4a484;border-radius:50%;margin-left:auto}
+.contact-variants .letter-icon{width:31px;height:31px;border:1px solid #ffffff30;border-radius:10px;display:grid;place-items:center;background:#ffffff0b}
+.contact-variants .letter-icon .icon{width:16px}
+.contact-variants .letter-recipient{margin:20px 0}
+.contact-variants .letter-recipient>span{display:block;font-size:9px;color:#b6c2ca;margin-bottom:8px}
+.contact-variants .letter-recipient>strong{font-size:13px;font-weight:500;display:block}
+.contact-variants .letter-recipient small{font-size:10px;display:block;margin-top:7px;color:#c6cfd5;overflow-wrap:anywhere}
+.contact-variants .letter-subject{font-size:12px;font-weight:500;margin-bottom:13px;overflow-wrap:anywhere}
+.contact-variants .letter-message{font-size:11px;line-height:1.85;min-height:62px;max-height:140px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+.contact-variants .letter-message.is-placeholder{color:#b9c6ce}
+.contact-variants .letter-signature{margin-top:20px;overflow-wrap:anywhere}
+.contact-variants .letter-signature>strong,.contact-variants .letter-signature>span{display:block;font-size:10px;font-weight:400}
+.contact-variants .letter-signature>span{font-size:9px;color:#b7c5ce;margin-top:5px}
+.contact-variants .letter-bottom{margin-top:25px;padding-top:16px;border-top:1px solid #ffffff1c;display:flex;align-items:center;gap:8px;font-size:9px;color:#bdc9d0}
+.contact-variants .nocturne-scene .site-mini-footer{color:#b6c2ca}
+@container concept (max-width:850px){
+  .contact-variants .scene{padding:0 5%;min-height:700px}.contact-variants .pearl-layout{gap:5%;grid-template-columns:.8fr 1.2fr}.contact-variants .pearl-intro h2{font-size:44px}.contact-variants .form-card{padding:23px}.contact-variants .field-pair{gap:12px}.contact-variants .form-end{align-items:stretch;flex-direction:column}.contact-variants .form-end .privacy-note br{display:none}.contact-variants .form-end .send-button{width:100%}.contact-variants .personal-layout{gap:5%;grid-template-columns:.75fr 1.25fr}.contact-variants .personal-photo{min-height:490px}.contact-variants .personal-copy>h2{font-size:36px}.contact-variants .portrait-label{padding:13px;left:12px;right:12px;bottom:12px}.contact-variants .portrait-label>.icon,.contact-variants .portrait-label>.person-dot{display:none}.contact-variants .portrait-label strong{font-size:11px}.contact-variants .portrait-label>div>span{font-size:8px}.contact-variants .step-layout{gap:5%}.contact-variants .step-intro h2{font-size:45px}.contact-variants .step-card{padding:24px}.contact-variants .step-content h3{font-size:21px}.contact-variants .step-contact{gap:8px}.contact-variants .step-contact strong{font-size:8px}.contact-variants .nocturne-layout{gap:20px;grid-template-columns:1.15fr .85fr}.contact-variants .nocturne-card{padding:22px}.contact-variants .live-letter{padding:21px}.contact-variants .letter-top{gap:7px;font-size:7px}.contact-variants .letter-icon{width:27px}
+}
+@container concept (max-width:640px){
+  .contact-variants .scene{padding:0 22px;min-height:760px}.contact-variants .site-mini-header{height:70px}.contact-variants .site-mini-header .monogram{font-size:25px}.contact-variants .site-mini-footer{font-size:8px;padding:22px 0;gap:20px}.contact-variants .site-mini-footer>span:last-child{text-align:right;max-width:50%}
+  .contact-variants .pearl-layout{display:block;padding:35px 0 14px}.contact-variants .pearl-intro>.eyebrow{font-size:8px}.contact-variants .pearl-intro h2{font-size:46px;margin:18px 0}.contact-variants .pearl-intro>p{font-size:11px}.contact-variants .recipient-person{margin-top:23px}.contact-variants .email-line{margin-top:13px;font-size:10px}.contact-variants .pearl-card{margin-top:28px;padding:24px 20px}.contact-variants .card-heading{gap:11px;margin-bottom:23px}.contact-variants .card-heading h3{font-size:19px}.contact-variants .card-heading p{font-size:10px}.contact-variants .small-icon{width:38px;height:38px;border-radius:12px}
+  .contact-variants .field-pair{grid-template-columns:1fr;gap:0}.contact-variants form label{font-size:11px;margin-bottom:18px}.contact-variants form input:not([type=radio]),.contact-variants form select,.contact-variants form textarea{font-size:16px;padding:13px;min-height:49px}.contact-variants form input::placeholder,.contact-variants form textarea::placeholder{font-size:12px}.contact-variants .form-end{gap:15px}.contact-variants .privacy-note{font-size:10px}.contact-variants .pearl-scene .ambient::before{width:350px;height:350px;right:-180px;bottom:40px}.contact-variants .pearl-scene .ambient::after{width:200px;height:200px;right:-80px;top:170px;opacity:.18}
+  .contact-variants .personal-layout{display:flex;flex-direction:column;padding-top:27px;gap:27px}.contact-variants .personal-photo{width:100%;min-height:240px;max-height:240px;border-radius:80px 80px 22px 22px}.contact-variants .personal-photo>img{object-position:50% 37%}.contact-variants .portrait-label{left:14px;right:14px;bottom:14px;padding:14px}.contact-variants .portrait-label>.person-dot{display:block}.contact-variants .portrait-label>div>span{font-size:9px}.contact-variants .personal-copy{width:100%}.contact-variants .personal-copy>h2{font-size:37px}.contact-variants .personal-card{padding:22px 19px;margin-top:23px}.contact-variants .personal-card>.privacy-note{font-size:9px}.contact-variants .personal-card textarea{min-height:120px}.contact-variants .personal-copy>p{font-size:11px}
+  .contact-variants .mail-intro{margin:28px 0 24px}.contact-variants .mail-intro>.eyebrow{font-size:8px;letter-spacing:.1em}.contact-variants .mail-intro h2{font-size:38px}.contact-variants .mail-window{border-radius:20px}.contact-variants .mail-window-bar{padding:16px}.contact-variants .mail-address-row{padding:14px 16px;gap:9px;align-items:flex-start;font-size:9px}.contact-variants .mail-address-row>span:first-child{width:auto;padding-top:7px}.contact-variants .recipient-chip{font-size:8px;gap:5px;padding-right:8px;overflow-wrap:anywhere;white-space:normal}.contact-variants .recipient-chip>span{flex-shrink:0;width:20px;height:20px;font-size:7px}.contact-variants .mail-sender-row{display:block;margin:0 16px}.contact-variants .mail-sender-row>label{font-size:10px}.contact-variants .mail-sender-row>label:first-child{border-bottom:1px solid #14243a0b}.contact-variants .mail-sender-row input{font-size:16px;padding:14px 0;min-height:47px}.contact-variants .mail-subject{margin:0 16px;gap:13px}.contact-variants .mail-subject>input{font-size:16px;padding-left:0}.contact-variants .mail-subject input::placeholder{font-size:10px}.contact-variants .mail-body{padding:0 16px}.contact-variants .mail-body textarea{font-size:16px;padding:18px 0;min-height:190px}.contact-variants .mail-window-footer{padding:10px 16px 20px;display:flex;flex-direction:column-reverse;align-items:stretch;gap:14px}.contact-variants .mail-window-footer .send-button{min-height:46px;font-size:11px}.contact-variants .mail-window-footer .privacy-note{text-align:center;font-size:9px}
+  .contact-variants .step-layout{display:block;padding-top:36px}.contact-variants .step-intro h2{font-size:44px;margin:18px 0}.contact-variants .step-intro>p{font-size:11px}.contact-variants .step-contact{margin-top:23px}.contact-variants .step-contact strong{font-size:9px}.contact-variants .step-card{padding:26px 21px;margin-top:29px;min-height:470px}.contact-variants .step-content h3{font-size:23px}.contact-variants .step-content{min-height:265px}.contact-variants .step-content>p{font-size:11px}.contact-variants .step-card .privacy-note{font-size:9px}.contact-variants .topic-options label>span{font-size:11px;padding:14px 12px}.contact-variants .topic-options{gap:9px}.contact-variants .step-content[data-step="2"] input{font-size:16px}.contact-variants .step-summary>p{max-height:60px}
+  .contact-variants .nocturne-heading{padding-top:30px}.contact-variants .nocturne-heading>h2{font-size:39px;margin:17px 0 25px}.contact-variants .nocturne-layout{display:flex;flex-direction:column;gap:26px}.contact-variants .nocturne-card{width:100%;padding:24px 19px}.contact-variants .nocturne-card input,.contact-variants .nocturne-card select,.contact-variants .nocturne-card textarea{font-size:16px}.contact-variants .nocturne-card textarea{min-height:125px}.contact-variants .nocturne-form-footer{gap:10px}.contact-variants .sand-button{padding:12px 17px;font-size:10px;gap:12px}.contact-variants .character-count{font-size:8px}.contact-variants .live-letter{width:calc(100% - 8px);transform:rotate(1deg);min-height:330px;margin-bottom:4px;padding:24px}.contact-variants .letter-top{font-size:8px}.contact-variants .letter-top .letter-icon{width:31px}.contact-variants .letter-recipient small{font-size:10px}.contact-variants .letter-message{font-size:12px;min-height:80px}.contact-variants .letter-subject{font-size:12px}.contact-variants .letter-signature>strong{font-size:11px}.contact-variants .letter-signature>span{font-size:10px}.contact-variants .letter-bottom{font-size:9px}
+}
+.contact-variants .mail-window input:focus,.contact-variants .mail-window textarea:focus{outline:2px solid var(--sand);outline-offset:3px;box-shadow:none}
+@container concept (max-width:640px){.contact-variants .mail-window .mail-sender-row input{font-size:16px;padding:14px 0;min-height:47px}.contact-variants .mail-window .mail-subject input{font-size:16px;padding-left:0}.contact-variants .mail-window .mail-body textarea{font-size:16px;padding:18px 0;min-height:190px}}
+@media(prefers-reduced-motion:reduce){.contact-variants *,.contact-variants *::before,.contact-variants *::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@supports not (backdrop-filter:blur(1px)){.contact-variants .glass{background:#eeeee7}.contact-variants .personal-card,.contact-variants .live-letter,.contact-variants .nocturne-card{background:#25384a}.contact-variants .portrait-label{background:#25384a}}
