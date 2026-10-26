@@ -55,7 +55,7 @@
   mix-blend-mode: difference;
   transform: translate3d(calc(var(--portal-depth) * 28px), calc(var(--portal-depth) * 8px), 0);
 }
-.hero-name-dot { color: #6ac709; }
+.hero-name-dot { color: #a9714b; }
 .hero-photo-layer {
   position: absolute;
   z-index: 2;
@@ -64,7 +64,7 @@
   height: var(--portrait-height);
   bottom: var(--portrait-bottom);
   overflow: hidden;
-  background: #b5b2b6;
+  background: #7e846b;
   transform: translate3d(var(--hero-parallax-x), var(--hero-parallax-y), 0);
 }
 .hero-photo-layer img {
@@ -81,7 +81,7 @@
   content: '';
   position: absolute;
   inset: 70% 0 0;
-  background: linear-gradient(transparent, #0b091055);
+  background: linear-gradient(transparent, #14120455);
 }
 .hero-photo-caption {
   position: absolute;
@@ -104,22 +104,22 @@
   opacity: var(--portal-opacity);
   contain: paint;
 }
-.hero-artwork-alternate { background: #8b2cff; }
-.hero-artwork-alternate .hero-photo-layer { background: #8b2cff; }
+.hero-artwork-alternate { background: #a9714b; }
+.hero-artwork-alternate .hero-photo-layer { background: #a9714b; }
 .hero-artwork-alternate .hero-photo-layer img {
   filter: grayscale(1) contrast(1.1);
   mix-blend-mode: luminosity;
   transform: translate(var(--lens-offset-x), var(--lens-offset-y)) scale(calc(1.055 + var(--portal-depth) * .065));
 }
-.hero-artwork-alternate .hero-name-back { color: #eee2ff; }
+.hero-artwork-alternate .hero-name-back { color: #f9dec9; }
 .hero-artwork-alternate .hero-name-front {
   color: transparent;
-  -webkit-text-stroke: 1.5px #f9f3ff;
+  -webkit-text-stroke: 1.5px #f9dec9;
   mix-blend-mode: normal;
-  text-shadow: 2px 0 #c594ff33;
+  text-shadow: 2px 0 #a9714b33;
 }
-.hero-artwork-alternate .hero-name-dot { color: #f5f3f6; -webkit-text-stroke: 0; }
-.portal-wash { position: absolute; inset: 0; z-index: 5; background: #8b2cff; opacity: var(--portal-wash); }
+.hero-artwork-alternate .hero-name-dot { color: #f9dec9; -webkit-text-stroke: 0; }
+.portal-wash { position: absolute; inset: 0; z-index: 5; background: #a9714b; opacity: var(--portal-wash); }
 .lens-rim, .lens-hit {
   position: absolute;
   left: calc(var(--lens-x) - var(--lens-rx));
@@ -132,12 +132,12 @@
   z-index: 5;
   pointer-events: none;
   opacity: var(--lens-rim-opacity);
-  border: 1px solid #f3e6ffbd;
+  border: 1px solid #f9dec9bd;
   /* Two crisp, unequal edges read as optical glass, not an illuminated orb. */
-  box-shadow: inset 2px 0 0 #f5e8ff99, inset -3px -1px 0 #441778b3, 0 0 0 1px #711ad988;
+  box-shadow: inset 2px 0 0 #f9dec999, inset -3px -1px 0 #262a10b3, 0 0 0 1px #a9714b88;
 }
-.lens-rim::before { content: ''; position: absolute; inset: 5px; border: 1px solid #efdbff40; border-radius: inherit; }
-.lens-edge-mark { position: absolute; left: 50%; top: -5px; width: 1px; height: 9px; background: #e9d2ff; }
+.lens-rim::before { content: ''; position: absolute; inset: 5px; border: 1px solid #f9dec940; border-radius: inherit; }
+.lens-edge-mark { position: absolute; left: 50%; top: -5px; width: 1px; height: 9px; background: #f9dec9; }
 .lens-edge-mark.second { top: auto; bottom: -5px; }
 .lens-hit {
   z-index: 7;
@@ -196,7 +196,7 @@
   .hero-photo-caption { font-size: 9px; }
   .hero-artwork-alternate .hero-photo-layer img { transform: scale(calc(1.035 + var(--portal-depth) * .04)); }
   .hero-artwork-alternate .hero-name-front { -webkit-text-stroke-width: 1px; text-shadow: none; }
-  .lens-rim { box-shadow: inset 1px 0 0 #f5e8ff99, 0 0 0 1px #711ad988; }
+  .lens-rim { box-shadow: inset 1px 0 0 #f9dec999, 0 0 0 1px #a9714b88; }
   .lens-rim::before { display: none; }
   .lens-annotation { top: calc(var(--lens-y) - var(--lens-ry) - 50px); left: clamp(22px, calc(var(--lens-x) - 50px), calc(100% - 156px)); }
 }

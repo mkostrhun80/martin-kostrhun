@@ -1,0 +1,91 @@
+/* The supplied palette. The legacy --purple name remains an accent alias so
+   the existing animation layers share the same cinnamon colour. */
+:root {
+  --pitch-black: #141204;
+  --dark-khaki: #262a10;
+  --powder-petal: #f9dec9;
+  --dusty-olive: #7e846b;
+  --cinnamon-wood: #a9714b;
+  --background: var(--powder-petal);
+  --foreground: var(--pitch-black);
+  --paper: var(--powder-petal);
+  --ink: var(--pitch-black);
+  --card: var(--powder-petal);
+  --card-foreground: var(--pitch-black);
+  --popover: var(--powder-petal);
+  --popover-foreground: var(--pitch-black);
+  --primary: var(--dark-khaki);
+  --primary-foreground: var(--powder-petal);
+  --secondary: #e6d0b8;
+  --secondary-foreground: var(--pitch-black);
+  --muted: #e6d0b8;
+  --muted-foreground: #54583d;
+  --accent: #e6d0b8;
+  --accent-foreground: var(--pitch-black);
+  --border: #b7b396;
+  --input: #b7b396;
+  --ring: var(--dark-khaki);
+  --purple: var(--cinnamon-wood);
+  --glass-line: rgba(249, 222, 201, .72);
+  --glass-shadow: 0 18px 55px rgba(20, 18, 4, .09), inset 0 1px 0 rgba(249, 222, 201, .8);
+}
+html { scrollbar-color: var(--dusty-olive) var(--powder-petal); }
+::selection { background: var(--dark-khaki); color: var(--powder-petal); }
+a:focus-visible, button:focus-visible, input:focus-visible,
+textarea:focus-visible, select:focus-visible, summary:focus-visible {
+  outline-color: var(--cinnamon-wood);
+}
+/* Keep small action labels readable on the exact cinnamon swatch. */
+.site-button, .hero-note .hero-appointment,
+.service-item .site-button, .header-appointment {
+  background: var(--cinnamon-wood);
+  color: var(--pitch-black);
+  box-shadow: inset 0 1px 1px rgba(249,222,201,.32), 0 6px 20px rgba(20,18,4,.16)!important;
+}
+.site-button:hover:not(:disabled), .hero-note .hero-appointment:hover,
+.service-item .site-button:hover, .header-appointment:hover {
+  background: var(--dark-khaki);
+  color: var(--powder-petal);
+}
+.index-section {
+  background: radial-gradient(ellipse at 85% 40%, rgba(126,132,107,.22), transparent 60%), var(--powder-petal);
+}
+.about, .trust-new { background: var(--dusty-olive); }
+.about { --primary: var(--pitch-black); --border: rgba(20,18,4,.3); }
+.about-copy .display { color: var(--powder-petal); mix-blend-mode: normal; }
+.about-copy .display span { color: var(--pitch-black); }
+.about-proof { border-color: rgba(20,18,4,.3); }
+.trust-new { --primary: var(--pitch-black); --border: rgba(20,18,4,.3); }
+.trust-new .section-heading > p, .trust-new .empty-note,
+.trust-new .review-method, .trust-new .review-card time,
+.trust-new .review-card > div > span, .trust-new .client-stat small { color: var(--pitch-black); }
+.service-chapter-protect {
+  background: radial-gradient(ellipse at 0% 60%, rgba(126,132,107,.26), transparent 70%), var(--dark-khaki);
+}
+.service-chapter-protect, .contact, .footer {
+  --primary: var(--powder-petal);
+  --ring: var(--powder-petal);
+}
+.service-chapter-protect .service-item h4 { color: var(--powder-petal); }
+.contact.section {
+  background: radial-gradient(ellipse at 85% 35%, rgba(169,113,75,.19), transparent 60%), var(--dark-khaki);
+}
+.contact-editorial .contact-tabs button[aria-selected=true] { color: var(--powder-petal); }
+.contact-topic select:focus, .contact-form input:focus, .contact-form textarea:focus {
+  border-color: var(--powder-petal);
+  box-shadow: 0 0 0 3px rgba(169,113,75,.3);
+}
+.contact .text-inline:hover, .contact a:hover { color: var(--powder-petal); }
+.contact .site-button:hover { color: var(--powder-petal); background: var(--pitch-black); }
+.footer { background: var(--pitch-black); }
+.footer-name { color: var(--dusty-olive); }
+.footer-columns a:hover { color: var(--powder-petal); }
+.partners-new .site-button-quiet { background: transparent; color: var(--dark-khaki); }
+.partners-new .site-button-quiet:hover { background: var(--dark-khaki); color: var(--powder-petal); }
+.contents-dialog[data-slot=dialog-content] {
+  background: linear-gradient(145deg, rgba(249,222,201,.97), rgba(230,208,184,.95));
+}
+@supports not (backdrop-filter: blur(1px)) {
+  .site-header, .scroll-trigger, .contents-dialog[data-slot=dialog-content] { background: var(--powder-petal); }
+  .contact-editorial .contact-experience { background: var(--dark-khaki); }
+}
