@@ -76,7 +76,8 @@ export function Motion() {
           sequence!.style.setProperty('--journey-frame-height', `${Math.ceil(needed)}px`);
           height = stage!.clientHeight;
         }
-        distance = Math.max(640, Math.min(1100, height * 1.1));
+        // Twice the scroll distance gives each beat room to play on wheel and touchpad.
+        distance = Math.max(1280, Math.min(2200, height * 2.2));
         sequence!.style.setProperty('--journey-scroll', `${distance}px`);
         top = sequence!.getBoundingClientRect().top + scrollY;
         const r = photo!.getBoundingClientRect(), sr = stage!.getBoundingClientRect();
@@ -221,7 +222,7 @@ export function Motion() {
         const dt = previous ? Math.min(.05, (now - previous) / 1000) : 1 / 60;
         previous = now;
         const actual = Math.max(0, scrollY);
-        renderedScroll = Math.abs(actual - renderedScroll) > height * .75 || actual <= top || actual >= top + distance
+        renderedScroll = actual <= top || actual >= top + distance
           ? actual : settleScroll(renderedScroll, actual, dt, mobile);
         draw(mix(FILM_START, FILM_END, clamp((renderedScroll - top) / distance)));
         if (Math.abs(actual - renderedScroll) > .25) animation = requestAnimationFrame(tick);
