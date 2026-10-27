@@ -6,6 +6,7 @@ import { clamp, ease, settleScroll, type Point } from '@/lib/traveller';
 
 const range = (p: number, from: number, to: number) => clamp((p - from) / (to - from));
 type Scene = { element: HTMLElement; grid: HTMLElement; column: HTMLElement; dark: boolean };
+type Popup = { kind: 'card' | 'photo' | 'text'; delay: number; played: boolean; animation?: gsap.core.Timeline };
 
 /** Motion-only enhancement: the original sections, text and layout stay intact. */
 export function SectionMotion() {
@@ -19,32 +20,77 @@ export function SectionMotion() {
       const about = document.querySelector<HTMLElement>('#o-mne');
       if (!root || !services || !about) return;
       const ball = root.querySelector<SVGGElement>('[data-section-ball]')!;
-      const panels = root.querySelector<SVGGElement>('[data-ball-panels]')!;
       const ribbon = root.querySelector<SVGPathElement>('[data-section-ribbon]')!;
       const trace = root.querySelector<SVGPathElement>('[data-section-trace]')!;
       const glint = root.querySelector<SVGPathElement>('[data-section-glint]')!;
       const shadow = root.querySelector<SVGEllipseElement>('[data-section-shadow]')!;
       const dust = Array.from(root.querySelectorAll<SVGCircleElement>('[data-section-dust]'));
-      const entries = new Map<HTMLElement, gsap.core.Tween>();
+      const fragments = Array.from(root.querySelectorAll<SVGCircleElement>('[data-popup-fragment]'));
+      const entries = new Map<HTMLElement, Popup>();
       const scenes: Scene[] = [];
       let disposed = false, frame = 0, previous = 0, renderedScroll = scrollY;
+      let orbPosition: Point | null = null;
+      let burst: { x: number; documentY: number; at: number; scene: Scene } | null = null;
       const mobile = () => innerWidth <= 760;
 
-      function reveal(element: HTMLElement, kind: 'card' | 'photo' | 'text', delay = 0) {
-        const photo = kind === 'photo', card = kind === 'card';
-        const tween = gsap.fromTo(element, {
-          opacity: 0, y: card ? 58 : photo ? 42 : 26,
-          scale: card ? .88 : photo ? .94 : 1,
-          rotationX: card ? 24 : 0, rotationY: photo ? -13 : card ? 8 : 0,
-          rotation: photo ? -2.5 : card ? -2 : 0,
-          transformPerspective: 1100, transformOrigin: '50% 85%',
+      function reveal(element: HTMLElement, kind: Popup['kind'], delay = 0) {
+        // Observe the full, untransformed frame. Shrinking it beforehand would
+        // postpone the trigger and disconnect the popup from the visible pearl.
+        gsap.set(element, { opacity: 0 });
+        entries.set(element, { kind, delay, played: false });
+      }
+      function finish(element: HTMLElement, popup: Popup) {
+        popup.animation?.kill();
+        popup.played = true;
+        element.classList.remove('section-popup-target');
+        element.style.removeProperty('--popup-seed-opacity');
+        gsap.set(element, { clearProps: 'transform,transformOrigin,opacity,borderRadius' });
+      }
+      function originFor(element: HTMLElement): Point {
+        if (burst && performance.now() - burst.at < 180) return { x: burst.x, y: burst.documentY - scrollY };
+        if (orbPosition && orbPosition.y > 100 && orbPosition.y < innerHeight - 45) return orbPosition;
+        const scene = scenes.find(item => item.element.contains(element));
+        const rect = element.getBoundingClientRect();
+        const gap = scene ? parseFloat(getComputedStyle(scene.grid).columnGap) || 60 : 60;
+        return {
+          x: scene && !mobile() ? scene.column.getBoundingClientRect().left - gap / 2 : Math.min(innerWidth - 38, rect.left + rect.width * .55),
+          y: Math.max(115, Math.min(innerHeight - 65, rect.top + rect.height * .65)),
+        };
+      }
+      function play(element: HTMLElement, popup: Popup, origin: Point, stagger: number) {
+        if (popup.played) return;
+        popup.played = true;
+        const rect = element.getBoundingClientRect();
+        const timeline = gsap.timeline({ onUpdate: wake, onComplete: () => finish(element, popup) });
+        popup.animation = timeline;
+        if (popup.kind === 'text') {
+          timeline.fromTo(element, { opacity: 0, y: 42, scale: .48, rotation: -2, transformOrigin: '0% 80%' },
+            { opacity: 1, y: 0, scale: 1, rotation: 0, duration: 1.45, ease: 'back.out(1.15)' }, popup.delay);
+          return;
+        }
+        const scene = scenes.find(item => item.element.contains(element));
+        if (scene) burst = { x: origin.x, documentY: origin.y + scrollY, at: performance.now(), scene };
+        const diameter = mobile() ? 34 : 58;
+        const radius = getComputedStyle(element).borderRadius;
+        const delay = .08 + stagger * .18;
+        element.classList.add('section-popup-target');
+        timeline.fromTo(element, {
+          opacity: 1,
+          x: origin.x - rect.left - rect.width / 2,
+          y: origin.y - rect.top - rect.height / 2,
+          scaleX: diameter / Math.max(1, rect.width),
+          scaleY: diameter / Math.max(1, rect.height),
+          rotation: 0, rotationX: 0, rotationY: 0,
+          borderRadius: '50%', transformOrigin: '50% 50%', transformPerspective: 1200,
+          '--popup-seed-opacity': 1,
         }, {
-          opacity: 1, y: 0, scale: 1, rotation: 0, rotationX: 0, rotationY: 0,
-          duration: card ? 1.65 : photo ? 1.8 : 1.25, delay,
-          ease: card ? 'back.out(1.05)' : 'power3.out', paused: true,
-          clearProps: 'transform,transformOrigin,opacity',
-        });
-        entries.set(element, tween);
+          x: 0, y: 0, scaleX: 1, scaleY: 1, borderRadius: radius,
+          duration: popup.kind === 'photo' ? 1.95 : 1.75, ease: 'back.out(1.25)',
+        }, delay);
+        timeline.to(element, { '--popup-seed-opacity': 0, duration: .68, ease: 'power2.out' }, delay + .22);
+        timeline.to(element, { rotationX: popup.kind === 'photo' ? -15 : 34, rotationY: stagger % 2 ? -18 : 18,
+          rotation: stagger % 2 ? 7 : -7, duration: .32, ease: 'power2.out' }, delay + .04);
+        timeline.to(element, { rotationX: 0, rotationY: 0, rotation: 0, duration: 1.25, ease: 'back.out(1.1)' }, delay + .36);
       }
       services.querySelectorAll<HTMLElement>('.services-intro > *').forEach((el, i) => reveal(el, 'text', i * .12));
       services.querySelectorAll<HTMLElement>('.service-chapter').forEach(chapter => {
@@ -62,34 +108,42 @@ export function SectionMotion() {
       about.querySelectorAll<HTMLElement>('.about-copy > :not(h2)').forEach((el, i) => reveal(el, 'text', Math.min(i * .08, .32)));
 
       const observer = new IntersectionObserver(changes => {
+        let stagger = 0;
+        let origin: Point | null = null;
         changes.forEach(entry => {
           if (!entry.isIntersecting) return;
-          entries.get(entry.target as HTMLElement)?.play();
+          const element = entry.target as HTMLElement;
+          const popup = entries.get(element)!;
+          if (popup.kind !== 'text') origin ??= originFor(element);
+          play(element, popup, origin ?? originFor(element), popup.kind === 'text' ? 0 : stagger++);
           observer.unobserve(entry.target);
         });
-      }, { rootMargin: '0px 0px -4% 0px', threshold: .03 });
+        wake();
+      }, { rootMargin: '0px 0px -8% 0px', threshold: .08 });
       entries.forEach((_, element) => observer.observe(element));
       const focus = (event: FocusEvent) => {
         if (!(event.target instanceof Node)) return;
         const target = event.target;
-        entries.forEach((tween, element) => {
-          if (element.contains(target)) { tween.progress(1); observer.unobserve(element); }
+        entries.forEach((popup, element) => {
+          if (element.contains(target)) { finish(element, popup); observer.unobserve(element); }
         });
       };
 
       function draw() {
         const height = innerHeight, width = innerWidth, actual = scrollY;
+        const burstProgress = burst ? range(performance.now() - burst.at, 0, 1100) : 1;
         const candidates = scenes.map(scene => {
           const rect = scene.element.getBoundingClientRect();
           const visible = Math.max(0, Math.min(height, rect.bottom) - Math.max(90, rect.top));
           return { scene, rect, visible };
         }).sort((a, b) => b.visible - a.visible);
-        const active = candidates[0];
-        if (!active || active.visible < height * .4) { root!.style.visibility = 'hidden'; return; }
+        const active = burst && burstProgress < .8 ? candidates.find(item => item.scene === burst!.scene) : candidates[0];
+        if (!active || (active.visible < height * .4 && burstProgress >= 1)) { root!.style.visibility = 'hidden'; orbPosition = null; return; }
         const { scene, rect } = active;
         const progress = clamp((height - rect.top - actual + renderedScroll) / (height + rect.height));
-        const presence = ease(range(active.visible / height, .4, .75))
-          * ease(range(progress, .04, .18)) * (1 - ease(range(progress, .82, .96)));
+        const presence = Math.max(ease(range(active.visible / height, .4, .75))
+          * ease(range(progress, .04, .18)) * (1 - ease(range(progress, .82, .96))),
+          1 - ease(range(burstProgress, .65, 1)));
         if (presence < .002) { root!.style.visibility = 'hidden'; return; }
         root!.style.visibility = 'visible';
         root!.style.opacity = String(presence);
@@ -98,7 +152,7 @@ export function SectionMotion() {
         root!.style.clipPath = `inset(${Math.max(0, marginTop)}px 0 ${Math.max(0, height - rect.bottom)}px 0)`;
         const column = scene.column.getBoundingClientRect();
         const gap = parseFloat(getComputedStyle(scene.grid).columnGap) || 60;
-        const size = mobile() ? 19 : Math.max(24, Math.min(58, gap * .48));
+        const size = mobile() ? 30 : Math.max(34, Math.min(64, gap * .55));
         const left = mobile() ? width - 21 : column.left - gap + size / 2 + 5;
         const right = mobile() ? width - 13 : column.left - size / 2 - 5;
         const base = rect.top + actual - renderedScroll;
@@ -113,6 +167,12 @@ export function SectionMotion() {
           };
         }
         const current = point(progress);
+        const emission = 1 - ease(range(burstProgress, .22, .8));
+        if (burst && emission > 0) {
+          current.x += (burst.x - current.x) * emission;
+          current.y += (burst.documentY - actual - current.y) * emission;
+        }
+        orbPosition = { ...current };
         const center: Point[] = [], outer: Point[] = [], inner: Point[] = [];
         const tail = Math.min(.3, progress);
         for (let i = 0; i <= 48; i++) {
@@ -133,7 +193,7 @@ export function SectionMotion() {
         const impact = 1 - ease(range(Math.min(bounce, 1 - bounce), 0, .13));
         const scale = size / 100;
         ball.setAttribute('transform', `translate(${current.x},${current.y}) scale(${scale * (1 + impact * .1)},${scale * (1 - impact * .09)})`);
-        panels.setAttribute('transform', `rotate(${progress * 1080},0,0)`);
+        ball.style.opacity = String(1 - Math.sin(burstProgress * Math.PI) * .7);
         shadow.setAttribute('cx', String(current.x));
         shadow.setAttribute('cy', String(current.y + size * .65));
         shadow.setAttribute('rx', String(size * .55));
@@ -146,6 +206,14 @@ export function SectionMotion() {
           particle.setAttribute('r', String(mobile() ? 1 : 1.8));
           particle.style.opacity = String(impact * .65);
         });
+        fragments.forEach((fragment, i) => {
+          const angle = i * 2.399;
+          const spread = ease(burstProgress) * (mobile() ? 66 : 120);
+          fragment.setAttribute('cx', String((burst?.x ?? current.x) + Math.cos(angle) * spread));
+          fragment.setAttribute('cy', String((burst ? burst.documentY - actual : current.y) + Math.sin(angle) * spread - burstProgress * 40));
+          fragment.setAttribute('r', String((mobile() ? 6 : 11) * (1 - i % 3 * .2) * Math.sin(burstProgress * Math.PI)));
+          fragment.style.opacity = String(1 - ease(range(burstProgress, .55, 1)));
+        });
       }
       function tick(now: number) {
         frame = 0;
@@ -154,7 +222,7 @@ export function SectionMotion() {
         previous = now;
         renderedScroll = Math.abs(scrollY - renderedScroll) > innerHeight ? scrollY : settleScroll(renderedScroll, scrollY, dt * .55, mobile());
         draw();
-        if (Math.abs(scrollY - renderedScroll) > .25) frame = requestAnimationFrame(tick);
+        if (Math.abs(scrollY - renderedScroll) > .25 || (burst && now - burst.at < 1100)) frame = requestAnimationFrame(tick);
         else previous = 0;
       }
       const wake = () => { if (!disposed && !document.hidden && !frame) frame = requestAnimationFrame(tick); };
@@ -169,6 +237,7 @@ export function SectionMotion() {
         disposed = true; cancelAnimationFrame(frame); observer.disconnect(); resizeObserver.disconnect();
         removeEventListener('scroll', wake); removeEventListener('resize', wake);
         removeEventListener('focusin', focus); document.removeEventListener('visibilitychange', visibility);
+        entries.forEach((popup, element) => finish(element, popup));
         root!.style.visibility = 'hidden';
       };
     });
@@ -178,10 +247,7 @@ export function SectionMotion() {
   return <div ref={ref} className="section-motion-layer" aria-hidden="true">
     <svg className="section-motion-canvas" focusable="false">
       <defs>
-        <radialGradient id={`${id}-shell`} cx="30%" cy="24%" r="77%"><stop stopColor="#fffef8"/><stop offset=".54" stopColor="#e4e6e2"/><stop offset=".85" stopColor="#a5aeac"/><stop offset="1" stopColor="#485359"/></radialGradient>
-        <radialGradient id={`${id}-shade`} cx="27%" cy="20%" r="80%"><stop stopColor="white" stopOpacity=".62"/><stop offset=".35" stopColor="white" stopOpacity="0"/><stop offset=".78" stopColor="#0c1825" stopOpacity=".1"/><stop offset="1" stopColor="#0c1825" stopOpacity=".64"/></radialGradient>
-        <linearGradient id={`${id}-bronze`} x1="0" y1="0" x2="1" y2="1"><stop stopColor="#e6cfaa"/><stop offset="1" stopColor="#a37e53"/></linearGradient>
-        <clipPath id={`${id}-clip`}><circle r="49"/></clipPath>
+        <radialGradient id={`${id}-shell`} cx="29%" cy="23%" r="80%"><stop stopColor="#f0dfc4"/><stop offset=".43" stopColor="var(--light-brown)"/><stop offset=".82" stopColor="#907252"/><stop offset="1" stopColor="#70533f"/></radialGradient>
         <filter id={`${id}-soft-shadow`} x="-50%" y="-100%" width="200%" height="300%"><feGaussianBlur stdDeviation="3"/></filter>
       </defs>
       <path data-section-ribbon className="section-ball-ribbon"/>
@@ -189,22 +255,9 @@ export function SectionMotion() {
       <path data-section-glint className="section-ball-glint" fill="none" strokeWidth="3" strokeLinecap="round"/>
       <ellipse data-section-shadow fill="#0c1825" filter={`url(#${id}-soft-shadow)`}/>
       {Array.from({ length: 5 }, (_, i) => <circle key={i} data-section-dust className="section-ball-dust"/>)}
+      {Array.from({ length: 9 }, (_, i) => <circle key={i} data-popup-fragment fill={`url(#${id}-shell)`}/>)}
       <g data-section-ball>
         <circle r="49" fill={`url(#${id}-shell)`}/>
-        <g clipPath={`url(#${id}-clip)`}>
-          <g data-ball-panels stroke="#65706e" strokeWidth=".8" strokeLinejoin="round">
-            <path d="M-7-25 18-18 24 7 3 24-20 8Z" fill="#14202a"/>
-            <path d="M-42-42-17-51-7-25-26-15-49-21Z" fill="#14202a"/>
-            <path d="M24-49 50-35 47-12 25-8 18-18Z" fill={`url(#${id}-bronze)`}/>
-            <path d="M24 7 49 13 51 39 26 48 14 30Z" fill="#14202a"/>
-            <path d="M3 24-4 51-31 48-36 26-20 8Z" fill="#14202a"/>
-            <path d="M-49-4-34-1-30 17-50 31Z" fill={`url(#${id}-bronze)`}/>
-            <path d="M-26-15-20 8M25-8 24 7M14 30 3 24M-36 26-30 17M-34-1-26-15M-17-51 7-42 24-49M7-42 18-18M47-12 54 0 49 13" fill="none"/>
-          </g>
-          <circle r="49" fill={`url(#${id}-shade)`}/>
-          <ellipse cx="-15" cy="-27" rx="14" ry="6" fill="white" opacity=".24" transform="rotate(-28)"/>
-        </g>
-        <circle r="49" fill="none" stroke="white" strokeOpacity=".2"/>
       </g>
     </svg>
   </div>;
