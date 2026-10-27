@@ -10,4 +10,4 @@ import { Partners } from '@/components/site/Partners';
 import { SignatureIntro } from '@/components/site/SignatureIntro';
 import { homeIntroBootstrap } from '@/lib/home-intro';
 export const metadata = pageMetadata('Martin Kostrhun | Finanční specialista');
-export default function Home() { return <><script dangerouslySetInnerHTML={{ __html: homeIntroBootstrap }}/><SignatureIntro/><Navigation /><main id="main"><div className="hero-about-sequence"><Hero /><Contents /><Motion /></div><Services /><About /><Trust /><FAQ /><Contact /><Partners /></main><ScrollContents /><Footer /></>; }
+export default function Home() { return <><script dangerouslySetInnerHTML={{ __html: homeIntroBootstrap }}/><SignatureIntro/><Navigation /><main id="main"><div className="hero-about-sequence"><div className="journey-stage"><Hero /><Contents /><Motion /></div></div><Services /><About /><Trust /><FAQ /><Contact /><Partners /></main><ScrollContents /><Footer /></>; }
