@@ -21,6 +21,22 @@
 .section-ball-ribbon { fill: var(--section-ribbon); }
 .section-ball-glint { stroke: var(--section-glint); }
 .section-ball-dust { fill: var(--section-trace); }
+.section-popup-target {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.section-popup-target::after {
+  content: '';
+  display: block;
+  position: absolute;
+  inset: -1px;
+  z-index: 10;
+  border-radius: inherit;
+  background: radial-gradient(circle at 29% 23%, #f0dfc4 0%, var(--light-brown) 43%, #907252 82%, #70533f 100%);
+  opacity: var(--popup-seed-opacity, 0);
+  pointer-events: none;
+}
 @media(prefers-reduced-motion:reduce) {
   .section-motion-layer { display: none!important; }
 }
