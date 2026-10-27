@@ -27,8 +27,11 @@
 .hero-signature .hero-flow-contours { opacity: calc(.09 * var(--contour-presence, 1)); }
 html[data-home-intro=ready] .hero-signature .hero-name { transform: none; }
 .journey-stage { position: relative; }
+.hero-about-sequence { overflow-anchor: none; }
 .hero-about-sequence[data-reference-journey] {
   --journey-frame-height: 100svh;
+  /* Reserve the full range as soon as pinning is enabled, before measurement. */
+  --journey-scroll: clamp(1920px, 330svh, 3300px);
   height: calc(var(--journey-frame-height) + var(--journey-scroll));
 }
 .hero-about-sequence[data-reference-journey] .journey-stage {

@@ -12,7 +12,9 @@ Druhá sekce už nevjíždí přirozeným posunem stránky s jednoduchým odhale
 - Druhá sekce se během nástupu neposouvá mimo obrazovku. Na závěr je celá kompozice ještě krátce připnutá a až následně pokračuje běžný scroll k dalšímu obsahu.
 - Menší obrazovky používají kompaktnější rozložení. Pokud se obsah do výšky obrazovky nevejde, scéna se prodlouží tak, aby se žádné odkazy neořízly.
 - Pohyb funguje při scrollování oběma směry, bez zachytávání kolečka nebo dotyků. Přímý odkaz na obsah přeskočí na dokončenou scénu.
-- Průběh je roztažený na dvojnásobnou délku scrollování, takže stejný posun kolečka přehraje polovinu původní animace. Prudší posun uvnitř scény nepřeskakuje vyhlazení; přímé přechody před scénu nebo za ni se nadále okamžitě srovnají s pozicí stránky.
+- Průběh je roztažený na trojnásobnou délku scrollování oproti původní scéně, tedy ještě o polovinu delší než předchozí zpomalená verze. Prudší posun uvnitř scény nepřeskakuje vyhlazení; přímé přechody před scénu nebo za ni se nadále okamžitě srovnají s pozicí stránky.
+- Obnovení stránky začíná nahoře u úvodu, včetně odstranění staré kotvy z adresy při refreshi. Automatické obnovení scrollu je vypnuté do dokončení načtení a následného rozvržení. Jakmile návštěvník začne ovládat stránku, pozdější reset už jeho pohyb nepřepisuje. Běžné otevření přímého odkazu na sekci a návrat historií tento reset nepoužívají.
+- Připnutá scéna má předem rezervovanou délku a neúčastní se automatického kotvení scrollu při změně rozložení. Její přeměření tak nemá posouvat návštěvníka za animaci.
 - Při omezení pohybu nebo nenačtení fotografie zůstává statický obsah v běžném toku. Klávesnicový fokus zviditelní celou dostupnou navigaci.
 
 Původní záloha: značka `backup/pre-animation-20261027`, commit `936c6b1c34890a628ce3a5fd2cbf1a75097fe3f4`. V pracovním projektu je navíc `backups/pre-animation-20261027/source.zip`, `history.bundle` a `OBNOVA.md`.
