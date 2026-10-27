@@ -1,0 +1,29 @@
+/* On smaller windows, keep both name lines behind a centered portrait. */
+@media(max-width:1000px) {
+  .hero-signature {
+    --name-size: clamp(56px, min(18vw, 25svh), 205px);
+    --centered-portrait-width: clamp(132px, min(32vw, 30svh), 280px);
+  }
+  .hero-signature .hero-name {
+    left: 3vw;
+    right: 3vw;
+    top: calc(50% - var(--name-size) * .88 - 8px);
+    z-index: 2;
+    text-align: center;
+  }
+  .hero-signature .hero-name-front { top: calc(50% - var(--name-size) * .06 + 8px); }
+  .hero-signature .hero-photo-layer {
+    left: calc(50% - var(--centered-portrait-width) / 2);
+    right: auto;
+    top: calc(50% - var(--centered-portrait-width) * .625);
+    bottom: auto;
+    z-index: 4;
+    width: var(--centered-portrait-width);
+    height: auto;
+    max-width: none;
+    max-height: none;
+    aspect-ratio: 4 / 5;
+  }
+  .hero-signature .hero-note { justify-content: center; }
+  .hero-signature .hero-actions { align-items: center; }
+}

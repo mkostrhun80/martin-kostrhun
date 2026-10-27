@@ -18,6 +18,8 @@ import "./palette.css";
 import "./signature-journey.css";
 import "./contact-variants.css";
 import "./clean-hero.css";
+import "./site-contours.css";
+import "./hero-responsive.css";
 export const metadata: Metadata = { description: "Martin Kostrhun, finanční specialista eDO finance. Bydlení, investice, pojištění a finanční plán.", icons: { icon: sitePath('/favicon.svg'), shortcut: sitePath('/favicon.svg') } };
 export default function RootLayout({ children }: Readonly<{
     children: React.ReactNode;
