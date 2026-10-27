@@ -76,8 +76,8 @@ export function Motion() {
           sequence!.style.setProperty('--journey-frame-height', `${Math.ceil(needed)}px`);
           height = stage!.clientHeight;
         }
-        // Twice the scroll distance gives each beat room to play on wheel and touchpad.
-        distance = Math.max(1280, Math.min(2200, height * 2.2));
+        // Three times the original range; keep the CSS reservation in sync.
+        distance = Math.max(1920, Math.min(3300, height * 3.3));
         sequence!.style.setProperty('--journey-scroll', `${distance}px`);
         top = sequence!.getBoundingClientRect().top + scrollY;
         const r = photo!.getBoundingClientRect(), sr = stage!.getBoundingClientRect();
