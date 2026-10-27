@@ -1,17 +1,21 @@
 # Animace podle video předlohy
 
-Převádí dodanou video předlohu na skutečný pohyb prvků webu při scrollování. Nepřehrává video celé stránky uvnitř webu.
+Druhá sekce už nevjíždí přirozeným posunem stránky s jednoduchým odhalením karet. První dvě sekce tvoří jednu připnutou scénu, která přehrává hlavní fáze předlohy podle scrollování a po jejich dokončení přejde do běžného toku stránky.
 
-- Stávající podpisový úvod a reálný portrét zůstávají součástí webu.
-- Úvod přebírá kompozici předlohy: dvě vycentrované řádky jména a úzký svislý portrét uprostřed před oběma řádky. Doplňkové bloky kolem portrétu jsou odstraněné; kontakt zůstává v navigaci.
-- Portrét se nejprve zvětší, zaoblí a přejde do světle hnědé kuličky. Jméno při odletu úplně zmizí.
-- Kulička proletí po dvou navazujících křivkách s jemnou stužkou a pěti menšími částicemi.
-- Kulička míří k pravému okraji stránky. Karty se začnou rozvíjet v polovině přechodu a jsou úplně odkryté před jeho koncem.
-- Konec přechodu je navázaný na začátek druhé sekce pod navigací. Její výška odečítá prostor navigace a svislé mezery jsou menší, aby nadpis i všechny čtyři karty byly společně v záběru při běžné výšce obrazovky. Na nízké obrazovce nebo s delším obsahem sekce přirozeně roste.
-- Sekce má nadpis vlevo a karty vpravo, na mobilu pod sebou. Odkrytí karet sleduje skutečný posun stránky bez zpoždění vyhlazované trajektorie.
-- Pohyb je řízený scrollováním v obou směrech. Na mobilu jsou dráha, stopa a odhalení karet střídmější.
-- Omezení pohybu používá statický obsah; při chybě načtení portrétu zůstane dostupný běžný obsah. Animace neblokuje scroll ani ovládání kontaktu. Klávesnicový fokus odkryje všechny odkazy v obsahu.
+- Jméno je ve dvou vycentrovaných řádcích, úzký portrét před ním. Podpisový úvod a skutečná fotografie zůstávají zachované.
+- Portrét se lehce zvětší a stáhne do hnědé kuličky; jméno a obrysové pozadí mizí.
+- Kulička nejprve klesá doleva, vykrouží smyčku se širokou měkkou stužkou a dopadne dole uprostřed.
+- Dopad ji zmáčkne a vystřelí organické hnědé a krémové části. Tím začíná pop-up druhé sekce.
+- Celá kompozice druhé sekce vyroste z hloubky a krátce přesáhne konečnou velikost. Jednotlivá písmena přiletí od místa dopadu a složí dvouřádkový nadpis. Podtitulek se připojí vzápětí.
+- Kulička vystřelí doprava a odskočí; teprve potom se postupně objeví čtyři karty. Každá vyroste z malé, natočené plochy, vyklopí se v prostoru a lehce zapruží do své konečné polohy.
+- Karty mají stejně jako v předloze ikonu a název. Jejich rozmístění zůstává 2 × 2; na mobilu je nadpis nad nimi.
+- Druhá sekce se během nástupu neposouvá mimo obrazovku. Na závěr je celá kompozice ještě krátce připnutá a až následně pokračuje běžný scroll k dalšímu obsahu.
+- Menší obrazovky používají kompaktnější rozložení. Pokud se obsah do výšky obrazovky nevejde, scéna se prodlouží tak, aby se žádné odkazy neořízly.
+- Pohyb funguje při scrollování oběma směry, bez zachytávání kolečka nebo dotyků. Přímý odkaz na obsah přeskočí na dokončenou scénu.
+- Při omezení pohybu nebo nenačtení fotografie zůstává statický obsah v běžném toku. Klávesnicový fokus zviditelní celou dostupnou navigaci.
 
-Záloha před touto úpravou: značka `backup/pre-animation-20261027`, commit `936c6b1c34890a628ce3a5fd2cbf1a75097fe3f4`. V pracovním projektu je navíc `backups/pre-animation-20261027/source.zip`, `history.bundle` a `OBNOVA.md`.
+Původní záloha: značka `backup/pre-animation-20261027`, commit `936c6b1c34890a628ce3a5fd2cbf1a75097fe3f4`. V pracovním projektu je navíc `backups/pre-animation-20261027/source.zip`, `history.bundle` a `OBNOVA.md`.
 
-Na přání uživatele nebyly spuštěny testy ani vizuální kontroly. Publikační workflow provádí sestavení potřebné pro GitHub Pages.
+Verze před tímto přepracováním: commit `a24ceea9138d101c6c4a2293ca84cc221acd3569`.
+
+Video předloha byla znovu prohlédnuta po půlsekundách a nástup druhé sekce po čtvrtsekundách. Na přání uživatele nebyly spuštěny testy ani kontrola implementace v prohlížeči. Publikační workflow provádí sestavení potřebné pro GitHub Pages.

@@ -16,8 +16,7 @@ export function SectionIcon({ id }: { id: string }) {
 export function Contents() {
   const sections = visibleSections(useSiteData());
   return <section id="obsah" className="index-section index-scene page-section" aria-labelledby="contents-heading">
-    <span className="journey-destination" aria-hidden="true"/>
-    <div className="index-copy"><div className="section-heading"><h2 id="contents-heading">Na webu najdete<span>.</span></h2><p>Vyberte si, co vás zajímá.</p></div>
+    <div className="index-copy"><div className="section-heading"><h2 id="contents-heading" aria-label="Na webu najdete.">{['Na webu', 'najdete.'].map((line, row) => <span key={line} className="journey-heading-line" aria-hidden="true">{Array.from(line).map((letter, column) => <span key={`${row}-${column}`} data-journey-letter className={letter === '.' ? 'journey-heading-dot' : undefined}>{letter === ' ' ? '\u00a0' : letter}</span>)}</span>)}</h2><p>Vyberte si, co vás zajímá.</p></div>
       <nav className="index-grid" aria-label="Rychlé odkazy na části webu">{sections.map(s => <a key={s.id} href={`#${s.id}`}><span className="index-icon"><SectionIcon id={s.id}/></span><span className="index-label">{s.label}<ArrowUpRight size={18} aria-hidden="true"/></span><p>{s.description}</p></a>)}</nav>
     </div>
   </section>;
