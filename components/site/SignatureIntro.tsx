@@ -89,8 +89,6 @@ export function SignatureIntro() {
         <path d={signatureInk} fill="currentColor" fillRule="evenodd" mask={`url(#${maskId})`}/>
         <path data-underline d="M30 148 Q410 159 788 141" fill="none" stroke="var(--light-brown)" strokeWidth="2.8" strokeLinecap="round" pathLength="1" style={{ strokeDasharray: 1, strokeDashoffset: 1 }}/>
       </svg>
-      <p>Finanční specialista <span>·</span> eDO finance</p>
     </div>
-    <button className="signature-skip" type="button">Přeskočit <span aria-hidden="true">↗</span></button>
   </div>;
 }
