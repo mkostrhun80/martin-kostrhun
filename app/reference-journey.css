@@ -1,11 +1,40 @@
-/* Portrait → brown pearl → unfolding navigation, inspired by the supplied film. */
+/* Composition and scroll beats from the supplied film. */
+.hero-signature {
+  --name-size: clamp(76px, min(18vw, 29svh), 320px);
+  --portrait-width: min(16.25vw, 28.9svh, 300px);
+  min-height: 0;
+  max-height: none;
+}
 .hero-signature .hero-name {
-  opacity: calc(1 - var(--portrait-departure, 0) * .8);
+  left: 3vw;
+  right: 3vw;
+  top: 26%;
+  text-align: center;
+  opacity: calc(1 - var(--portrait-departure, 0));
+}
+.hero-signature .hero-name-front { top: calc(26% + var(--name-size) * .82 + 12px); }
+.hero-signature .hero-photo-layer {
+  z-index: 4;
+  left: calc(50% - var(--portrait-width) / 2);
+  right: auto;
+  top: calc(54% - var(--portrait-width) * 10 / 13);
+  width: var(--portrait-width);
+  max-width: none;
+  aspect-ratio: 13 / 20;
+  border-radius: 20px;
+  clip-path: inset(0 round 20px);
 }
 html[data-home-intro=ready] .hero-signature .hero-name {
   transform: translateY(calc(var(--portrait-departure, 0) * -28px));
 }
-.index-scene { min-height: 100svh; }
+.index-scene {
+  --scene-header-gap: 98px;
+  position: relative;
+  min-height: calc(100svh - var(--scene-header-gap));
+  padding: clamp(36px, 7svh, 72px) 5vw;
+  /* html supplies the header clearance for anchor navigation. */
+  scroll-margin-top: 0;
+}
 .index-scene .index-copy {
   display: grid;
   grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
@@ -25,16 +54,16 @@ html[data-home-intro=ready] .hero-signature .hero-name {
 }
 .index-scene .journey-destination {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 36px;
-  height: 36px;
+  top: 50%;
+  right: 24px;
+  width: 12px;
+  height: 12px;
   pointer-events: none;
   visibility: hidden;
 }
 .index-scene .index-grid > a {
   --card-arrival: 1;
-  min-height: 180px;
+  min-height: 164px;
   opacity: 1;
   transform: none;
   transform-origin: 50% 100%;
@@ -65,15 +94,25 @@ html[data-home-intro=ready] .hero-signature .hero-name {
 @media(max-width:1000px) and (min-width:761px) {
   .index-scene .index-copy { gap: 36px; grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); }
   .index-scene .section-heading h2 { font-size: 60px; }
-  .index-scene .journey-destination { top: 16px; left: 16px; }
 }
 @media(max-width:760px) {
-  .index-scene { padding: 120px 22px 90px; min-height: 100svh; }
-  .index-scene .index-copy { grid-template-columns: minmax(0,1fr); gap: 40px; }
-  .index-scene .section-heading h2 { font-size: clamp(56px,15vw,90px); }
+  .hero.hero-signature {
+    --name-size: clamp(62px, min(20vw, 25svh), 152px);
+    --portrait-width: min(27vw, 25svh, 190px);
+    min-height: 0!important;
+    max-height: none;
+  }
+  .hero-signature .hero-name { top: calc(50% - var(--name-size)); }
+  .hero-signature .hero-name-front { top: calc(50% - var(--name-size) * .18 + 9px); }
+  .hero-signature .hero-photo-layer { top: calc(52% - var(--portrait-width) * 10 / 13); border-radius: 16px; clip-path: inset(0 round 16px); }
+  .index-scene { --scene-header-gap: 84px; padding: 32px 22px; }
+  .index-scene .index-copy { grid-template-columns: minmax(0,1fr); gap: 24px; }
+  .index-scene .section-heading h2 { font-size: clamp(48px,13vw,72px); }
+  .index-scene .section-heading p { margin-top: 12px; }
   .index-scene .index-grid { gap: 12px; }
-  .index-scene .index-grid > a { min-height: 164px; }
-  .index-scene .journey-destination { top: 17px; left: 14px; }
+  .index-scene .index-grid > a { min-height: 138px; padding: 14px; }
+  .index-scene .index-icon { margin-bottom: 10px; }
+  .index-scene .journey-destination { right: 12px; }
   .index-scene[data-journey=active] .index-grid > a,
   .index-scene[data-journey=active] .index-grid > a:nth-of-type(even) {
     transform: translate3d(0, calc((1 - var(--card-arrival)) * 34px), 0);
