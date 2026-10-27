@@ -1,0 +1,36 @@
+/* Decorative motion only. No content dimensions, ordering or spacing are changed. */
+.section-motion-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9;
+  pointer-events: none;
+  visibility: hidden;
+  overflow: hidden;
+  contain: strict;
+  --section-trace: rgba(148, 123, 95, .55);
+  --section-ribbon: rgba(196, 164, 132, .2);
+  --section-glint: rgba(255, 252, 244, .82);
+}
+.section-motion-layer[data-surface=dark] {
+  --section-trace: rgba(239, 237, 225, .7);
+  --section-ribbon: rgba(239, 237, 225, .2);
+  --section-glint: rgba(255, 253, 245, .95);
+}
+.section-motion-canvas { display: block; width: 100%; height: 100%; overflow: hidden; }
+.section-ball-trace { stroke: var(--section-trace); }
+.section-ball-ribbon { fill: var(--section-ribbon); }
+.section-ball-glint { stroke: var(--section-glint); }
+.section-ball-dust { fill: var(--section-trace); }
+@media(prefers-reduced-motion:reduce) {
+  .section-motion-layer { display: none!important; }
+}
+@media print {
+  .section-motion-layer { display: none!important; }
+  #sluzby .services-intro > *,
+  #sluzby .service-chapter-heading h3,
+  #sluzby .service-chapter-heading figure,
+  #sluzby .service-item,
+  #o-mne .about-portrait,
+  #o-mne .motion-title-line,
+  #o-mne .about-copy > * { opacity: 1!important; transform: none!important; }
+}
