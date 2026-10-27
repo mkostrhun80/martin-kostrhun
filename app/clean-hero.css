@@ -1,8 +1,2 @@
-/* The opening frame contains only the name, portrait and appointment action. */
-html[data-clean-hero=true] .site-header,
-html[data-clean-hero=true] .scroll-contents {
-  opacity: 0!important;
-  visibility: hidden;
-  pointer-events: none!important;
-}
+/* Keep the hero action aligned beneath the name after removing small labels. */
 .hero-signature .hero-note { justify-content: flex-start; }
