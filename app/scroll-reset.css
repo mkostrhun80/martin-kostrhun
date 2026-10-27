@@ -1,0 +1,4 @@
+/* Prevent layout anchoring from undoing the reload reset before initialization. */
+html[data-home-reload=pending],
+html[data-home-reload=pending] body { overflow-anchor: none; }
+html[data-home-reload=pending] { scroll-behavior: auto!important; }
