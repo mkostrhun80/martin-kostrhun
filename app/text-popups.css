@@ -1,0 +1,9 @@
+/* Only opacity and transforms change; the original text keeps its layout space. */
+.text-popup-pending { opacity: 0; }
+.text-popup-running { transform-origin: 0% 65%; }
+@media(prefers-reduced-motion:reduce) {
+  .text-popup-pending, .text-popup-running { opacity: 1!important; transform: none!important; filter: none!important; }
+}
+@media print {
+  .text-popup-pending, .text-popup-running { opacity: 1!important; transform: none!important; filter: none!important; }
+}
