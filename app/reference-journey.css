@@ -1,0 +1,86 @@
+/* Portrait → brown pearl → unfolding navigation, inspired by the supplied film. */
+.hero-signature .hero-name {
+  opacity: calc(1 - var(--portrait-departure, 0) * .8);
+}
+html[data-home-intro=ready] .hero-signature .hero-name {
+  transform: translateY(calc(var(--portrait-departure, 0) * -28px));
+}
+.index-scene { min-height: 100svh; }
+.index-scene .index-copy {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: clamp(36px, 7vw, 110px);
+  grid-column: 1 / -1;
+  width: 100%;
+}
+.index-scene .section-heading { margin: 0; }
+.index-scene .section-heading h2 { font-size: clamp(56px, 6.4vw, 104px); }
+.index-scene .index-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  perspective: 1000px;
+}
+.index-scene .journey-destination {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 36px;
+  height: 36px;
+  pointer-events: none;
+  visibility: hidden;
+}
+.index-scene .index-grid > a {
+  --card-arrival: 1;
+  min-height: 180px;
+  opacity: 1;
+  transform: none;
+  transform-origin: 50% 100%;
+  backface-visibility: hidden;
+  box-shadow: 0 16px 38px rgba(20,36,58,.055), inset 0 1px 0 rgba(255,255,255,.7);
+}
+.index-scene[data-journey=active] .index-grid > a {
+  opacity: var(--card-arrival);
+  transform: translate3d(0, calc((1 - var(--card-arrival)) * 75px), 0) rotateX(calc((1 - var(--card-arrival)) * 32deg)) rotateZ(calc((1 - var(--card-arrival)) * -5deg));
+}
+.index-scene[data-journey=active] .index-grid > a:nth-of-type(even) {
+  transform: translate3d(0, calc((1 - var(--card-arrival)) * 95px), 0) rotateX(calc((1 - var(--card-arrival)) * 28deg)) rotateZ(calc((1 - var(--card-arrival)) * 5deg));
+}
+.index-scene:focus-within .index-grid > a {
+  opacity: 1!important;
+  transform: none!important;
+  pointer-events: auto!important;
+}
+.reference-traveller { z-index: 8; }
+.reference-traveller .journey-trail { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
+.reference-traveller .traveller-main {
+  --orb: 0;
+  background: radial-gradient(circle at 29% 23%, #f0dfc4 0%, var(--light-brown) 43%, #907252 82%, #70533f 100%);
+  box-shadow: 0 calc(var(--orb) * 9px) calc(var(--orb) * 18px) rgba(20,36,58,.14);
+  transform-origin: center;
+}
+.reference-traveller .traveller-main img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+@media(max-width:1000px) and (min-width:761px) {
+  .index-scene .index-copy { gap: 36px; grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); }
+  .index-scene .section-heading h2 { font-size: 60px; }
+  .index-scene .journey-destination { top: 16px; left: 16px; }
+}
+@media(max-width:760px) {
+  .index-scene { padding: 120px 22px 90px; min-height: 100svh; }
+  .index-scene .index-copy { grid-template-columns: minmax(0,1fr); gap: 40px; }
+  .index-scene .section-heading h2 { font-size: clamp(56px,15vw,90px); }
+  .index-scene .index-grid { gap: 12px; }
+  .index-scene .index-grid > a { min-height: 164px; }
+  .index-scene .journey-destination { top: 17px; left: 14px; }
+  .index-scene[data-journey=active] .index-grid > a,
+  .index-scene[data-journey=active] .index-grid > a:nth-of-type(even) {
+    transform: translate3d(0, calc((1 - var(--card-arrival)) * 34px), 0);
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  .reference-traveller { display: none!important; }
+  .hero-signature .hero-name { opacity: 1!important; transform: none!important; }
+  .index-scene .index-grid > a { opacity: 1!important; transform: none!important; pointer-events: auto!important; }
+}
