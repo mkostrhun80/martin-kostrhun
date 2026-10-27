@@ -35,6 +35,9 @@ export function Motion() {
         mobile = innerWidth <= 760;
         measuredWidth = innerWidth;
         measuredHeight = mobile ? hero!.offsetHeight : innerHeight;
+        const header = document.querySelector<HTMLElement>('.site-header');
+        const headerGap = Math.ceil((header?.getBoundingClientRect().bottom ?? (mobile ? 68 : 82)) + 16);
+        contents!.style.setProperty('--scene-header-gap', `${headerGap}px`);
         const r = photo!.getBoundingClientRect();
         const cr = contents!.getBoundingClientRect();
         const tr = target!.getBoundingClientRect();
@@ -43,18 +46,20 @@ export function Motion() {
         const style = getComputedStyle(original);
         image.style.objectPosition = style.objectPosition;
         image.style.filter = style.filter;
-        const from = { x: measuredWidth * (mobile ? .8 : .7), y: cr.top + scrollY - (mobile ? 70 : 110) };
+        const from = { x: measuredWidth * .5, y: cr.top + scrollY - (mobile ? 90 : 110) };
         const to = { x: tr.left + tr.width / 2, y: tr.top + scrollY + tr.height / 2 };
         // Two continuous curves give the ball a broad sweep and a soft return.
-        const middle = { x: measuredWidth * (mobile ? .89 : .43), y: from.y + (to.y - from.y) * .55 };
-        const tangent = { x: mobile ? -measuredWidth * .05 : measuredWidth * .17, y: (to.y - from.y) * .13 };
+        const middle = { x: measuredWidth * .46, y: from.y + (to.y - from.y) * .55 };
+        const tangent = { x: measuredWidth * .17, y: (to.y - from.y) * .13 };
         route = sampleRoute(p => p < .56
-          ? bezier(p / .56, from, { x: measuredWidth * (mobile ? .94 : .12), y: from.y + 30 }, { x: middle.x - tangent.x, y: middle.y - tangent.y }, middle)
-          : bezier((p - .56) / .44, middle, { x: middle.x + tangent.x, y: middle.y + tangent.y }, { x: to.x + measuredWidth * (mobile ? .1 : .2), y: to.y - 50 }, to));
+          ? bezier(p / .56, from, { x: measuredWidth * .12, y: from.y + 30 }, { x: middle.x - tangent.x, y: middle.y - tangent.y }, middle)
+          : bezier((p - .56) / .44, middle, { x: middle.x + tangent.x, y: middle.y + tangent.y }, { x: measuredWidth * .78, y: to.y - 50 }, to));
         start = mobile ? 64 : 48;
-        collapseEnd = Math.max(start + 200, hero!.offsetHeight * .5);
-        travelEnd = Math.max(collapseEnd + (mobile ? 220 : 300), to.y - innerHeight * .36);
-        finish = Math.max(travelEnd + 160, to.y - Math.min(150, innerHeight * .2));
+        // Finish as the section reaches the header, not after scrolling to a card.
+        finish = Math.max(start + 1, cr.top + scrollY - headerGap);
+        const span = finish - start;
+        collapseEnd = start + span * .38;
+        travelEnd = start + span * .82;
       }
 
       function hideTrail() {
@@ -107,11 +112,17 @@ export function Motion() {
         if ((intro && intro !== 'ready') || ![original, image].every(img => img.complete && img.naturalWidth > 0)) {
           restore(); return;
         }
-        const idle = y <= start && actual <= start, done = y >= finish;
+        const idle = y <= start && actual <= start, done = actual >= finish;
         contents!.dataset.journey = done ? 'complete' : 'active';
-        hero!.style.setProperty('--portrait-departure', String(ease((y - start) / Math.max(1, collapseEnd - start))));
+        const collapseSpan = collapseEnd - start;
+        hero!.style.setProperty('--portrait-departure', String(ease((y - start - collapseSpan * .18) / Math.max(1, collapseSpan * .82))));
+        const span = finish - start;
+        const revealStart = start + span * .5;
+        const stagger = span * .035;
+        const revealDuration = Math.max(1, span * .43 - stagger * (cards.length - 1));
         cards.forEach((card, i) => {
-          const p = done ? 1 : ease((y - (travelEnd - 120) - i * 30) / 150);
+          // Reveal follows the actual scroll so smoothing cannot delay the last card.
+          const p = done ? 1 : ease((actual - revealStart - i * stagger) / revealDuration);
           card.style.setProperty('--card-arrival', String(p));
           card.style.pointerEvents = p > .2 ? 'auto' : 'none';
         });
@@ -123,10 +134,11 @@ export function Motion() {
         const from = routePoint(route, 0);
         let frame: Frame & { radius: number }, orb = 1, rotation = 0, opacity = 1;
         if (y < collapseEnd) {
-          const p = clamp((y - start) / (collapseEnd - start)), t = ease(p);
-          const swell = 1 + Math.sin(Math.PI * clamp(p / .32)) * .07 * (1 - ease(p / .32));
-          const width = (source.width + (size - source.width) * t) * swell;
-          const height = (source.height + (size - source.height) * t) * swell;
+          const p = clamp((y - start) / (collapseEnd - start));
+          const t = ease((p - .2) / .8);
+          const swell = 1 + .28 * ease(p / .2);
+          const width = source.width * swell + (size - source.width * swell) * t;
+          const height = source.height * swell + (size - source.height * swell) * t;
           const cx = source.left + source.width / 2 + (from.x - source.left - source.width / 2) * t;
           const cy = source.top + source.height / 2 + (from.y - source.top - source.height / 2) * t;
           frame = { left: cx - width / 2, top: cy - actual - height / 2, width, height, radius: radius + (Math.min(width, height) / 2 - radius) * ease(p / .78) };
@@ -188,6 +200,7 @@ export function Motion() {
         document.removeEventListener('visibilitychange', wake);
         [original, image].forEach(img => img.removeEventListener('load', refresh));
         restore();
+        contents.style.removeProperty('--scene-header-gap');
       };
     });
     return () => media.revert();
