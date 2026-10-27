@@ -1,0 +1,40 @@
+/* Reuse the opening contour motif behind the content throughout the public site. */
+:root {
+  --contour-mask: url('../public/images/navy-contours.svg');
+  --contour-ink: var(--navy);
+  --contour-opacity: .095;
+  --contour-size: 1440px 900px;
+}
+:where(main > section, .index-scene, .service-chapter-protect, .footer, .legal-main, .standalone-main, .contact-variants .scene) {
+  position: relative;
+  isolation: isolate;
+}
+:where(main > section, .index-scene, .service-chapter-protect, .footer, .legal-main, .standalone-main, .contact-variants .scene)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background-color: var(--contour-ink);
+  opacity: var(--contour-opacity);
+  -webkit-mask-image: var(--contour-mask);
+  mask-image: var(--contour-mask);
+  -webkit-mask-size: var(--contour-size);
+  mask-size: var(--contour-size);
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+  -webkit-mask-position: center top;
+  mask-position: center top;
+}
+:where(.service-chapter-protect, .footer, .contact:not(.contact-gallery), .contact-variants .personal-scene, .contact-variants .nocturne-scene) {
+  --contour-ink: #526782;
+  --contour-opacity: .24;
+}
+.hero-signature .hero-flow-contours { color: var(--navy); opacity: .095; }
+@media(max-width:760px) {
+  :root { --contour-size: 1000px 625px; }
+}
+@media print {
+  :where(main > section, .index-scene, .service-chapter-protect, .footer, .legal-main, .standalone-main, .contact-variants .scene)::before { display: none; }
+}
