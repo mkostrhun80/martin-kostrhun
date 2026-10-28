@@ -40,7 +40,7 @@
   clip-path: inset(0 round 28px);
   transition: clip-path .6s cubic-bezier(.22, 1, .36, 1);
 }
-.hero-signature .hero-photo-layer img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 32%; filter: grayscale(1); transform: none; scale: none; }
+.hero-signature .hero-photo-layer img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 32%; filter: none; transform: none; scale: none; }
 .hero-signature .hero-photo-layer::after { display: none; }
 .hero-signature .hero-meta { top: 125px; left: 5vw; right: 5vw; font-size: 10px; z-index: 4; }
 .hero-signature .hero-note { left: 5vw; right: 5vw; bottom: 76px; top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; z-index: 4; }
@@ -79,7 +79,7 @@ html[data-home-intro=ready] .hero-signature .hero-photo-layer { transition: none
 
 .index-scene { display: grid; grid-template-columns: minmax(0, 1.06fr) minmax(0, 1fr); gap: clamp(40px, 7vw, 120px); align-items: center; min-height: 100svh; padding: clamp(100px, 13svh, 160px) 5vw; background: var(--paper); }
 .index-scene .index-photo { margin: 0; position: relative; width: 100%; aspect-ratio: 1 / 1; max-height: 70svh; overflow: hidden; border-radius: 28px; background: var(--sand); }
-.index-scene .index-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 60% 50%; filter: grayscale(1); }
+.index-scene .index-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 60% 50%; filter: none; }
 .index-scene .index-copy { min-width: 0; }
 .index-scene .section-heading { display: block; margin: 0 0 35px; }
 .index-scene .section-heading h2 { max-width: 520px; font-size: clamp(58px, 6.4vw, 104px); }
@@ -90,7 +90,7 @@ html[data-home-intro=ready] .hero-signature .hero-photo-layer { transition: none
 .index-scene .index-label { font-size: 15px; }
 .index-scene .index-grid p { font-size: 12px; line-height: 1.6; margin-top: 9px; }
 .signature-traveller .traveller-main { background: var(--light-brown); box-shadow: none; }
-.signature-traveller .traveller-main img { filter: grayscale(1); transform: none; }
+.signature-traveller .traveller-main img { filter: none; transform: none; }
 
 @media (max-width: 1000px) and (min-width: 761px) {
   .hero-signature .hero-meta { top: 110px; }

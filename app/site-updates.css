@@ -126,10 +126,10 @@
 .menu-links > a { transition: background .25s, padding .25s; }
 .menu-links > a:is(:hover, :focus-visible) { background: #c4a48416; padding-left: 18px; }
 
-/* Tighter framing keeps the whole figure, from head to shoes, in view. */
+/* Reduce the About portrait's previous 1.65 zoom by 25 percent. */
 .about-portrait { height: auto; width: 100%; aspect-ratio: 2 / 3; }
 .about-portrait img, .hero-photo-handoff .handoff-to {
-  transform: scale(1.65);
+  transform: scale(1.2375);
   transform-origin: 50% 68%;
   object-position: center;
 }
