@@ -6,7 +6,9 @@ export const INTRO_TIMING = { signature: 2500, duration: 1800 } as const;
 // the default; a hydration failure cannot leave an opaque intro over the site.
 export const homeIntroBootstrap = `(() => {
   try {
-    const replay = new URLSearchParams(location.search).get('intro') === 'replay';
+    // During animation tuning, every browser refresh replays the intro.
+    const navigation = performance.getEntriesByType('navigation')[0];
+    const replay = navigation?.type === 'reload' || new URLSearchParams(location.search).get('intro') === 'replay';
     if (replay) {
       if (location.hash) history.replaceState(history.state, '', location.pathname + location.search);
       scrollTo({ top: 0, left: 0, behavior: 'instant' });
