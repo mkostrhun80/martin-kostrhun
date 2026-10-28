@@ -2,16 +2,16 @@ import { sitePath } from './site-path';
 
 // User-supplied gallery previews. Keep the embedded photographer watermark intact.
 export const assets = {
-  heroPortrait: sitePath('/images/DSC01608.jpg'),
-  heroLensPortrait: sitePath('/images/DSC01608.jpg'),
+  heroPortrait: sitePath('/images/DSC01657.jpg'),
+  heroLensPortrait: sitePath('/images/DSC01657.jpg'),
   contentsPortrait: sitePath('/images/DSC01638.jpg'),
-  aboutPortrait: sitePath('/images/DSC01657.jpg'),
+  aboutPortrait: sitePath('/images/DSC01608.jpg'),
   editorialPortrait01: sitePath('/images/DSC01638.jpg'),
   editorialPortrait02: sitePath('/images/DSC01624.jpg'),
   contactPortrait: sitePath('/images/DSC01638.jpg'),
   isPlaceholder: false,
   portraitAlt: 'Martin Kostrhun, finanční specialista',
-  aboutAlt: 'Martin Kostrhun při chůzi po terase',
+  aboutAlt: 'Martin Kostrhun na terase',
   editorialAlt: 'Martin Kostrhun na terase vedle svého odrazu ve skle',
   contactAlt: 'Martin Kostrhun pracuje na notebooku u venkovního stolu',
 };
