@@ -2,8 +2,7 @@
 
 import { useEffect, useId, useRef } from 'react';
 import { INTRO_SESSION_KEY, INTRO_TIMING } from '@/lib/home-intro';
-import { signatureInk, signatureTraces } from '@/lib/signature-paths';
-import { signaturePenStrokes, signaturePenTiming } from '@/lib/signature-pen';
+import { signatureLettering, signatureViewBox, signatureUnderline, signatureTiming } from '@/lib/signature-lettering';
 
 export function SignatureIntro() {
   const ref = useRef<HTMLDivElement>(null);
@@ -17,8 +16,7 @@ export function SignatureIntro() {
     let frame = 0;
     let disposed = false;
     let completed = false;
-    const traces = Array.from(stage.querySelectorAll<SVGPathElement>('[data-pen-stroke]'));
-    const settledInk = Array.from(stage.querySelectorAll<SVGPathElement>('[data-settled-ink]'));
+    const letters = Array.from(stage.querySelectorAll<SVGRectElement>('[data-letter-reveal]'));
     const underline = stage.querySelector<SVGPathElement>('[data-underline]')!;
     const markPlayed = () => { try { sessionStorage.setItem(INTRO_SESSION_KEY, '1'); } catch { /* Storage may be disabled. */ } };
     const finish = () => {
@@ -53,16 +51,14 @@ export function SignatureIntro() {
         if (disposed || completed) return;
         if (root.dataset.homeIntro === 'ready') { finish(); return; }
         const elapsed = now - zero;
-        traces.forEach((path, i) => {
-          const stroke = signaturePenStrokes[i];
-          const p = clamp((elapsed - stroke.start) / stroke.duration);
-          // Slow into and out of a stroke; keep the middle of each loop fluid.
+        letters.forEach((rect, i) => {
+          const letter = signatureLettering[i];
+          const p = clamp((elapsed - letter.start) / letter.duration);
+          // A restrained writing cadence preserves the font's smooth curves.
           const flow = p - Math.sin(p * Math.PI * 2) * .06;
-          path.style.strokeDashoffset = String(1 - flow);
-          // Settle fine ink edges at the end without retracing their outlines.
-          settledInk[i].style.opacity = String(clamp((p - .9) / .1));
+          rect.setAttribute('width', String(letter.width * flow));
         });
-        underline.style.strokeDashoffset = String(1 - clamp((elapsed - signaturePenTiming.underline) / signaturePenTiming.underlineDuration));
+        underline.style.strokeDashoffset = String(1 - clamp((elapsed - signatureTiming.underline) / signatureTiming.underlineDuration));
         if (elapsed >= INTRO_TIMING.signature) root.dataset.homeIntro = elapsed >= portraitAt ? 'portrait' : 'name';
         if (elapsed >= end) { finish(); return; }
         frame = requestAnimationFrame(tick);
@@ -86,14 +82,10 @@ export function SignatureIntro() {
 
   return <div ref={ref} className="signature-intro">
     <div className="signature-stage" role="status" aria-label="Martin Kostrhun — úvodní podpis">
-      <svg viewBox="0 0 814 173" className="signature-art" aria-hidden="true" focusable="false">
-        <defs><mask id={maskId} maskUnits="userSpaceOnUse" x="0" y="0" width="814" height="173">
-          <rect width="814" height="173" fill="black"/>
-          {signaturePenStrokes.map((stroke, i) => <path key={`pen-${i}`} data-pen-stroke d={stroke.path} fill="none" stroke="white" strokeWidth="23" strokeLinejoin="round" strokeLinecap="round" pathLength="1" style={{ strokeDasharray: 1, strokeDashoffset: 1 }}/>) }
-          {signatureTraces.map((stroke, i) => <path key={`ink-${i}`} data-settled-ink d={stroke.path} fill="none" stroke="white" strokeWidth="23" strokeLinejoin="round" strokeLinecap="round" style={{ opacity: 0 }}/>) }
-        </mask></defs>
-        <path d={signatureInk} fill="currentColor" fillRule="evenodd" mask={`url(#${maskId})`}/>
-        <path data-underline d="M30 148 Q410 159 788 141" fill="none" stroke="var(--light-brown)" strokeWidth="2.8" strokeLinecap="round" pathLength="1" style={{ strokeDasharray: 1, strokeDashoffset: 1 }}/>
+      <svg viewBox={`0 0 ${signatureViewBox.width} ${signatureViewBox.height}`} className="signature-art" aria-hidden="true" focusable="false" shapeRendering="geometricPrecision">
+        <defs>{signatureLettering.map((letter, i) => <clipPath key={i} id={`${maskId}-${i}`} clipPathUnits="userSpaceOnUse"><rect data-letter-reveal x={letter.left} y="0" width="0" height={signatureViewBox.height}/></clipPath>)}</defs>
+        {signatureLettering.map((letter, i) => <path key={i} d={letter.path} fill="currentColor" clipPath={`url(#${maskId}-${i})`}/>)}
+        <path data-underline d={signatureUnderline} fill="none" stroke="var(--light-brown)" strokeWidth="2" strokeLinecap="round" pathLength="1" style={{ strokeDasharray: 1, strokeDashoffset: 1 }}/>
       </svg>
     </div>
   </div>;
