@@ -10,5 +10,6 @@ import { Partners } from '@/components/site/Partners';
 import { SignatureIntro } from '@/components/site/SignatureIntro';
 import { homeIntroBootstrap } from '@/lib/home-intro';
 import { HomeScrollReady } from '@/components/site/HomeScrollReady';
+import { Cooperation } from '@/components/site/Cooperation';
 export const metadata = pageMetadata('Martin Kostrhun | Finanční specialista');
-export default function Home() { return <><script dangerouslySetInnerHTML={{ __html: homeIntroBootstrap }}/><SignatureIntro/><Navigation /><main id="main"><div className="hero-about-sequence"><Hero /><Contents /><Motion /></div><Services /><About /><Trust /><FAQ /><Contact /><Partners /></main><HomeScrollReady/><ScrollContents /><Footer /></>; }
+export default function Home() { return <><script dangerouslySetInnerHTML={{ __html: homeIntroBootstrap }}/><SignatureIntro/><Navigation /><main id="main"><div className="hero-about-sequence"><Hero /><Contents /><Motion /></div><Services /><About /><Trust /><FAQ /><Contact /><Cooperation /><Partners /></main><HomeScrollReady/><ScrollContents /><Footer /></>; }
