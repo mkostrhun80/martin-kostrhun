@@ -1,5 +1,7 @@
-export const INTRO_SESSION_KEY = 'mk.signature.intro.v3';
-export const INTRO_TIMING = { referenceLimit: 11000, name: 550, hold: 400, portrait: 600 } as const;
+import { signaturePenTiming } from './signature-pen';
+
+export const INTRO_SESSION_KEY = 'mk.signature.intro.v4';
+export const INTRO_TIMING = { signature: signaturePenTiming.end, name: 550, hold: 400, portrait: 600 } as const;
 
 // Runs before the homepage is painted. Without JavaScript the settled page is
 // the default; a hydration failure cannot leave an opaque intro over the site.
@@ -12,6 +14,6 @@ export const homeIntroBootstrap = `(() => {
       if (document.documentElement.dataset.homeIntro !== 'ready') {
         document.documentElement.dataset.homeIntro = 'ready';
       }
-    }, 21000);
+    }, 9500);
   } catch {}
 })();`;

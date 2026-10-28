@@ -53,8 +53,8 @@
 .hero-signature .hero-meta, .hero-signature .hero-note, .hero-signature .hero-bottom { transition: opacity .6s ease; }
 
 .signature-intro { position: fixed; inset: 0; z-index: 90; visibility: hidden; pointer-events: none; background: var(--paper); color: var(--ink); opacity: 0; transition: opacity .45s ease, visibility 0s .45s; }
-.signature-stage { position: absolute; left: 50%; top: 46%; width: min(94vw, 1100px); transform: translate(-50%, -50%); text-align: center; }
-.signature-video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: contain; border-radius: 14px; pointer-events: none; }
+.signature-stage { position: absolute; left: 50%; top: 46%; width: min(78vw, 860px); transform: translate(-50%, -50%); text-align: center; }
+.signature-art { display: block; width: 100%; height: auto; overflow: visible; }
 .signature-stage p { margin-top: 22px; font-size: 11px; text-transform: uppercase; letter-spacing: .18em; }
 .signature-stage p span { color: var(--light-brown); margin: 0 6px; }
 .signature-skip { position: absolute; right: 5vw; bottom: 35px; display: flex; align-items: center; gap: 18px; min-height: 44px; padding: 10px 0 10px 16px; border: 0; background: none; color: var(--ink); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
