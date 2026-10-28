@@ -7,8 +7,8 @@ import { Services } from '@/components/site/Services';
 import { About, Contact, Footer } from '@/components/site/Sections';
 import { Trust, FAQ } from '@/components/site/TrustAndFAQ';
 import { Partners } from '@/components/site/Partners';
-import { HeroEntrance } from '@/components/site/HeroEntrance';
+import { SignatureIntro } from '@/components/site/SignatureIntro';
 import { homeIntroBootstrap } from '@/lib/home-intro';
 import { HomeScrollReady } from '@/components/site/HomeScrollReady';
 export const metadata = pageMetadata('Martin Kostrhun | Finanční specialista');
-export default function Home() { return <><script dangerouslySetInnerHTML={{ __html: homeIntroBootstrap }}/><HeroEntrance/><Navigation /><main id="main"><div className="hero-about-sequence"><Hero /><Contents /><Motion /></div><Services /><About /><Trust /><FAQ /><Contact /><Partners /></main><HomeScrollReady/><ScrollContents /><Footer /></>; }
+export default function Home() { return <><script dangerouslySetInnerHTML={{ __html: homeIntroBootstrap }}/><SignatureIntro/><Navigation /><main id="main"><div className="hero-about-sequence"><Hero /><Contents /><Motion /></div><Services /><About /><Trust /><FAQ /><Contact /><Partners /></main><HomeScrollReady/><ScrollContents /><Footer /></>; }
