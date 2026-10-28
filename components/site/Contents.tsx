@@ -1,7 +1,7 @@
 'use client';
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUpRight, BookOpen, BriefcaseBusiness, Home, MessageCircle, Phone, UserRound, X } from 'lucide-react';
+import { ArrowUpRight, BookOpen, BriefcaseBusiness, Home, MessageCircle, Phone, Route, UserRound, X } from 'lucide-react';
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { visibleSections } from '@/lib/public-data';
 import { sitePath } from '@/lib/site-path';
@@ -10,7 +10,7 @@ import { AppointmentLink } from './AppointmentLink';
 import { assets } from '@/lib/site-config';
 import { useContentsTextPopups } from './useContentsTextPopups';
 
-const icons = { domu: Home, sluzby: BriefcaseBusiness, 'o-mne': UserRound, zkusenosti: MessageCircle, otazky: MessageCircle, kontakt: Phone };
+const icons = { domu: Home, sluzby: BriefcaseBusiness, 'o-mne': UserRound, zkusenosti: MessageCircle, otazky: MessageCircle, kontakt: Phone, spoluprace: Route };
 export function SectionIcon({ id }: { id: string }) {
   const Icon = icons[id as keyof typeof icons] || BookOpen;
   return <Icon size={18} strokeWidth={1.6} aria-hidden="true"/>;

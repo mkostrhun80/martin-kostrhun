@@ -40,5 +40,6 @@ export const sectionDefinitions = [
     { id: 'zkusenosti', label: 'Zkušenosti klientů', short: 'Zkušenosti', description: 'Skutečné zkušenosti ze spolupráce.' },
     { id: 'otazky', label: 'Časté otázky', short: 'Otázky', description: 'Praktické odpovědi před první schůzkou.' },
     { id: 'kontakt', label: 'Kontakt', short: 'Kontakt', description: 'Napište mi zprávu přímo z webu.' },
+    { id: 'spoluprace', label: 'Jak spolupráce probíhá', short: 'Spolupráce', description: 'Od první schůzky po dlouhodobou péči.' },
 ];
 export function visibleSections(data: PublicData) { return sectionDefinitions.filter(s => s.id !== 'zkusenosti' || data.statistics !== null || data.reviews.length > 0); }
