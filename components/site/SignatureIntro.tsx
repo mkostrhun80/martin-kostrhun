@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef } from 'react';
 import { INTRO_SESSION_KEY, INTRO_TIMING, SIGNATURE_MOTION } from '@/lib/home-intro';
-import { signatureInk, signatureTraces, signatureViewBox } from '@/lib/signature-lettering';
+import { signatureInk, signatureTraces, signatureViewBox, signatureStrokeWidth, signatureFillRule } from '@/lib/signature-lettering';
 
 export function SignatureIntro() {
   const ref = useRef<HTMLDivElement>(null);
@@ -60,7 +60,7 @@ export function SignatureIntro() {
           const reveal = smooth((elapsed - SIGNATURE_MOTION.start - delay) / SIGNATURE_MOTION.draw);
           const p = reveal * (1 - retract);
           // Grow each mask route out from its middle, then reverse it. The
-          // visible ink always remains the original clean font outline.
+          // visible ink always remains the exact supplied signature outline.
           path.style.strokeDasharray = `${p.toFixed(4)} 1`;
           path.style.strokeDashoffset = String(-(1 - p) / 2);
           path.style.opacity = String(Math.min(1, p * 8));
@@ -95,10 +95,10 @@ export function SignatureIntro() {
       <svg viewBox={`0 0 ${signatureViewBox.width} ${signatureViewBox.height}`} className="signature-art" aria-hidden="true" focusable="false" shapeRendering="geometricPrecision">
         <defs><mask id={maskId} maskUnits="userSpaceOnUse" x="0" y="0" width={signatureViewBox.width} height={signatureViewBox.height} style={{ maskType: 'luminance' }}>
           <rect width={signatureViewBox.width} height={signatureViewBox.height} fill="black"/>
-          {signatureTraces.map((stroke, i) => <path key={i} data-pen-stroke d={stroke.path} fill="none" stroke="white" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" pathLength="1" style={{ strokeDasharray: '0 1', strokeDashoffset: -.5, opacity: 0 }}/>) }
+          {signatureTraces.map((stroke, i) => <path key={i} data-pen-stroke d={stroke.path} fill="none" stroke="white" strokeWidth={signatureStrokeWidth} strokeLinecap="round" strokeLinejoin="round" pathLength="1" style={{ strokeDasharray: '0 1', strokeDashoffset: -.5, opacity: 0 }}/>) }
         </mask></defs>
-        <path d={signatureInk} fill="currentColor" mask={`url(#${maskId})`}/>
-        <path className="signature-solid-ink" d={signatureInk} fill="currentColor"/>
+        <path d={signatureInk} fill="currentColor" fillRule={signatureFillRule} mask={`url(#${maskId})`}/>
+        <path className="signature-solid-ink" d={signatureInk} fill="currentColor" fillRule={signatureFillRule}/>
       </svg>
     </div>
   </div>;
