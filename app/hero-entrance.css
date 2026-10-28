@@ -10,12 +10,10 @@ html[data-home-intro=entering] .hero-entry-cover {
   pointer-events: none;
 }
 html[data-home-intro=pending] .signature-intro { pointer-events: auto; cursor: pointer; }
-.signature-stage { position: absolute; left: 50%; top: 46%; width: min(87vw, 925px); transform: translate(-50%, -50%); }
-.signature-art { display: block; width: 100%; height: auto; max-height: 213px; overflow: visible; transition: opacity .53s ease, transform .53s ease, filter .53s ease; }
-.signature-solid-ink { opacity: 0; transition: opacity .22s ease; }
-.signature-intro[data-signature-complete=true] .signature-solid-ink { opacity: 1; }
-.signature-intro[data-signature-lifted=true] .signature-art { opacity: 0; transform: translateY(-20px); filter: blur(3px); }
-@media(max-width:760px) { .signature-stage { width: 90vw; } }
+.signature-stage { position: absolute; left: 50%; top: 50%; width: min(45vw, 640px); transform: translate(-50%, -50%); }
+.signature-art { display: block; width: 100%; height: auto; max-height: 160px; overflow: visible; color: var(--ink); }
+.signature-solid-ink { opacity: 0; }
+@media(max-width:760px) { .signature-stage { width: 82vw; } }
 html[data-home-intro=pending] :is(.site-header, .scroll-contents, .hero-signature .hero-name, .hero-signature .hero-photo-layer, .hero-signature .hero-note) { opacity: 0; }
 html[data-home-intro=entering] .hero-entry-cover { animation: hero-cover-out .7s cubic-bezier(.65,0,.25,1) both; }
 html[data-home-intro=entering] .site-header { animation: hero-header-in .75s .05s cubic-bezier(.16,1,.3,1) both; }

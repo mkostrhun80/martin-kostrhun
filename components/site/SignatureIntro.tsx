@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useId, useRef } from 'react';
-import { INTRO_SESSION_KEY, INTRO_TIMING } from '@/lib/home-intro';
-import { signatureInk, signatureTraces, signatureViewBox, signatureUnderline, signatureTiming } from '@/lib/signature-lettering';
+import { INTRO_SESSION_KEY, INTRO_TIMING, SIGNATURE_MOTION } from '@/lib/home-intro';
+import { signatureInk, signatureTraces, signatureViewBox } from '@/lib/signature-lettering';
 
 export function SignatureIntro() {
   const ref = useRef<HTMLDivElement>(null);
@@ -17,12 +17,7 @@ export function SignatureIntro() {
     let disposed = false;
     let completed = false;
     const traces = Array.from(stage.querySelectorAll<SVGPathElement>('[data-pen-stroke]'));
-    const lengths = traces.map(path => path.getTotalLength());
-    const nib = stage.querySelector<SVGGElement>('[data-pen-tip]')!;
-    const underline = stage.querySelector<SVGPathElement>('[data-underline]')!;
-    const underlineLength = underline.getTotalLength();
-    delete stage.dataset.signatureComplete;
-    delete stage.dataset.signatureLifted;
+    const solidInk = stage.querySelector<SVGPathElement>('.signature-solid-ink')!;
     const markPlayed = () => { try { sessionStorage.setItem(INTRO_SESSION_KEY, '1'); } catch { /* Storage may be disabled. */ } };
     const finish = () => {
       if (disposed || completed) return;
@@ -51,33 +46,29 @@ export function SignatureIntro() {
       const zero = performance.now();
       const end = INTRO_TIMING.signature + INTRO_TIMING.duration;
       const clamp = (value: number) => Math.max(0, Math.min(1, value));
-      // Motion functions ported from the supplied standalone HTML animation.
+      // The recording reveals short fragments across the whole signature at
+      // once, holds the finished ink, then contracts those same fragments.
       const smooth = (value: number) => { const p = clamp(value); return p * p * (3 - 2 * p); };
-      const humanize = (p: number) => clamp(p + .011 * Math.sin(p * 6 * Math.PI) * Math.sin(Math.PI * p));
       const tick = (now: number) => {
         if (disposed || completed) return;
         if (root.dataset.homeIntro === 'ready') { finish(); return; }
         const elapsed = now - zero;
-        let active: { path: SVGPathElement; distance: number } | null = null;
+        const retract = smooth((elapsed - SIGNATURE_MOTION.retract) / SIGNATURE_MOTION.retractDuration);
         for (let i = 0; i < traces.length; i++) {
           const path = traces[i];
-          const stroke = signatureTraces[i];
-          const p = humanize(smooth((elapsed - stroke.start) / stroke.duration));
-          path.style.opacity = elapsed >= stroke.start ? '1' : '0';
-          path.style.strokeDashoffset = String(1 - p);
-          if (elapsed >= stroke.start && elapsed < stroke.start + stroke.duration) active = { path, distance: lengths[i] * p };
+          const delay = ((i * 17) % 7) / 6 * SIGNATURE_MOTION.stagger;
+          const reveal = smooth((elapsed - SIGNATURE_MOTION.start - delay) / SIGNATURE_MOTION.draw);
+          const p = reveal * (1 - retract);
+          // Grow each mask route out from its middle, then reverse it. The
+          // visible ink always remains the original clean font outline.
+          path.style.strokeDasharray = `${p.toFixed(4)} 1`;
+          path.style.strokeDashoffset = String(-(1 - p) / 2);
+          path.style.opacity = String(Math.min(1, p * 8));
         }
-        const progress = smooth((elapsed - signatureTiming.underline) / signatureTiming.underlineDuration);
-        underline.style.strokeDashoffset = String(1 - progress);
-        underline.style.opacity = elapsed >= signatureTiming.underline ? '1' : '0';
-        if (elapsed >= signatureTiming.underline && elapsed < signatureTiming.underline + signatureTiming.underlineDuration) active = { path: underline, distance: underlineLength * progress };
-        if (active) {
-          const point = active.path.getPointAtLength(active.distance);
-          nib.setAttribute('transform', `translate(${point.x.toFixed(2)} ${point.y.toFixed(2)})`);
-          nib.style.opacity = '1';
-        } else nib.style.opacity = '0';
-        if (elapsed >= signatureTiming.inkComplete) stage.dataset.signatureComplete = 'true';
-        if (elapsed >= signatureTiming.lift) stage.dataset.signatureLifted = 'true';
+        solidInk.style.opacity = elapsed < SIGNATURE_MOTION.complete ? '0' : String(
+          smooth((elapsed - SIGNATURE_MOTION.complete) / 100) *
+          (1 - smooth((elapsed - SIGNATURE_MOTION.retract) / 70))
+        );
         if (elapsed >= INTRO_TIMING.signature) root.dataset.homeIntro = 'entering';
         if (elapsed >= end) { finish(); return; }
         frame = requestAnimationFrame(tick);
@@ -104,12 +95,10 @@ export function SignatureIntro() {
       <svg viewBox={`0 0 ${signatureViewBox.width} ${signatureViewBox.height}`} className="signature-art" aria-hidden="true" focusable="false" shapeRendering="geometricPrecision">
         <defs><mask id={maskId} maskUnits="userSpaceOnUse" x="0" y="0" width={signatureViewBox.width} height={signatureViewBox.height} style={{ maskType: 'luminance' }}>
           <rect width={signatureViewBox.width} height={signatureViewBox.height} fill="black"/>
-          {signatureTraces.map((stroke, i) => <path key={i} data-pen-stroke d={stroke.path} fill="none" stroke="white" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" pathLength="1" style={{ strokeDasharray: 1, strokeDashoffset: 1, opacity: 0 }}/>) }
+          {signatureTraces.map((stroke, i) => <path key={i} data-pen-stroke d={stroke.path} fill="none" stroke="white" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" pathLength="1" style={{ strokeDasharray: '0 1', strokeDashoffset: -.5, opacity: 0 }}/>) }
         </mask></defs>
         <path d={signatureInk} fill="currentColor" mask={`url(#${maskId})`}/>
         <path className="signature-solid-ink" d={signatureInk} fill="currentColor"/>
-        <path data-underline d={signatureUnderline} fill="none" stroke="var(--light-brown)" strokeWidth="2" strokeLinecap="round" pathLength="1" style={{ strokeDasharray: 1, strokeDashoffset: 1, opacity: 0 }}/>
-        <g data-pen-tip aria-hidden="true" style={{ opacity: 0 }}><circle r="4" fill="var(--light-brown)" opacity=".18"/><circle r="1.4" fill="currentColor" opacity=".75"/></g>
       </svg>
     </div>
   </div>;
