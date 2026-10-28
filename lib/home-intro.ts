@@ -1,7 +1,7 @@
 import { signatureTiming } from './signature-lettering';
 
-export const INTRO_SESSION_KEY = 'mk.signature.intro.v5';
-export const INTRO_TIMING = { signature: signatureTiming.end, name: 550, hold: 400, portrait: 600 } as const;
+export const INTRO_SESSION_KEY = 'mk.signature.intro.v6';
+export const INTRO_TIMING = { signature: signatureTiming.fade, name: 550, hold: 400, portrait: 600 } as const;
 
 // Runs before the homepage is painted. Without JavaScript the settled page is
 // the default; a hydration failure cannot leave an opaque intro over the site.
@@ -14,6 +14,6 @@ export const homeIntroBootstrap = `(() => {
       if (document.documentElement.dataset.homeIntro !== 'ready') {
         document.documentElement.dataset.homeIntro = 'ready';
       }
-    }, 9500);
+    }, 13500);
   } catch {}
 })();`;
