@@ -1,29 +1,3 @@
-@font-face {
-  font-family: HeroPoppins;
-  src: url('../public/fonts/Poppins-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Poppins is the main-heading typeface in the supplied page reference. */
-.hero-signature { --name-size: clamp(78px, 11.8vw, 188px); }
-.hero-signature .hero-name {
-  font-family: HeroPoppins, Body, sans-serif;
-  font-weight: 500;
-  font-synthesis: none;
-  line-height: 1.06;
-  letter-spacing: -.055em;
-}
-.hero-signature .hero-name-front {
-  font-size: calc(var(--name-size) * .85);
-  top: calc(27% + var(--name-size) * 1.06 + 18px);
-}
-.header-links, .header-appointment, .hero-signature .hero-appointment {
-  font-family: HeroPoppins, Body, sans-serif;
-  font-weight: 500;
-}
-
 /* Like the reference, a cover drops away to reveal the whole first section. */
 .hero-entry-cover { display: none; }
 html[data-home-intro=pending] .hero-entry-cover,
@@ -52,11 +26,6 @@ html[data-home-intro=entering] .hero-signature .hero-flow-contours { animation: 
 @keyframes hero-action-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 @keyframes hero-contours-in { from { opacity: 0; } to { opacity: .09; } }
 
-@media(max-width:1000px) {
-  .hero-signature { --name-size: clamp(46px, min(13vw, 18svh), 140px); }
-  .hero-signature .hero-name { top: calc(50% - var(--name-size) * 1.06 - 8px); }
-  .hero-signature .hero-name-front { top: calc(50% + 8px); }
-}
 @media(prefers-reduced-motion:reduce) {
   .hero-entry-cover { display: none!important; }
   html[data-home-intro] :is(.site-header, .scroll-contents, .hero-signature .hero-name, .hero-signature .hero-photo-layer, .hero-signature .hero-note) { opacity: 1!important; animation: none!important; transform: none!important; clip-path: none!important; }

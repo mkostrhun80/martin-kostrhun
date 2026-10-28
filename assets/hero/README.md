@@ -1,12 +1,9 @@
 # Hero entrance
 
-The supplied reference page uses Poppins Medium for its main heading and drops
-a full viewport cover downward to reveal the first section. This implementation
-adapts that entrance to Martin Kostrhun's existing name/photo/button/header layout.
+The entrance animates the existing homepage composition: header, name, portrait,
+appointment button and decorative background. Typography, name sizes and
+responsive positioning remain defined by the original hero styles.
 
-Poppins Medium is self-hosted in public/fonts/Poppins-Medium.ttf under SIL OFL 1.1.
-Source: https://github.com/google/fonts/tree/main/ofl/poppins
-The font license is in this directory.
-
-The former standalone signature intro is not rendered. Previously generated
-signature artwork remains in the repository as editable reference material.
+A full viewport cover drops downward as in the reference. The animation has a
+bounded duration, can be skipped by user input, and respects reduced motion.
+The standalone signature screen is not rendered.
