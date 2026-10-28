@@ -52,9 +52,12 @@
 .hero-signature .hero-bottom { left: 5vw; right: 5vw; bottom: 25px; font-size: 10px; z-index: 4; }
 .hero-signature .hero-meta, .hero-signature .hero-note, .hero-signature .hero-bottom { transition: opacity .6s ease; }
 
-.signature-intro { position: fixed; inset: 0; z-index: 90; visibility: hidden; pointer-events: none; background: var(--paper); color: var(--ink); opacity: 0; transition: opacity .45s ease, visibility 0s .45s; }
-.signature-stage { position: absolute; left: 50%; top: 46%; width: min(78vw, 860px); transform: translate(-50%, -50%); text-align: center; }
-.signature-art { display: block; width: 100%; height: auto; overflow: visible; }
+.signature-intro { position: fixed; inset: 0; z-index: 90; visibility: hidden; pointer-events: none; background: var(--paper); color: var(--ink); opacity: 0; transition: opacity .65s cubic-bezier(.55,0,.3,1), visibility 0s .65s; }
+.signature-stage { position: absolute; left: 50%; top: 46%; width: min(87vw, 925px); transform: translate(-50%, -50%); text-align: center; }
+.signature-art { display: block; width: 100%; height: auto; max-height: 213px; overflow: visible; transition: opacity .53s ease, transform .53s ease, filter .53s ease; }
+.signature-solid-ink { opacity: 0; transition: opacity .22s ease; }
+.signature-intro[data-signature-complete=true] .signature-solid-ink { opacity: 1; }
+.signature-intro[data-signature-lifted=true] .signature-art { opacity: 0; transform: translateY(-20px); filter: blur(3px); }
 .signature-stage p { margin-top: 22px; font-size: 11px; text-transform: uppercase; letter-spacing: .18em; }
 .signature-stage p span { color: var(--light-brown); margin: 0 6px; }
 .signature-skip { position: absolute; right: 5vw; bottom: 35px; display: flex; align-items: center; gap: 18px; min-height: 44px; padding: 10px 0 10px 16px; border: 0; background: none; color: var(--ink); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
