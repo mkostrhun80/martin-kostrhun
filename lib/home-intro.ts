@@ -1,4 +1,4 @@
-export const INTRO_SESSION_KEY = 'mk.signature.hero.v3';
+export const INTRO_SESSION_KEY = 'mk.signature.hero.v4';
 export const SIGNATURE_MOTION = { start: 120, draw: 860, stagger: 84, complete: 1100, retract: 1900, retractDuration: 520 } as const;
 export const INTRO_TIMING = { signature: 2500, duration: 1800 } as const;
 

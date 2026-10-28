@@ -1,13 +1,14 @@
 """Generate signature assets from the user's supplied HTML artwork.
 
-The visible outline is copied verbatim. Only the invisible reveal routes are
-split into short fragments for the simultaneous draw/retract motion.
+The original lettering is retained, with pixel-trace steps replaced by smooth
+cubic curves. Invisible reveal routes are split for the draw/retract motion.
 Uses the standard library; no fonts, rasterization or tracing required.
 """
 import json
 import math
 import re
 from pathlib import Path
+from signature_curves import curved_path, smooth_outline
 
 root = Path(__file__).resolve().parents[1]
 art = json.loads((root / 'assets/signature/reference-artwork.json').read_text())
@@ -40,13 +41,12 @@ def fragment_routes(path, limit=40):
 traces = []
 for stroke in art['traces']:
     for points in fragment_routes(stroke['path']):
-        commands = ' '.join(f'{"M" if i == 0 else "L"}{x:.3f} {y:.3f}'
-                            for i, (x, y) in enumerate(points))
-        traces.append({'path': commands})
+        traces.append({'path': curved_path(points, sigma=.75)})
 
 header = '// Generated from the supplied HTML artwork by scripts/generate-signature.py.\n'
+ink = smooth_outline(art['ink'])
 exports = {
-    'signatureInk': art['ink'],
+    'signatureInk': ink,
     'signatureTraces': traces,
     'signatureViewBox': art['viewBox'],
     'signatureStrokeWidth': max(stroke['width'] for stroke in art['traces']),
@@ -59,5 +59,5 @@ box = art['viewBox']
 (root / 'public/images/signature.svg').write_text(
     f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {box["width"]} {box["height"]}" '
     'role="img" aria-label="Martin Kostrhun"><title>Martin Kostrhun</title>'
-    f'<path fill="#14243a" fill-rule="{art["fillRule"]}" d="{art["ink"]}"/></svg>\n')
+    f'<path fill="#14243a" fill-rule="{art["fillRule"]}" d="{ink}"/></svg>\n')
 print('Generated signature from the supplied artwork with', len(traces), 'reveal fragments')

@@ -60,7 +60,7 @@ export function SignatureIntro() {
           const reveal = smooth((elapsed - SIGNATURE_MOTION.start - delay) / SIGNATURE_MOTION.draw);
           const p = reveal * (1 - retract);
           // Grow each mask route out from its middle, then reverse it. The
-          // visible ink always remains the exact supplied signature outline.
+          // visible ink uses smooth vector contours of the supplied lettering.
           path.style.strokeDasharray = `${p.toFixed(4)} 1`;
           path.style.strokeDashoffset = String(-(1 - p) / 2);
           path.style.opacity = String(Math.min(1, p * 8));
