@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef } from 'react';
 import { INTRO_SESSION_KEY, INTRO_TIMING } from '@/lib/home-intro';
 import { signatureInk, signatureTraces } from '@/lib/signature-paths';
+import { sitePath } from '@/lib/site-path';
 
 export function SignatureIntro() {
   const ref = useRef<HTMLDivElement>(null);
@@ -16,6 +17,30 @@ export function SignatureIntro() {
     let frame = 0;
     let disposed = false;
     let completed = false;
+    let mediaTimer = 0;
+    const video = stage.querySelector<HTMLVideoElement>('video')!;
+    const drawing = stage.querySelector<HTMLElement>('.signature-stage')!;
+    let mode: 'waiting' | 'video' | 'fallback' = 'waiting';
+    let zero = performance.now();
+    let signatureFinishedAt: number | null = null;
+    const useFallback = () => {
+      if (disposed || completed || mode === 'fallback' || signatureFinishedAt !== null) return;
+      clearTimeout(mediaTimer);
+      mode = 'fallback';
+      video.pause();
+      delete drawing.dataset.signatureMedia;
+      zero = performance.now();
+    };
+    const playing = () => {
+      if (disposed || completed || mode !== 'waiting') return;
+      clearTimeout(mediaTimer);
+      mode = 'video';
+      drawing.dataset.signatureMedia = 'video';
+      zero = performance.now();
+    };
+    const ended = () => {
+      if (!disposed && !completed && mode === 'video') signatureFinishedAt = performance.now();
+    };
     const traces = Array.from(stage.querySelectorAll<SVGPathElement>('[data-pen-stroke]'));
     const underline = stage.querySelector<SVGPathElement>('[data-underline]')!;
     const markPlayed = () => { try { sessionStorage.setItem(INTRO_SESSION_KEY, '1'); } catch { /* Storage may be disabled. */ } };
@@ -23,6 +48,8 @@ export function SignatureIntro() {
       if (disposed || completed) return;
       completed = true;
       cancelAnimationFrame(frame);
+      clearTimeout(mediaTimer);
+      video.pause();
       root.dataset.homeIntro = 'ready';
       markPlayed();
       dispatchEvent(new Event('home-intro-ready'));
@@ -40,26 +67,44 @@ export function SignatureIntro() {
     addEventListener('hashchange', skip);
     document.addEventListener('visibilitychange', visibility);
     reduced.addEventListener('change', preference);
+    video.addEventListener('playing', playing);
+    video.addEventListener('ended', ended);
+    video.addEventListener('error', useFallback);
 
     if (location.hash || scrollY > 8 || reduced.matches) finish();
     else {
-      const zero = performance.now();
-      const portraitAt = INTRO_TIMING.signature + INTRO_TIMING.name + INTRO_TIMING.hold;
+      const portraitAt = INTRO_TIMING.name + INTRO_TIMING.hold;
       const end = portraitAt + INTRO_TIMING.portrait;
       const clamp = (value: number) => Math.max(0, Math.min(1, value));
+      // Only first-visit intros fetch the supplied 11–20 second reference clip.
+      // Keep the original vector drawing when autoplay or the connection fails.
+      video.muted = true;
+      video.preload = 'auto';
+      mediaTimer = window.setTimeout(() => { if (mode === 'waiting') useFallback(); }, 1250);
+      void video.play().catch(useFallback);
       const tick = (now: number) => {
         if (disposed || root.dataset.homeIntro === 'ready') return;
         const elapsed = now - zero;
-        // Preserve the supplied stroke order, accelerated into a 2.1 s drawing.
-        const referenceTime = .48 + clamp(elapsed / 2100) * (6.31 - .48);
-        traces.forEach((path, i) => {
-          const stroke = signatureTraces[i];
-          const p = clamp((referenceTime - stroke.start) / stroke.duration);
-          path.style.strokeDashoffset = String(1 - p);
-        });
-        underline.style.strokeDashoffset = String(1 - clamp((elapsed - 2110) / 230));
-        if (elapsed >= INTRO_TIMING.signature) root.dataset.homeIntro = elapsed >= portraitAt ? 'portrait' : 'name';
-        if (elapsed >= end) { finish(); return; }
+        if (mode === 'fallback') {
+          const referenceTime = .48 + clamp(elapsed / 2100) * (6.31 - .48);
+          traces.forEach((path, i) => {
+            const stroke = signatureTraces[i];
+            const p = clamp((referenceTime - stroke.start) / stroke.duration);
+            path.style.strokeDashoffset = String(1 - p);
+          });
+          underline.style.strokeDashoffset = String(1 - clamp((elapsed - 2110) / 230));
+          if (elapsed >= INTRO_TIMING.signature && signatureFinishedAt === null) signatureFinishedAt = now;
+        }
+        // A stalled video must also hand control back to the page.
+        if (mode === 'video' && elapsed >= INTRO_TIMING.referenceLimit && signatureFinishedAt === null) {
+          video.pause();
+          signatureFinishedAt = now;
+        }
+        if (signatureFinishedAt !== null) {
+          const handoff = now - signatureFinishedAt;
+          root.dataset.homeIntro = handoff >= portraitAt ? 'portrait' : 'name';
+          if (handoff >= end) { finish(); return; }
+        }
         frame = requestAnimationFrame(tick);
       };
       frame = requestAnimationFrame(tick);
@@ -67,6 +112,12 @@ export function SignatureIntro() {
     return () => {
       disposed = true;
       cancelAnimationFrame(frame);
+      clearTimeout(mediaTimer);
+      video.pause();
+      delete drawing.dataset.signatureMedia;
+      video.removeEventListener('playing', playing);
+      video.removeEventListener('ended', ended);
+      video.removeEventListener('error', useFallback);
       stage.removeEventListener('click', skip);
       removeEventListener('wheel', skip);
       removeEventListener('touchmove', skip);
@@ -81,6 +132,7 @@ export function SignatureIntro() {
 
   return <div ref={ref} className="signature-intro">
     <div className="signature-stage" role="status" aria-label="Martin Kostrhun — úvodní podpis">
+      <video className="signature-video" src={sitePath('/video/signature-opening.mp4')} muted playsInline preload="none" disablePictureInPicture tabIndex={-1} aria-hidden="true"/>
       <svg viewBox="0 0 814 173" className="signature-art" aria-hidden="true" focusable="false">
         <defs><mask id={maskId} maskUnits="userSpaceOnUse" x="0" y="0" width="814" height="173">
           <rect width="814" height="173" fill="black"/>
