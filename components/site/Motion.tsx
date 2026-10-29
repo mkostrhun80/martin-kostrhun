@@ -1,15 +1,14 @@
 'use client';
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
 import { assets } from '@/lib/site-config';
 import { clamp, ease, travelPoint, sampleRoute, routePoint, photoFrame, journeyTiming, settleScroll, type Frame } from '@/lib/traveller';
 
 export function Motion() {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const media = gsap.matchMedia();
-    media.add('(prefers-reduced-motion: no-preference)', () => {
+    const media = matchMedia('(prefers-reduced-motion: reduce)');
+    const attach = () => {
       const hero = document.querySelector<HTMLElement>('.hero-signature');
       const photo = hero?.querySelector<HTMLElement>('.hero-photo-layer');
       const contents = document.querySelector<HTMLElement>('.index-scene');
@@ -21,6 +20,8 @@ export function Motion() {
       const originals = [photo.querySelector('img')!, target.querySelector('img')!];
       const links = contents.querySelector<HTMLElement>('.index-grid')!;
       let source: Frame = { left: 0, top: 0, width: 1, height: 1 };
+      let destination: Frame = { ...source };
+      let drawnPhase = '', arrival = '';
       let route = sampleRoute(p => ({ x: p, y: p }));
       let timing = journeyTiming(800, 1000, 800, false);
       let mobile = false, measuredWidth = 0, measuredHeight = 0;
@@ -33,6 +34,7 @@ export function Motion() {
         measuredHeight = mobile ? hero!.offsetHeight : innerHeight;
         const r = photo!.getBoundingClientRect(), cr = contents!.getBoundingClientRect(), tr = target!.getBoundingClientRect();
         source = { left: r.left, top: r.top + scrollY, width: r.width, height: r.height };
+        destination = { left: tr.left, top: tr.top + scrollY, width: tr.width, height: tr.height };
         sourceRadius = parseFloat(getComputedStyle(photo!).borderTopLeftRadius) || 0;
         targetRadius = parseFloat(getComputedStyle(target!).borderTopLeftRadius) || 0;
         originals.forEach((image, i) => {
@@ -46,6 +48,8 @@ export function Motion() {
       }
 
       function restore() {
+        if (drawnPhase === 'restored') return;
+        drawnPhase = 'restored'; arrival = '';
         root!.style.visibility = 'hidden';
         photo!.style.removeProperty('opacity');
         target!.style.removeProperty('opacity');
@@ -61,10 +65,15 @@ export function Motion() {
         }
         const idle = actual <= timing.start && y <= timing.start;
         const finished = y >= timing.expandEnd;
-        root!.style.visibility = !idle && !finished ? 'visible' : 'hidden';
-        photo!.style.opacity = idle ? '1' : '0';
-        target!.style.opacity = idle || finished ? '1' : '0';
-        links.style.setProperty('--arrival', String(idle || finished ? 1 : ease((y - timing.travelEnd) / (timing.expandEnd - timing.travelEnd))));
+        const phase = idle ? 'idle' : finished ? 'finished' : 'moving';
+        if (phase !== drawnPhase) {
+          drawnPhase = phase;
+          root!.style.visibility = phase === 'moving' ? 'visible' : 'hidden';
+          photo!.style.opacity = idle ? '1' : '0';
+          target!.style.opacity = idle || finished ? '1' : '0';
+        }
+        const nextArrival = String(idle || finished ? 1 : ease((y - timing.travelEnd) / (timing.expandEnd - timing.travelEnd)));
+        if (nextArrival !== arrival) { arrival = nextArrival; links.style.setProperty('--arrival', arrival); }
         if (idle || finished) return;
         const shrinking = y < timing.collapseEnd;
         const travelling = y >= timing.collapseEnd && y < timing.travelEnd;
@@ -82,13 +91,16 @@ export function Motion() {
           frame = { left: dot.x - 7, top: dot.y - actual - 7, width: 14, height: 14, radius: 7 };
           images[0].style.opacity = images[1].style.opacity = '0';
         } else {
-          const tr = target!.getBoundingClientRect(), end = routePoint(route, route.length);
+          const tr = { ...destination, top: destination.top - actual }, end = routePoint(route, route.length);
           const p = clamp((y - timing.travelEnd) / (timing.expandEnd - timing.travelEnd));
           frame = photoFrame({ left: end.x - 7, top: end.y - actual - 7, width: 14, height: 14 }, tr, p, true, targetRadius);
           images[0].style.opacity = '0';
           images[1].style.opacity = String(ease(p / .65));
         }
-        gsap.set(main, { x: frame.left, y: frame.top, width: frame.width, height: frame.height, borderRadius: frame.radius });
+        main.style.transform = `translate3d(${frame.left}px, ${frame.top}px, 0)`;
+        main.style.width = `${frame.width}px`;
+        main.style.height = `${frame.height}px`;
+        main.style.borderRadius = `${frame.radius}px`;
       }
 
       function tick(now: number) {
@@ -104,7 +116,10 @@ export function Motion() {
         if (Math.abs(actual - renderedScroll) > .25) animation = requestAnimationFrame(tick);
         else previous = 0;
       }
-      const wake = () => { if (!disposed && !animation) animation = requestAnimationFrame(tick); };
+      const wake = () => {
+        if (drawnPhase === 'finished' && scrollY >= timing.expandEnd) return;
+        if (!disposed && !animation) animation = requestAnimationFrame(tick);
+      };
       const refresh = () => {
         if (disposed || resizeFrame) return;
         resizeFrame = requestAnimationFrame(() => { resizeFrame = 0; measure(); renderedScroll = scrollY; draw(); });
@@ -129,8 +144,12 @@ export function Motion() {
         [...originals, ...images].forEach(image => image.removeEventListener('load', refresh));
         restore();
       };
-    });
-    return () => media.revert();
+    };
+    let detach = () => {};
+    const sync = () => { detach(); detach = media.matches ? () => {} : attach() || (() => {}); };
+    sync();
+    media.addEventListener('change', sync);
+    return () => { detach(); media.removeEventListener('change', sync); };
   }, []);
 
   return <div ref={ref} className="portrait-traveller signature-traveller" aria-hidden="true"><div className="traveller-main"><img src={assets.heroPortrait} alt="" width="800" height="1200"/><img src={assets.contentsPortrait} alt="" width="800" height="1200"/></div></div>;

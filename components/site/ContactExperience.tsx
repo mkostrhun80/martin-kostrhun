@@ -2,9 +2,12 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useRef, useState, type FormEvent, type ReactNode, type RefObject } from 'react';
 import Link from 'next/link';
-import { Check, ChevronDown, LoaderCircle, Mail, Send } from 'lucide-react';
+import { ArrowUpRight, CalendarDays, Check, LoaderCircle, Mail, Send, X } from 'lucide-react';
 import { assets, siteConfig } from '@/lib/site-config';
 import { CONTACT_ACTION, CONTACT_PUBLIC_KEY, deliverContactEmail, emptyEmailDraft, validateEmailContact, type EmailDraft, type EmailErrors } from '@/lib/email-contact';
+import { liveBookingEvents } from '@/lib/booking-config';
+import { AppointmentBooking } from './AppointmentBooking';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const topics = ['Bydlení', 'Investice', 'Pojištění', 'Finanční plán', 'Něco jiného'];
 type Notice = { kind: 'sent' | 'activation' | 'error'; text: string } | null;
@@ -62,37 +65,50 @@ function Fields({ model, personal = false }: { model: Model; personal?: boolean 
     <Field model={model} field="email" label={personal ? 'Kam vám mohu napsat?' : 'E-mail'} compactLabel="E-mail" placeholder="vas@email.cz"/>
   </div>;
 }
-function PersonalLetter({ model }: { model: Model }) {
+function ContactCard({ model }: { model: Model }) {
   const { draft } = model;
-  const [previewOpen, setPreviewOpen] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const focusMessage = useRef(false);
   return <div className="combined-layout">
     <header className="combined-intro">
       <span className="eyebrow">POJĎME SE POZNAT</span>
       <h2 id="contact-title">Na dobrý plán<br/><span>nejste sami.</span></h2>
-      <p>Na druhé straně zprávy jsem já.<br/>Napište mi, s čím vám mohu pomoci.</p>
+      <p>Vyberte si termín schůzky nebo mi napište, s čím vám mohu pomoci.</p>
     </header>
     <figure className="combined-portrait">
       <img src={assets.contactPortrait} alt={assets.contactAlt} width={1200} height={800} loading="lazy"/>
       <figcaption className="portrait-label glass"><span className="person-dot"/><div><strong>Martin Kostrhun</strong><span>Finanční specialista · eDO finance</span></div></figcaption>
     </figure>
-    <Form model={model} className="glass nocturne-card combined-form">
-      <div className="combined-form-heading"><span className="small-icon"><Mail className="icon" aria-hidden="true"/></span><div><h3>Napište mi.</h3><p>Vaši zprávu hned uvidíte v náhledu.</p></div></div>
+    <div id="rezervace" className="combined-workspace">
+      {!!liveBookingEvents.length && <div className="contact-booking-callout">
+        <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
+          <DialogTrigger className="contact-booking-trigger"><CalendarDays size={19} aria-hidden="true"/><span>Rezervovat konkrétní termín</span><ArrowUpRight size={19} aria-hidden="true"/></DialogTrigger>
+          <DialogContent className="contact-booking-dialog" showCloseButton={false} onCloseAutoFocus={event => {
+            if (!focusMessage.current) return;
+            event.preventDefault();
+            focusMessage.current = false;
+            model.formRef.current?.querySelector<HTMLInputElement>('[name="name"]')?.focus();
+          }}>
+            <DialogTitle className="sr-only">Rezervace schůzky</DialogTitle>
+            <DialogDescription className="sr-only">Vyberte si volný termín 90minutové konzultace.</DialogDescription>
+            <DialogClose className="contact-booking-close" aria-label="Zavřít rezervaci"><X size={20} aria-hidden="true"/></DialogClose>
+            <AppointmentBooking onContact={() => {
+              focusMessage.current = true;
+              setBookingOpen(false);
+            }}/>
+          </DialogContent>
+        </Dialog>
+        <p>Nevyhovuje vám žádný z nabízených termínů? Napište mi a domluvíme se individuálně.</p>
+      </div>}
+      <Form model={model} className="nocturne-card combined-form">
+      <div className="combined-form-heading"><span className="small-icon"><Mail className="icon" aria-hidden="true"/></span><div><h3>Napište mi.</h3><p>Ozvu se vám na uvedený e-mail.</p></div></div>
       <Fields model={model} personal/>
       <Field model={model} field="topic" label="O čem si napíšeme?" select/>
       <Field model={model} field="message" label="Co právě řešíte?" placeholder="Dobrý den, Martine, rád/a bych s vámi probral/a…" rows={4}/>
       <div className="nocturne-form-footer"><span className="character-count">{draft.message.length.toLocaleString('cs-CZ')} / 3 000</span><SendButton model={model} className="sand-button">Poslat Martinovi</SendButton></div>
       <Privacy/>
     </Form>
-    <aside className="glass live-letter combined-letter" data-expanded={previewOpen} aria-labelledby="contact-preview-title">
-      <div className="letter-top"><span className="letter-icon"><Mail className="icon" aria-hidden="true"/></span><h3 id="contact-preview-title">NÁHLED VAŠÍ ZPRÁVY</h3><button className="combined-preview-toggle" type="button" aria-expanded={previewOpen} aria-controls="contact-preview-body" aria-label={previewOpen ? 'Skrýt náhled zprávy' : 'Zobrazit náhled zprávy'} onClick={() => setPreviewOpen(open => !open)}>{previewOpen ? 'Skrýt' : 'Zobrazit'}<ChevronDown size={16} aria-hidden="true"/></button><i aria-hidden="true"/></div>
-      <div className="letter-body" id="contact-preview-body">
-      <div className="letter-recipient"><span>Komu</span><strong>Martin Kostrhun</strong><small>{siteConfig.email}</small></div>
-      <div className="letter-subject"><span>Předmět</span><strong>{draft.topic || 'Obecný dotaz'}</strong></div>
-      <p className={'letter-message' + (draft.message ? '' : ' is-placeholder')}>{draft.message || 'Tady se při psaní zobrazí vaše zpráva Martinovi.'}</p>
-      <div className="letter-signature"><strong>{draft.name || 'Vaše jméno'}</strong><span>{draft.email || 'vas@email.cz'}</span></div>
-      <div className="letter-bottom"><span className="person-dot"/>Přímo do Martinovy schránky</div>
-      </div>
-    </aside>
+    </div>
   </div>;
 }
 
@@ -151,7 +167,7 @@ export function ContactExperience() {
     <div className="scene personal-scene nocturne-scene combined-scene">
       <div className="ambient" aria-hidden="true"/>
       <div className="contact-picker-bar"><span className="eyebrow">KONTAKT</span><span className="combined-reply-note">OSOBNĚ I ONLINE</span></div>
-      <PersonalLetter model={model}/>
+      <ContactCard model={model}/>
       <div className="site-mini-footer"><span>HRADEC KRÁLOVÉ · OSOBNĚ I ONLINE</span><span>MARTIN KOSTRHUN · eDO finance</span></div>
     </div>
   </div>;

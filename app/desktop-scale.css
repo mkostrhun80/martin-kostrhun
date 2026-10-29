@@ -59,8 +59,6 @@
   .contact-combined .combined-intro h2 { font-size: 56px; }
   .contact-combined .combined-portrait { height: 220px; }
   .contact-combined .combined-layout { gap: 28px; }
-  .contact-combined .combined-form,
-  .contact-combined .combined-letter { padding: 28px; }
   .partners-new { padding-block: 64px; }
   .partners-new .section-heading h2 { font-size: 56px; }
   .footer-columns { column-gap: 48px; padding-block: 52px; }

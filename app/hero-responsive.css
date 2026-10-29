@@ -30,6 +30,8 @@
 
 /* The wrapper only supplies a mobile layout; desktop keeps its original layers. */
 .hero-signature .hero-name-group { display: contents; }
+/* Trim the empty ceiling, keeping the full figure and shoes in the 4:5 frame. */
+.hero-signature .hero-photo-layer img { object-position: 50% 100%; }
 
 @media(min-width:1001px) {
   .hero-signature { max-height: none; }
