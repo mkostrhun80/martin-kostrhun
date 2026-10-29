@@ -3,14 +3,7 @@
   :root {
     --wide-content: 1360px;
     --wide-gutter: max(5vw, calc((100vw - var(--wide-content)) / 2));
-    --hero-content: min(90vw, 1560px);
-    --hero-gutter: max(5vw, calc((100vw - 1560px) / 2));
   }
-
-  .site-header { left: var(--hero-gutter); right: var(--hero-gutter); padding-inline: 28px; }
-  .header-links { font-size: 13px; }
-  .header-appointment { font-size: 13px; }
-  .contents-trigger { font-size: 12px; }
 
   .index-balanced,
   .services-editorial,
