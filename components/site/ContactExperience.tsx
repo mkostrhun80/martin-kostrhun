@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useRef, useState, type FormEvent, type ReactNode, type RefObject } from 'react';
 import Link from 'next/link';
-import { Check, LoaderCircle, Mail, Send } from 'lucide-react';
+import { Check, ChevronDown, LoaderCircle, Mail, Send } from 'lucide-react';
 import { assets, siteConfig } from '@/lib/site-config';
 import { CONTACT_ACTION, deliverContactEmail, emptyEmailDraft, validateEmailContact, type EmailDraft, type EmailErrors } from '@/lib/email-contact';
 
@@ -15,9 +15,9 @@ type Model = {
   submit: (event: FormEvent<HTMLFormElement>) => void;
 };
 
-function Field({ model, field, label, placeholder, className = '', rows = 4, select = false }: {
+function Field({ model, field, label, compactLabel, placeholder, className = '', rows = 4, select = false }: {
   model: Model; field: 'name' | 'email' | 'message' | 'topic'; label: string;
-  placeholder?: string; className?: string; rows?: number; select?: boolean;
+  compactLabel?: string; placeholder?: string; className?: string; rows?: number; select?: boolean;
 }) {
   const id = 'contact-email-' + field;
   const error = field === 'topic' ? undefined : model.errors[field];
@@ -27,7 +27,7 @@ function Field({ model, field, label, placeholder, className = '', rows = 4, sel
     'aria-label': label, 'aria-invalid': !!error, 'aria-describedby': error ? id + '-error' : undefined,
     onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => model.update(field, event.target.value),
   };
-  return <label className={className} htmlFor={id}><span>{label}</span>
+  return <label className={className} htmlFor={id}><span className={compactLabel ? 'field-label-full' : undefined}>{label}</span>{compactLabel && <span className="field-label-compact" aria-hidden="true">{compactLabel}</span>}
     {field === 'message'
       ? <textarea {...common} placeholder={placeholder} minLength={10} maxLength={3000} rows={rows}/>
       : select
@@ -57,12 +57,13 @@ function Form({ model, className, children }: { model: Model; className: string;
 }
 function Fields({ model, personal = false }: { model: Model; personal?: boolean }) {
   return <div className="field-pair">
-    <Field model={model} field="name" label={personal ? 'Jak se jmenujete?' : 'Vaše jméno'} placeholder="Jméno a příjmení"/>
-    <Field model={model} field="email" label={personal ? 'Kam vám mohu napsat?' : 'E-mail'} placeholder="vas@email.cz"/>
+    <Field model={model} field="name" label={personal ? 'Jak se jmenujete?' : 'Vaše jméno'} compactLabel="Vaše jméno" placeholder="Jméno a příjmení"/>
+    <Field model={model} field="email" label={personal ? 'Kam vám mohu napsat?' : 'E-mail'} compactLabel="E-mail" placeholder="vas@email.cz"/>
   </div>;
 }
 function PersonalLetter({ model }: { model: Model }) {
   const { draft } = model;
+  const [previewOpen, setPreviewOpen] = useState(false);
   return <div className="combined-layout">
     <header className="combined-intro">
       <span className="eyebrow">POJĎME SE POZNAT</span>
@@ -77,17 +78,19 @@ function PersonalLetter({ model }: { model: Model }) {
       <div className="combined-form-heading"><span className="small-icon"><Mail className="icon" aria-hidden="true"/></span><div><h3>Napište mi.</h3><p>Vaši zprávu hned uvidíte v náhledu.</p></div></div>
       <Fields model={model} personal/>
       <Field model={model} field="topic" label="O čem si napíšeme?" select/>
-      <Field model={model} field="message" label="Co právě řešíte?" placeholder="Dobrý den, Martine, rád/a bych s vámi probral/a…" rows={7}/>
+      <Field model={model} field="message" label="Co právě řešíte?" placeholder="Dobrý den, Martine, rád/a bych s vámi probral/a…" rows={4}/>
       <div className="nocturne-form-footer"><span className="character-count">{draft.message.length.toLocaleString('cs-CZ')} / 3 000</span><SendButton model={model} className="sand-button">Poslat Martinovi</SendButton></div>
       <Privacy/>
     </Form>
-    <aside className="glass live-letter combined-letter" aria-labelledby="contact-preview-title">
-      <div className="letter-top"><span className="letter-icon"><Mail className="icon" aria-hidden="true"/></span><h3 id="contact-preview-title">NÁHLED VAŠÍ ZPRÁVY</h3><i aria-hidden="true"/></div>
+    <aside className="glass live-letter combined-letter" data-expanded={previewOpen} aria-labelledby="contact-preview-title">
+      <div className="letter-top"><span className="letter-icon"><Mail className="icon" aria-hidden="true"/></span><h3 id="contact-preview-title">NÁHLED VAŠÍ ZPRÁVY</h3><button className="combined-preview-toggle" type="button" aria-expanded={previewOpen} aria-controls="contact-preview-body" aria-label={previewOpen ? 'Skrýt náhled zprávy' : 'Zobrazit náhled zprávy'} onClick={() => setPreviewOpen(open => !open)}>{previewOpen ? 'Skrýt' : 'Zobrazit'}<ChevronDown size={16} aria-hidden="true"/></button><i aria-hidden="true"/></div>
+      <div className="letter-body" id="contact-preview-body">
       <div className="letter-recipient"><span>Komu</span><strong>Martin Kostrhun</strong><small>{siteConfig.email}</small></div>
       <div className="letter-subject"><span>Předmět</span><strong>{draft.topic || 'Obecný dotaz'}</strong></div>
       <p className={'letter-message' + (draft.message ? '' : ' is-placeholder')}>{draft.message || 'Tady se při psaní zobrazí vaše zpráva Martinovi.'}</p>
       <div className="letter-signature"><strong>{draft.name || 'Vaše jméno'}</strong><span>{draft.email || 'vas@email.cz'}</span></div>
       <div className="letter-bottom"><span className="person-dot"/>Přímo do Martinovy schránky</div>
+      </div>
     </aside>
   </div>;
 }
