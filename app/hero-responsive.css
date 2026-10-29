@@ -27,3 +27,101 @@
   .hero-signature .hero-note { justify-content: center; }
   .hero-signature .hero-actions { align-items: center; }
 }
+
+/* The wrapper only supplies a mobile layout; desktop keeps its original layers. */
+.hero-signature .hero-name-group { display: contents; }
+
+@media(min-width:1001px) {
+  .hero-signature { max-height: none; }
+}
+
+/* Restore the larger mobile composition without changing desktop positioning. */
+@media(max-width:760px) {
+  .hero-signature {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 24px;
+    height: 100vh!important;
+    height: 100lvh!important;
+    min-height: max(620px, 100vh)!important;
+    min-height: max(620px, 100lvh)!important;
+    max-height: none!important;
+    padding: 100px 22px max(24px, calc(24px + 100lvh - 100svh), env(safe-area-inset-bottom));
+  }
+  .hero-signature .hero-artwork {
+    position: static;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 22px;
+    align-items: center;
+    min-height: 0;
+    isolation: auto;
+    background: transparent;
+  }
+  .hero-signature .hero-name-group {
+    display: block;
+    container-type: inline-size;
+    position: relative;
+    z-index: 3;
+    min-width: 0;
+  }
+  .hero-signature .hero-name {
+    position: relative;
+    display: block;
+    inset: auto;
+    font-size: min(25.5cqw, 165px);
+    line-height: .86;
+    text-align: center;
+  }
+  .hero-signature .hero-name-front { margin-top: 6px; }
+  .hero-signature .hero-photo-layer {
+    position: relative;
+    inset: auto;
+    justify-self: center;
+    align-self: center;
+    width: auto;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    max-width: 100%;
+    max-height: min(102.5vw, 525px);
+    aspect-ratio: 4 / 5;
+    border-radius: 24px;
+    clip-path: inset(0 round 24px);
+  }
+  .hero-signature .hero-note {
+    position: relative;
+    inset: auto!important;
+    justify-content: center;
+  }
+  .hero-signature .hero-actions { width: 100%; align-items: center; }
+  .hero-signature .hero-appointment {
+    width: min(100%, 340px);
+    min-height: 54px!important;
+    padding: 17px 24px!important;
+    font-size: 12px!important;
+  }
+}
+@media(min-width:561px) and (max-width:760px) and (max-height:600px) {
+  .hero-signature {
+    min-height: max(520px, 100lvh)!important;
+    padding-top: 104px;
+    padding-bottom: 24px;
+    gap: 20px;
+  }
+  .hero-signature .hero-artwork {
+    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    gap: 28px;
+  }
+  .hero-signature .hero-name { font-size: min(25.5cqw, 190px); text-align: left; }
+  .hero-signature .hero-photo-layer {
+    justify-self: end;
+    width: min(100%, calc((max(100svh, 520px) - 220px) * .8));
+    height: auto;
+    max-height: none;
+  }
+  .hero-signature .hero-note { justify-content: flex-start; }
+  .hero-signature .hero-actions { width: auto; }
+}
