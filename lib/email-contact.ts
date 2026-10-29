@@ -1,6 +1,9 @@
 export const CONTACT_RECIPIENT = 'martin.kostrhun@edofinance.cz';
-export const CONTACT_ACTION = 'https://formsubmit.co/' + CONTACT_RECIPIENT;
-export const CONTACT_AJAX_ACTION = 'https://formsubmit.co/ajax/' + CONTACT_RECIPIENT;
+export const CONTACT_ACTION = 'https://api.web3forms.com/submit';
+// Public submission key, issued for this website and verified recipient.
+// It does not grant access to the account or received messages.
+export const CONTACT_PUBLIC_KEY = '41fbc06e-40c1-4e3a-b081-292fde681f24';
+export const CONTACT_AJAX_ACTION = CONTACT_ACTION;
 
 export type EmailDraft = { name: string; email: string; topic: string; message: string; website: string };
 export type EmailErrors = Partial<Record<'name' | 'email' | 'message', string>>;
@@ -18,8 +21,9 @@ export function emailPayload(draft: EmailDraft, pageUrl: string) {
   const topic = draft.topic.replace(/[\r\n]/g, ' ').trim().slice(0, 120);
   return {
     name: draft.name.trim(), email: draft.email.trim(), topic: topic || 'Obecný dotaz', message: draft.message.trim(),
-    _replyto: draft.email.trim(), _subject: 'Web Martina Kostrhuna — ' + (topic || 'Nová zpráva'),
-    _template: 'table', _url: pageUrl, _honey: draft.website,
+    access_key: CONTACT_PUBLIC_KEY, replyto: draft.email.trim(),
+    subject: 'Web Martina Kostrhuna — ' + (topic || 'Nová zpráva'),
+    from_name: 'Web Martina Kostrhuna', page_url: pageUrl, botcheck: !!draft.website,
   };
 }
 
