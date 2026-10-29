@@ -70,7 +70,7 @@ function PersonalLetter({ model }: { model: Model }) {
       <p>Na druhé straně zprávy jsem já.<br/>Napište mi, s čím vám mohu pomoci.</p>
     </header>
     <figure className="combined-portrait">
-      <img src={assets.heroPortrait} alt={assets.portraitAlt} width={800} height={1200} loading="lazy"/>
+      <img src={assets.contactPortrait} alt={assets.contactAlt} width={1200} height={800} loading="lazy"/>
       <figcaption className="portrait-label glass"><span className="person-dot"/><div><strong>Martin Kostrhun</strong><span>Finanční specialista · eDO finance</span></div></figcaption>
     </figure>
     <Form model={model} className="glass nocturne-card combined-form">
