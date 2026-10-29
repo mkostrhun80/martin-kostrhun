@@ -164,8 +164,7 @@ export function ContactExperience() {
   }
   const model: Model = { draft, errors, busy, notice, formRef, update, submit };
   return <div className="contact-variants contact-combined">
-    <div className="scene personal-scene nocturne-scene combined-scene">
-      <div className="ambient" aria-hidden="true"/>
+    <div className="scene combined-scene">
       <div className="contact-picker-bar"><span className="eyebrow">KONTAKT</span><span className="combined-reply-note">OSOBNĚ I ONLINE</span></div>
       <ContactCard model={model}/>
       <div className="site-mini-footer"><span>HRADEC KRÁLOVÉ · OSOBNĚ I ONLINE</span><span>MARTIN KOSTRHUN · eDO finance</span></div>
