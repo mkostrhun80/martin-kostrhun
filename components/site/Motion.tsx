@@ -133,5 +133,5 @@ export function Motion() {
     return () => media.revert();
   }, []);
 
-  return <div ref={ref} className="portrait-traveller signature-traveller" aria-hidden="true"><div className="traveller-main"><img src={assets.heroPortrait} alt="" width="800" height="1200"/><img src={assets.contentsPortrait} alt="" width="1200" height="800"/></div></div>;
+  return <div ref={ref} className="portrait-traveller signature-traveller" aria-hidden="true"><div className="traveller-main"><img src={assets.heroPortrait} alt="" width="800" height="1200"/><img src={assets.contentsPortrait} alt="" width="800" height="1200"/></div></div>;
 }
