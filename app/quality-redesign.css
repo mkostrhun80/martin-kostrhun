@@ -90,8 +90,6 @@ main:focus { outline: none; }
 .legal-table-wrap table { width: 100%; border-collapse: collapse; font-size: 13px; line-height: 1.6; text-align: left; }
 .legal-table-wrap th, .legal-table-wrap td { padding: 14px; border-bottom: 1px solid #14243a33; vertical-align: top; }
 .privacy-settings-link { display: block; width: fit-content; margin-bottom: 12px; padding: 0; border: 0; color: inherit; background: none; text-align: left; text-decoration: underline; text-underline-offset: 4px; }
-.partner-cover-arrows .partner-play { width: auto; padding-inline: 14px; gap: 8px; display: flex; font-size: 12px; border-radius: 999px; }
-.partner-cover-scroller:not([data-enhanced=true]) .partner-cover { transform: none; -webkit-box-reflect: none; }
 
 @media(max-width: 900px), (hover: none) and (pointer: coarse) {
   .contents-rail { top: auto; bottom: max(14px, env(safe-area-inset-bottom)); right: 14px; transform: none; }
@@ -119,9 +117,6 @@ main:focus { outline: none; }
   .feedback-toggle { padding: 16px; font-size: 15px; }
   .feedback-disclosure .feedback-form { padding: 20px 16px; }
   .feedback-form { margin-top: 30px; }
-  .partner-cover-controls { align-items: flex-start; flex-direction: column; gap: 16px; }
-  .partner-cover-arrows { width: 100%; justify-content: flex-end; }
-  .partner-cover-arrows .partner-play { margin-right: auto; }
   .privacy-actions { grid-template-columns: 1fr; }
   .privacy-actions button { font-size: 14px; min-height: 44px; }
 }

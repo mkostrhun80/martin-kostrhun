@@ -7,19 +7,23 @@ export function coverPose(item: PartnerGeometry, scrollLeft: number, viewport: n
   const proximity = 1 - Math.abs(relative);
   return { near, turn: reduced ? 0 : -relative * 55, scale: reduced ? 1 : .82 + proximity * .18, depth: reduced ? 0 : proximity * 55, z: Math.round(proximity * 100) };
 }
-export function nearbyRange(geometry: PartnerGeometry[], left: number, viewport: number): [number, number] {
-  if (!geometry.length) return [0, -1];
-  const step = geometry.length > 1 ? geometry[1].center - geometry[0].center : geometry[0].width;
-  // Cards have equal flex widths; this bounds per-frame work regardless of list length.
-  const first = geometry[0].center;
-  const pad = geometry[0].width * 2.5;
-  return [Math.max(0, Math.floor((left - pad - first) / step)), Math.min(geometry.length - 1, Math.ceil((left + viewport + pad - first) / step))];
+export function wrapPartnerPhase(value: number, length: number) {
+  return length > 0 ? ((value % length) + length) % length : 0;
 }
-export function advancePartners(left: number, direction: number, max: number, elapsed: number) {
-  const next = Math.max(0, Math.min(Math.max(0, max), left + direction * 20 * Math.min(elapsed, .05)));
-  return { left: next, direction: next >= max ? -1 : next <= 0 ? 1 : direction };
+export function advancePartners(phase: number, length: number, elapsed: number) {
+  return wrapPartnerPhase(phase + 20 * Math.max(0, Math.min(elapsed, .05)), length);
 }
-export type PartnerPause = { playing: boolean; reduced: boolean; visible: boolean; hidden: boolean; hovered: boolean; focused: boolean; manual: boolean };
+/** A bounded window on a circular track; cells outside it have no compositor layers. */
+export function partnerLoopSlots(phase: number, count: number, poolSize: number, viewport: number, step: number) {
+  if (count < 1 || poolSize < 1 || step <= 0) return [];
+  const center = Math.floor(phase / step);
+  const radius = Math.min(Math.ceil(viewport / (2 * step) + 3), Math.floor((poolSize - 1) / 2));
+  return Array.from({ length: radius * 2 + 1 }, (_, n) => {
+    const slot = center + n - radius;
+    return { index: wrapPartnerPhase(slot, poolSize), partner: wrapPartnerPhase(slot, count), offset: slot * step - phase };
+  });
+}
+export type PartnerPause = { playing: boolean; reduced: boolean; visible: boolean; hidden: boolean };
 export function canAutoplay(state: PartnerPause) {
-  return state.playing && !state.reduced && state.visible && !state.hidden && !state.hovered && !state.focused && !state.manual;
+  return state.playing && !state.reduced && state.visible && !state.hidden;
 }
