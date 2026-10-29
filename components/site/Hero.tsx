@@ -8,13 +8,15 @@ import { HeroContours } from './HeroFlow';
 function HeroArtwork() {
   return <div className="hero-artwork" aria-hidden="true">
     <HeroContours/>
-    <span className="hero-name hero-name-back">MARTIN</span>
+    <div className="hero-name-group">
+      <span className="hero-name hero-name-back">MARTIN</span>
+      <span className="hero-name hero-name-front">KOSTRHUN<span className="hero-name-dot">.</span></span>
+    </div>
     <div className="hero-photo-layer">
       <img src={assets.heroPortrait}
         alt="" width="800" height="1200"
         fetchPriority="high" draggable={false}/>
     </div>
-    <span className="hero-name hero-name-front">KOSTRHUN<span className="hero-name-dot">.</span></span>
   </div>;
 }
 
