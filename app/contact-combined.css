@@ -1,0 +1,99 @@
+/* Personal portrait from concept 2, live email composition from concept 5. */
+.contact-combined .combined-scene { min-height: 0; background: var(--navy); }
+.contact-combined .combined-reply-note { font-size: 10px; letter-spacing: .1em; color: #c4cdd4; }
+.contact-combined .combined-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  grid-template-areas: 'intro portrait' 'form preview';
+  align-items: stretch;
+  gap: 30px;
+  padding: 34px 0 30px;
+}
+.contact-combined .combined-intro { grid-area: intro; align-self: center; min-width: 0; }
+.contact-combined .combined-intro > .eyebrow { color: #d4b797; }
+.contact-combined .combined-intro h2 { font-size: clamp(38px, 4.8cqw, 66px); font-weight: 400; line-height: 1.08; letter-spacing: -.055em; margin: 18px 0; }
+.contact-combined .combined-intro h2 span { color: #d4b797; }
+.contact-combined .combined-intro > p { font-size: 14px; line-height: 1.8; color: #c4cdd4; }
+.contact-combined .combined-portrait {
+  grid-area: portrait;
+  position: relative;
+  height: 230px;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #ffffff29;
+  border-radius: 28px;
+  background: #596675;
+}
+.contact-combined .combined-portrait > img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 38%; filter: none; }
+.contact-combined .combined-portrait .portrait-label { left: 14px; right: 14px; bottom: 14px; padding: 14px 16px; }
+.contact-combined .combined-portrait .person-dot { display: block; }
+.contact-combined .combined-form { grid-area: form; min-width: 0; padding: 30px; }
+.contact-combined .combined-form-heading { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+.contact-combined .combined-form-heading .small-icon { background: #ffffff0c; border-color: #ffffff20; color: #d4b797; }
+.contact-combined .combined-form-heading h3 { font-size: 22px; font-weight: 500; letter-spacing: -.03em; }
+.contact-combined .combined-form-heading p { margin-top: 5px; font-size: 12px; line-height: 1.6; color: #c4cdd4; }
+.contact-combined .combined-form label { font-size: 12px; margin-bottom: 21px; }
+.contact-combined .combined-form input:not([type=radio]),
+.contact-combined .combined-form select,
+.contact-combined .combined-form textarea { font-size: 16px; padding: 14px; min-height: 50px; }
+.contact-combined .combined-form textarea { min-height: 200px; }
+.contact-combined .combined-form .nocturne-form-footer { gap: 16px; }
+.contact-combined .combined-form .character-count { font-size: 10px; }
+.contact-combined .combined-form .sand-button { min-height: 48px; font-size: 12px; padding: 13px 22px; }
+.contact-combined .combined-form > .privacy-note { margin-top: 18px; font-size: 11px; }
+.contact-combined .combined-letter {
+  grid-area: preview;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 30px;
+  transform: none;
+  color: var(--navy);
+  background: #fbf9f5;
+  border-color: #e8dac9;
+  border-radius: 28px;
+  box-shadow: 0 22px 50px #0000001c;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.contact-combined .combined-letter .letter-top { gap: 12px; padding-bottom: 22px; color: #586579; border-color: #14243a1c; }
+.contact-combined .combined-letter .letter-top h3 { font-size: 10px; line-height: 1.6; font-weight: 500; letter-spacing: .1em; }
+.contact-combined .combined-letter .letter-icon { width: 36px; height: 36px; background: #e8dac9; border-color: #c4a48440; color: var(--navy); }
+.contact-combined .combined-letter .letter-recipient { margin: 24px 0; }
+.contact-combined .combined-letter .letter-recipient > span { font-size: 11px; color: #64707a; }
+.contact-combined .combined-letter .letter-recipient > strong { font-size: 16px; }
+.contact-combined .combined-letter .letter-recipient small { font-size: 12px; color: #586579; }
+.contact-combined .combined-letter .letter-subject { margin-bottom: 22px; }
+.contact-combined .combined-letter .letter-subject > span { display: block; font-size: 11px; color: #64707a; margin-bottom: 7px; }
+.contact-combined .combined-letter .letter-subject > strong { font-size: 16px; line-height: 1.5; font-weight: 500; }
+.contact-combined .combined-letter .letter-message { flex: 1; font-size: 15px; line-height: 1.85; min-height: 160px; max-height: 360px; }
+.contact-combined .combined-letter .letter-message.is-placeholder { color: #788492; }
+.contact-combined .combined-letter .letter-signature { margin-top: 24px; margin-bottom: 28px; }
+.contact-combined .combined-letter .letter-signature > strong { font-size: 14px; font-weight: 500; }
+.contact-combined .combined-letter .letter-signature > span { font-size: 12px; color: #586579; }
+.contact-combined .combined-letter .letter-bottom { margin-top: auto; padding-top: 18px; font-size: 11px; color: #586579; border-color: #14243a1c; }
+
+@container concept (max-width:850px) {
+  .contact-combined .combined-layout { gap: 22px; }
+  .contact-combined .combined-form,
+  .contact-combined .combined-letter { padding: 24px; }
+  .contact-combined .combined-form .field-pair { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .contact-combined .combined-portrait { height: 230px; }
+}
+@container concept (max-width:640px) {
+  .contact-combined .combined-layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'intro' 'portrait' 'form' 'preview'; padding-top: 28px; gap: 24px; }
+  .contact-combined .combined-reply-note { font-size: 8px; }
+  .contact-combined .combined-intro h2 { font-size: clamp(36px, 8cqw, 49px); }
+  .contact-combined .combined-intro > p { font-size: 13px; }
+  .contact-combined .combined-portrait { height: 220px; border-radius: 22px; }
+  .contact-combined .combined-form,
+  .contact-combined .combined-letter { padding: 24px 20px; border-radius: 22px; }
+  .contact-combined .combined-form-heading { align-items: flex-start; }
+  .contact-combined .combined-form textarea { min-height: 180px; }
+  .contact-combined .combined-form .nocturne-form-footer { flex-wrap: wrap; }
+  .contact-combined .combined-form .sand-button { flex: 1; }
+  .contact-combined .combined-letter .letter-message { min-height: 120px; max-height: 320px; font-size: 14px; }
+}
