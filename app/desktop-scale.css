@@ -12,25 +12,6 @@
   .header-appointment { font-size: 13px; }
   .contents-trigger { font-size: 12px; }
 
-  .hero-signature {
-    --name-size: clamp(180px, min(14vw, 26svh), 280px);
-    --wide-portrait: clamp(340px, min(32vw, 50svh), 580px);
-  }
-  .hero-signature .hero-name {
-    left: var(--hero-gutter);
-    right: auto;
-    top: calc(50% - var(--name-size) * .86 - 12px);
-  }
-  .hero-signature .hero-name-front { top: calc(50% - var(--name-size) * .04 + 6px); }
-  .hero-signature .hero-photo-layer {
-    left: calc(50% + var(--hero-content) * .1);
-    top: calc(50% - var(--wide-portrait) * .625);
-    width: var(--wide-portrait);
-    max-width: none;
-  }
-  .hero-signature .hero-note { left: var(--hero-gutter); right: var(--hero-gutter); }
-  .hero-signature .hero-appointment { min-height: 54px; padding: 17px 28px; font-size: 13px; }
-
   .index-balanced,
   .services-editorial,
   .about,
