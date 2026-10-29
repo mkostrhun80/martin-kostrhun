@@ -39,37 +39,35 @@
   .contact-combined .combined-intro h2 { font-size: 38px; }
   .contact-combined .combined-portrait { min-height: 340px; }
 }
-@container concept (max-width:700px) {
+@container concept (max-width:850px) {
   .contact-combined .combined-scene { padding-inline: 0; }
   .contact-combined .contact-picker-bar { height: 58px; }
-  .contact-combined .combined-layout { grid-template-columns: minmax(0, 1fr) 120px; grid-template-rows: auto auto; grid-template-areas: 'intro portrait' 'workspace workspace'; padding: 24px 0; gap: 24px 14px; }
+  .contact-combined .combined-layout { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto; grid-template-areas: 'intro' 'portrait' 'workspace'; padding: 24px 0; gap: 28px; }
   .contact-combined .combined-reply-note { font-size: 8px; }
-  .contact-combined .combined-intro > .eyebrow { font-size: 8px; }
-  .contact-combined .combined-intro h2 { font-size: clamp(26px, 6.6cqw, 38px); margin: 10px 0; }
-  .contact-combined .combined-intro > p { font-size: 12px; line-height: 1.6; }
-  .contact-combined .combined-portrait { height: 190px; min-height: 0; aspect-ratio: auto; align-self: center; border-radius: 18px; }
-  .contact-combined .combined-portrait > img { object-position: 80% 50%; }
+  .contact-combined .combined-intro > .eyebrow { font-size: 11px; }
+  .contact-combined .combined-intro h2 { font-size: clamp(32px, 6.4cqw, 46px); margin: 12px 0; }
+  .contact-combined .combined-intro > p { max-width: 46ch; font-size: 14px; line-height: 1.7; }
+  .contact-combined .combined-portrait { width: 100%; height: auto; min-height: 0; max-height: 440px; aspect-ratio: 3 / 2; align-self: start; border-radius: 20px; }
+  .contact-combined .combined-portrait > img { position: absolute; inset: 0; width: 100%; height: 100%; object-position: 50% 45%; }
   .contact-combined .combined-portrait .portrait-label { display: none; }
   .contact-combined .combined-workspace { padding: 0; border-radius: 0; }
   .contact-combined .combined-form-heading { margin-bottom: 20px; }
   .contact-combined .combined-form-heading h3 { font-size: 22px; }
-  .contact-combined .combined-form-heading p { font-size: 11px; }
+  .contact-combined .combined-form-heading p { font-size: 13px; }
   .contact-combined .combined-form-heading .small-icon { width: 34px; height: 34px; border-radius: 10px; }
   .contact-combined .combined-form .field-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-  .contact-combined .combined-form label { min-width: 0; margin-bottom: 14px; font-size: 11px; }
-  .contact-combined .field-label-full { display: none; }
-  .contact-combined .field-label-compact { display: inline; }
+  .contact-combined .combined-form label { min-width: 0; margin-bottom: 18px; font-size: 13px; }
+  .contact-combined .field-label-full { display: inline; }
+  .contact-combined .field-label-compact { display: none; }
   .contact-combined .combined-form input:not([type=radio]), .contact-combined .combined-form select, .contact-combined .combined-form textarea { padding: 11px; margin-top: 6px; }
   .contact-combined .combined-form textarea { min-height: 128px; height: 128px; }
   .contact-combined .combined-form .nocturne-form-footer { flex-wrap: wrap; }
   .contact-combined .combined-form .sand-button { flex: 1; }
-  .contact-combined .combined-form > .privacy-note { margin-top: 12px; font-size: 10px; line-height: 1.6; }
+  .contact-combined .combined-form > .privacy-note { margin-top: 16px; font-size: 13px; line-height: 1.7; }
   .contact-combined .site-mini-footer { padding-block: 16px; font-size: 7px; gap: 16px; }
 }
-@container concept (max-width:360px) {
-  .contact-combined .combined-layout { grid-template-columns: minmax(0, 1fr) 90px; column-gap: 10px; }
-  .contact-combined .combined-portrait { height: 150px; }
-  .contact-combined .combined-intro h2 { font-size: 24px; }
+@container concept (max-width:560px) {
+  .contact-combined .combined-form .field-pair { grid-template-columns: minmax(0, 1fr); gap: 0; }
 }
 
 .contact-booking-callout { padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid #14243a1c; }

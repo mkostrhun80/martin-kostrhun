@@ -1,54 +1,17 @@
-/* On smaller windows, keep both name lines behind a centered portrait. */
-@media(max-width:1000px) {
-  .hero-signature {
-    --name-size: clamp(56px, min(18vw, 25svh), 205px);
-    --centered-portrait-width: clamp(132px, min(32vw, 30svh), 280px);
-  }
-  .hero-signature .hero-name {
-    left: 3vw;
-    right: 3vw;
-    top: calc(50% - var(--name-size) * .88 - 8px);
-    z-index: 2;
-    text-align: center;
-  }
-  .hero-signature .hero-name-front { top: calc(50% - var(--name-size) * .06 + 8px); }
-  .hero-signature .hero-photo-layer {
-    left: calc(50% - var(--centered-portrait-width) / 2);
-    right: auto;
-    top: calc(50% - var(--centered-portrait-width) * .625);
-    bottom: auto;
-    z-index: 4;
-    width: var(--centered-portrait-width);
-    height: auto;
-    max-width: none;
-    max-height: none;
-    aspect-ratio: 4 / 5;
-  }
-  .hero-signature .hero-note { justify-content: center; }
-  .hero-signature .hero-actions { align-items: center; }
-}
-
-/* The wrapper only supplies a mobile layout; desktop keeps its original layers. */
+/* The two name lines and portrait occupy separate grid tracks on phones/tablets. */
 .hero-signature .hero-name-group { display: contents; }
-/* Trim the empty ceiling, keeping the full figure and shoes in the 4:5 frame. */
 .hero-signature .hero-photo-layer img { object-position: 50% 100%; }
+@media(min-width:1001px) { .hero-signature { max-height: none; } }
 
-@media(min-width:1001px) {
-  .hero-signature { max-height: none; }
-}
-
-/* Restore the larger mobile composition without changing desktop positioning. */
-@media(max-width:760px) {
+@media(max-width:1000px) {
   .hero-signature {
     display: grid;
     grid-template-rows: minmax(0, 1fr) auto;
     gap: 24px;
-    height: 100vh!important;
-    height: 100lvh!important;
-    min-height: max(620px, 100vh)!important;
-    min-height: max(620px, 100lvh)!important;
+    height: 100svh!important;
+    min-height: max(560px, 100svh)!important;
     max-height: none!important;
-    padding: 100px 22px max(24px, calc(24px + 100lvh - 100svh), env(safe-area-inset-bottom));
+    padding: 32px 22px max(104px, calc(88px + env(safe-area-inset-bottom)));
   }
   .hero-signature .hero-artwork {
     position: static;
@@ -92,38 +55,15 @@
     border-radius: 24px;
     clip-path: inset(0 round 24px);
   }
-  .hero-signature .hero-note {
-    position: relative;
-    inset: auto!important;
-    justify-content: center;
-  }
+  .hero-signature .hero-note { position: relative; inset: auto!important; justify-content: center; }
   .hero-signature .hero-actions { width: 100%; align-items: center; }
-  .hero-signature .hero-appointment {
-    width: min(100%, 340px);
-    min-height: 54px!important;
-    padding: 17px 24px!important;
-    font-size: 12px!important;
-  }
+  .hero-signature .hero-appointment { width: min(100%, 340px); min-height: 54px!important; padding: 17px 24px!important; font-size: 12px!important; }
 }
-@media(min-width:561px) and (max-width:760px) and (max-height:600px) {
-  .hero-signature {
-    min-height: max(520px, 100lvh)!important;
-    padding-top: 104px;
-    padding-bottom: 24px;
-    gap: 20px;
-  }
-  .hero-signature .hero-artwork {
-    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr);
-    gap: 28px;
-  }
+@media(min-width:561px) and (max-width:1000px) and (max-height:600px) {
+  .hero-signature { height: max(520px, 100svh)!important; min-height: max(520px, 100svh)!important; padding-top: 32px; }
+  .hero-signature .hero-artwork { grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); gap: 28px; }
   .hero-signature .hero-name { font-size: min(25.5cqw, 190px); text-align: left; }
-  .hero-signature .hero-photo-layer {
-    justify-self: end;
-    width: min(100%, calc((max(100svh, 520px) - 220px) * .8));
-    height: auto;
-    max-height: none;
-  }
+  .hero-signature .hero-photo-layer { justify-self: end; width: min(100%, calc((max(100svh, 520px) - 220px) * .8)); height: auto; max-height: none; }
   .hero-signature .hero-note { justify-content: flex-start; }
   .hero-signature .hero-actions { width: auto; }
 }

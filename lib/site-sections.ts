@@ -12,3 +12,5 @@ export const siteSections = [
 ] as const;
 export type SectionId = typeof siteSections[number]['id'];
 export const contentSections = siteSections.slice(2);
+// The opening shortcuts are a small selection; the rail still lists the whole page.
+export const indexSections = contentSections.filter(section => section.id !== 'zkusenosti' && section.id !== 'zazemi');

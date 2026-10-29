@@ -1,5 +1,11 @@
 # Ověření úprav — 29. října 2026
 
+## Doplnění po mobilní revizi 30. října 2026
+
+Úvodní rozcestník opět nabízí jen pět hlavních cílů; partnerská sekce a zpětná vazba zůstávají na stránce a v úplném obsahu. Překrývání portrétu a jména v původním breakpointu 761–1000 px bylo nahrazeno oddělenými gridovými oblastmi, včetně mobilu naležato. Mobilní kontakt skládá nadpis, celou fotografii v poměru 3:2 a formulář pod sebe; na úzkém telefonu jsou i jméno a e-mail pod sebou. Zpětná vazba má samostatnou tmavou kartu s odstupem a nativní rozbalovací formulář. Starý hluboký odkaz jej otevře přímo; zavření zachová rozepsaný obsah.
+
+V prohlížeči byly kontrolovány šířky 320, 390, 768, 844, 1000 a 1440 px: bez vodorovného přetékání a bez překryvu jména s portrétem. Ověřeno také rozbalení klávesnicí, hluboký odkaz a předání fotografie při scrollu tam/zpět. Taste kontrola na 1440/768/390 neměla chyby konzole ani výtky ke kontrastu či přetékání; jeho zbývající obecná estetická pravidla mají stejné značkové výjimky jako níže. Původní výkonnostní čísla nebyla kvůli těmto změnám znovu měřena.
+
 ## Rozsah
 
 Výchozí Martinova verze: `9142e1a1b2628c90e2f625dbae9207c0e3fe6fc4`. Zdrojový archiv, binární patch místních změn a upravený původní náhledový skript jsou zachované v ignorovaném `work/quality-redesign-20261029/backup`. Aktuální web má statický export, společný seznam sekcí, minimální desktopový obsah a mobilní plovoucí navigaci Obsah / Kontakt. Při editaci polí se mobilní navigace schová. Úvodní animace zůstává; hluboké odkazy a opakované návštěvy ji přeskakují.
