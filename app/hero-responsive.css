@@ -56,13 +56,32 @@
 .hero-signature .hero-actions { align-items: center; }
 .hero-signature .hero-appointment { min-height: 54px; padding: 17px 28px; font-size: 13px; }
 
+/* Keep the photograph beside the actual lettering, with only the dot over it. */
+@media(min-width:1001px) {
+  .hero-signature {
+    --hero-portrait-width: clamp(300px, min(30vw, 50svh), 580px);
+    --name-size: min(clamp(160px, min(14vw, 26svh), 280px), calc((min(90vw, 1560px) - var(--hero-portrait-width) - 12px) / 3.9));
+  }
+  .hero-signature .hero-artwork {
+    grid-template-columns: max-content minmax(0, var(--hero-portrait-width));
+    justify-content: start;
+    gap: 12px;
+  }
+  .hero-signature .hero-name-group { container-type: normal; }
+  .hero-signature .hero-name { width: max-content; font-size: var(--name-size); }
+  .hero-signature .hero-name-dot { position: absolute; left: 100%; top: 0; }
+  .hero-signature .hero-photo-layer { justify-self: start; width: min(100%, calc((100dvh - 270px) * .8)); }
+}
+
 @media(max-width:760px) {
   .hero-signature {
-    height: 100svh!important;
-    height: 100dvh!important;
-    min-height: 620px!important;
-    max-height: none;
-    padding: 100px 22px max(24px, env(safe-area-inset-bottom));
+    /* Reserve the browser's expanded viewport as its toolbar opens/closes. */
+    height: 100vh!important;
+    height: 100lvh!important;
+    min-height: max(620px, 100vh)!important;
+    min-height: max(620px, 100lvh)!important;
+    max-height: none!important;
+    padding: 100px 22px max(24px, calc(24px + 100lvh - 100svh), env(safe-area-inset-bottom));
     gap: 24px;
   }
   .hero-signature .hero-artwork {
@@ -101,7 +120,7 @@
 /* Keep a useful portrait on phones held horizontally and short laptop windows. */
 @media(min-width:561px) and (max-height:600px) {
   .hero-signature {
-    min-height: 520px!important;
+    min-height: max(520px, 100lvh)!important;
     padding-top: 104px;
     padding-bottom: 24px;
     gap: 20px;
@@ -111,6 +130,7 @@
     grid-template-rows: minmax(0, 1fr);
     gap: 28px;
   }
+  .hero-signature .hero-name-group { container-type: inline-size; }
   .hero-signature .hero-name { font-size: min(25.5cqw, 190px); text-align: left; }
   .hero-signature .hero-photo-layer {
     justify-self: end;
