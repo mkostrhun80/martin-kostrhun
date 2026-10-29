@@ -79,21 +79,21 @@
   gap: 4px 16px;
   min-height: 98px;
   padding: 20px 24px;
-  color: var(--paper);
-  background: var(--navy);
-  border-color: var(--navy);
+  color: var(--navy);
+  background: #e4c7a7;
+  border-color: var(--light-brown);
 }
 .index-balanced .index-contact .index-icon {
   grid-row: 1 / 3;
   width: 42px;
   height: 42px;
   color: var(--navy);
-  background: var(--light-brown);
+  background: var(--paper);
 }
 .index-balanced .index-contact .index-label { min-height: 0; font-size: 18px; }
-.index-balanced .index-contact .index-label svg { color: var(--light-brown); }
-.index-balanced .index-contact p { grid-column: 2; color: var(--paper); opacity: .8; }
-.index-balanced .index-grid > .index-contact:hover { background: #23384f; border-color: var(--light-brown); }
+.index-balanced .index-contact .index-label svg { color: var(--navy); }
+.index-balanced .index-contact p { grid-column: 2; color: var(--navy); opacity: .85; }
+.index-balanced .index-grid > .index-contact:hover { background: #ecd7be; border-color: var(--light-brown); }
 
 @media(max-width:1000px) {
   .index-balanced { grid-template-columns: minmax(0, 1fr); gap: 36px; padding-inline: 5vw; }
