@@ -27,34 +27,43 @@ export function Contents() {
   </section>;
 }
 
-export function usePageProgress(enabled = true) {
+export function usePageProgress(enabled = true, detailed = true) {
   const sections = visibleSections(useSiteData());
   const [state, setState] = useState({ active: 'domu', progress: 0, positions: {} as Record<string, number> });
   const key = sections.map(s => s.id).join(',');
   useEffect(() => {
     if (!enabled) return;
-    let frame = 0;
+    let frame = 0, disposed = false, needsMeasure = true, max = 1, threshold = 0;
+    let positions: Record<string, number> = {};
+    let offsets: { id: string; top: number }[] = [];
+    const measure = () => {
+      max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+      threshold = Math.min(innerHeight * .35, 220);
+      offsets = key.split(',').flatMap(id => {
+        const el = document.getElementById(id);
+        return el ? [{ id, top: el.getBoundingClientRect().top + scrollY }] : [];
+      });
+      positions = Object.fromEntries(offsets.map(({ id, top }) => [id, Math.max(0, Math.min(100, top / max * 100))]));
+    };
     const update = () => {
       frame = 0;
-      const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+      if (disposed) return;
+      if (needsMeasure) { measure(); needsMeasure = false; }
       let active = 'domu';
-      const positions: Record<string, number> = {};
-      for (const id of key.split(',')) {
-        const el = document.getElementById(id);
-        if (!el) continue;
-        const r = el.getBoundingClientRect();
-        positions[id] = Math.max(0, Math.min(100, (r.top + scrollY) / max * 100));
-        if (r.top <= Math.min(innerHeight * .35, 220)) active = id;
-      }
-      setState({ active, positions, progress: Math.max(0, Math.min(1, scrollY / max)) });
+      const y = scrollY;
+      for (const section of offsets) if (section.top <= y + threshold) active = section.id;
+      const progress = detailed ? Math.round(Math.max(0, Math.min(1, y / max)) * 1000) / 1000 : 0;
+      setState(current => current.active === active && current.positions === positions && current.progress === progress
+        ? current : { active, positions, progress });
     };
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const schedule = () => { if (!disposed && !frame) frame = requestAnimationFrame(update); };
+    const resize = () => { needsMeasure = true; schedule(); };
     update();
-    const observer = new ResizeObserver(schedule); observer.observe(document.body);
-    document.fonts.ready.then(schedule);
-    addEventListener('scroll', schedule, { passive: true }); addEventListener('resize', schedule); addEventListener('hashchange', schedule);
-    return () => { cancelAnimationFrame(frame); observer.disconnect(); removeEventListener('scroll', schedule); removeEventListener('resize', schedule); removeEventListener('hashchange', schedule); };
-  }, [key, enabled]);
+    const observer = new ResizeObserver(resize); observer.observe(document.body);
+    document.fonts.ready.then(resize);
+    addEventListener('scroll', schedule, { passive: true }); addEventListener('resize', resize); addEventListener('hashchange', schedule);
+    return () => { disposed = true; cancelAnimationFrame(frame); observer.disconnect(); removeEventListener('scroll', schedule); removeEventListener('resize', resize); removeEventListener('hashchange', schedule); };
+  }, [key, enabled, detailed]);
   return { ...state, sections };
 }
 
@@ -69,7 +78,14 @@ export function ContentsPanel({ isHome = true, active = 'domu', progress = 0, ch
 }
 
 export function ScrollContents() {
-  const { active, progress, positions, sections } = usePageProgress();
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const screen = matchMedia('(min-width:1101px)');
+    const sync = () => setVisible(screen.matches);
+    sync(); screen.addEventListener('change', sync);
+    return () => screen.removeEventListener('change', sync);
+  }, []);
+  const { active, progress, positions, sections } = usePageProgress(visible);
   const [open, setOpen] = useState(false);
   const target = useRef<string | null>(null);
   const choose = (id: string) => { target.current = id; setOpen(false); };

@@ -1,23 +1,19 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ArrowUpRight, CalendarDays, ChevronUp } from 'lucide-react';
 import { liveBookingEvents } from '@/lib/booking-config';
 
-export function AppointmentBooking() {
-  return liveBookingEvents.length ? <LiveBooking/> : null;
+export function AppointmentBooking({ onContact }: { onContact: () => void }) {
+  return liveBookingEvents.length ? <LiveBooking onContact={onContact}/> : null;
 }
-function LiveBooking() {
+function LiveBooking({ onContact }: { onContact: () => void }) {
   const [selected, setSelected] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const event = liveBookingEvents[selected];
-  useEffect(() => {
-    const open = () => setExpanded(true);
-    window.addEventListener('appointment', open);
-    return () => window.removeEventListener('appointment', open);
-  }, []);
-  return <section id="rezervace" className="appointment-booking" aria-labelledby="appointment-booking-title">
-    <header className="appointment-booking-heading"><div><span className="eyebrow">DOMLUVME SI SCHŮZKU</span><h2 id="appointment-booking-title">Vyberte si svůj termín.</h2><p>Volné časy se průběžně řídí mým kalendářem.</p></div><CalendarDays size={32} strokeWidth={1.5} aria-hidden="true"/></header>
+  return <section className="appointment-booking" aria-labelledby="appointment-booking-title">
+    <header className="appointment-booking-heading"><div><span className="eyebrow">DOMLUVME SI SCHŮZKU</span><h3 id="appointment-booking-title">Vyberte si svůj termín.</h3><p>Na schůzku si rezervujte přibližně 90 minut. Délka schůzky je orientační a může se podle potřeby změnit.</p></div><CalendarDays size={32} strokeWidth={1.5} aria-hidden="true"/></header>
     <div className="appointment-options" role="group" aria-label="Délka konzultace">{liveBookingEvents.map((option, index) => <button type="button" key={option.id} aria-expanded={expanded && selected === index} aria-controls="appointment-booking-panel" onClick={() => { setSelected(index); setExpanded(true); }}><span><strong>Konzultace · {option.duration} minut</strong><small>{option.days}</small></span><ArrowUpRight size={20} aria-hidden="true"/></button>)}</div>
+    <p className="appointment-individual-note">Nevyhovuje vám žádný z nabízených termínů? <button type="button" onClick={onContact}>Napište mi</button> a domluvíme se individuálně.</p>
     {expanded && <div id="appointment-booking-panel" className="appointment-booking-panel">
       <div className="appointment-booking-toolbar"><a href={event.url} target="_blank" rel="noreferrer">Otevřít rezervaci samostatně <ArrowUpRight size={16} aria-hidden="true"/></a><button type="button" aria-controls="appointment-booking-panel" aria-expanded="true" onClick={() => setExpanded(false)}>Sbalit <ChevronUp size={16} aria-hidden="true"/></button></div>
       <iframe key={event.id} src={event.url} title={`Výběr termínu konzultace – ${event.duration} minut`} loading="lazy" referrerPolicy="strict-origin-when-cross-origin"/>

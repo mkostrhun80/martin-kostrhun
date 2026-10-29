@@ -14,40 +14,68 @@ export function Partners() {
   useEffect(() => {
     const root = scroller.current;
     if (!root) return;
-    const cards = Array.from(root.querySelectorAll<HTMLElement>('.partner-cover-item'));
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('.partner-cover-item')).map(card => ({
+      card, cover: card.querySelector<HTMLElement>('.partner-cover')!, center: 0, width: 1, relative: NaN,
+    }));
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     let frame = 0;
+    let viewportWidth = 0, wheelTarget = 0, lastWheel = 0;
     const draw = () => {
       frame = 0;
-      const viewport = root.getBoundingClientRect();
-      const center = viewport.left + root.clientWidth / 2;
+      const center = root.scrollLeft + viewportWidth / 2;
       let closest = 0, distance = Infinity;
-      cards.forEach((card, index) => {
-        const bounds = card.getBoundingClientRect();
-        const offset = bounds.left + bounds.width / 2 - center;
-        const relative = Math.max(-1, Math.min(1, offset / (bounds.width * 1.45)));
+      cards.forEach((item, index) => {
+        const offset = item.center - center;
+        const relative = reduced.matches ? 0 : Math.max(-1, Math.min(1, offset / (item.width * 1.45)));
         const proximity = 1 - Math.abs(relative);
-        const cover = card.querySelector<HTMLElement>('.partner-cover')!;
-        card.style.zIndex = String(Math.round(proximity * 100));
-        cover.style.setProperty('--cover-turn', `${-relative * 55}deg`);
-        cover.style.setProperty('--cover-scale', String(reduced.matches ? 1 : .82 + proximity * .18));
-        cover.style.setProperty('--cover-depth', `${proximity * 55}px`);
+        // Most of the 68 cards stay at the same angle outside the viewport.
+        // Write only changing covers, with no layout reads between writes.
+        if (relative !== item.relative) {
+          item.relative = relative;
+          item.card.style.zIndex = String(Math.round(proximity * 100));
+          item.cover.style.setProperty('--cover-turn', `${-relative * 55}deg`);
+          item.cover.style.setProperty('--cover-scale', String(reduced.matches ? 1 : .82 + proximity * .18));
+          item.cover.style.setProperty('--cover-depth', `${proximity * 55}px`);
+        }
         if (Math.abs(offset) < distance) { closest = index; distance = Math.abs(offset); }
       });
       setActive(current => current === closest ? current : closest);
     };
     const refresh = () => { if (!frame) frame = requestAnimationFrame(draw); };
+    const measure = () => {
+      viewportWidth = root.clientWidth;
+      const geometry = cards.map(({ card }) => ({ center: card.offsetLeft + card.offsetWidth / 2, width: card.offsetWidth }));
+      cards.forEach((item, index) => { Object.assign(item, geometry[index]); item.relative = NaN; });
+      refresh();
+    };
+    const wheel = (event: WheelEvent) => {
+      // Preserve horizontal trackpad gestures and browser zoom.
+      if (event.ctrlKey || event.metaKey || Math.abs(event.deltaX) >= Math.abs(event.deltaY)) return;
+      const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? viewportWidth : 1;
+      const delta = Math.max(-viewportWidth, Math.min(viewportWidth, event.deltaY * unit));
+      const max = root.scrollWidth - viewportWidth;
+      const now = performance.now();
+      if (now - lastWheel > 220) wheelTarget = root.scrollLeft;
+      if (!delta || max <= 1 || (delta < 0 && root.scrollLeft <= 1 && wheelTarget <= 1)
+        || (delta > 0 && root.scrollLeft >= max - 1 && wheelTarget >= max - 1)) return;
+      event.preventDefault();
+      lastWheel = now;
+      wheelTarget = Math.max(0, Math.min(max, wheelTarget + delta));
+      root.scrollTo({ left: wheelTarget, behavior: reduced.matches ? 'instant' : 'smooth' });
+    };
     // Filters always start at their first partner, without an animated jump.
     root.scrollLeft = 0;
-    refresh();
-    const observer = new ResizeObserver(refresh);
+    measure();
+    const observer = new ResizeObserver(measure);
     observer.observe(root);
     root.addEventListener('scroll', refresh, { passive: true });
-    reduced.addEventListener('change', refresh);
+    root.addEventListener('wheel', wheel, { passive: false });
+    reduced.addEventListener('change', measure);
     return () => {
       cancelAnimationFrame(frame); observer.disconnect();
       root.removeEventListener('scroll', refresh);
-      reduced.removeEventListener('change', refresh);
+      root.removeEventListener('wheel', wheel);
+      reduced.removeEventListener('change', measure);
     };
   }, [category]);
 
@@ -71,7 +99,7 @@ export function Partners() {
   return <section id="zazemi" className="page-section partners-new partners-coverflow">
     <div className="partners-summary"><div><h2>Zázemí eDO finance<span>.</span></h2><p>Možnosti napříč finančním trhem. Konkrétní nabídku posuzuji podle vaší situace.</p></div></div>
     <div className="partner-category" role="group" aria-label="Oblast partnerů">{(['Všichni', ...partnerCategories] as const).map(value => <button key={value} aria-pressed={category === value} onClick={() => setCategory(value)}>{value}</button>)}</div>
-    <p className="sr-only" id="partner-scroll-help">Partnery posunete vodorovně prstem nebo posuvníkem. Po zaměření pásu můžete použít také šipky vlevo a vpravo.</p>
+    <p className="sr-only" id="partner-scroll-help">Partnery posunete kolečkem myši, vodorovně prstem nebo posuvníkem. Po zaměření pásu můžete použít také šipky vlevo a vpravo.</p>
     <div ref={scroller} className="partner-cover-scroller" role="region" aria-label="Partneři eDO finance" aria-describedby="partner-scroll-help" tabIndex={0} onKeyDown={keyboard}>
       <ul className="partner-cover-track">{shown.map(partner => <li key={partner.name} className="partner-cover-item">
         <figure className="partner-cover">
