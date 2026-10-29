@@ -2,11 +2,12 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useRef, useState, type FormEvent, type ReactNode, type RefObject } from 'react';
 import Link from 'next/link';
-import { CalendarDays, Check, LoaderCircle, Mail, Send } from 'lucide-react';
+import { ArrowUpRight, CalendarDays, Check, LoaderCircle, Mail, Send, X } from 'lucide-react';
 import { assets, siteConfig } from '@/lib/site-config';
 import { CONTACT_ACTION, CONTACT_PUBLIC_KEY, deliverContactEmail, emptyEmailDraft, validateEmailContact, type EmailDraft, type EmailErrors } from '@/lib/email-contact';
 import { liveBookingEvents } from '@/lib/booking-config';
 import { AppointmentBooking } from './AppointmentBooking';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const topics = ['Bydlení', 'Investice', 'Pojištění', 'Finanční plán', 'Něco jiného'];
 type Notice = { kind: 'sent' | 'activation' | 'error'; text: string } | null;
@@ -64,8 +65,10 @@ function Fields({ model, personal = false }: { model: Model; personal?: boolean 
     <Field model={model} field="email" label={personal ? 'Kam vám mohu napsat?' : 'E-mail'} compactLabel="E-mail" placeholder="vas@email.cz"/>
   </div>;
 }
-function ContactCard({ model, mode, chooseMode }: { model: Model; mode: 'booking' | 'message'; chooseMode: (mode: 'booking' | 'message') => void }) {
+function ContactCard({ model }: { model: Model }) {
   const { draft } = model;
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const focusMessage = useRef(false);
   return <div className="combined-layout">
     <header className="combined-intro">
       <span className="eyebrow">POJĎME SE POZNAT</span>
@@ -77,29 +80,39 @@ function ContactCard({ model, mode, chooseMode }: { model: Model; mode: 'booking
       <figcaption className="portrait-label glass"><span className="person-dot"/><div><strong>Martin Kostrhun</strong><span>Finanční specialista · eDO finance</span></div></figcaption>
     </figure>
     <div id="rezervace" className="combined-workspace">
-      <div className="contact-mode-picker" role="group" aria-label="Způsob kontaktu">
-        {!!liveBookingEvents.length && <button type="button" aria-pressed={mode === 'booking'} aria-controls="contact-workspace-panel" onClick={() => chooseMode('booking')}><CalendarDays size={18} aria-hidden="true"/>Vybrat termín</button>}
-        <button type="button" aria-pressed={mode === 'message'} aria-controls="contact-workspace-panel" onClick={() => chooseMode('message')}><Mail size={18} aria-hidden="true"/>Napsat zprávu</button>
-      </div>
-      <div id="contact-workspace-panel">
-      {mode === 'booking' ? <AppointmentBooking onContact={() => {
-        chooseMode('message');
-        requestAnimationFrame(() => model.formRef.current?.querySelector<HTMLInputElement>('[name="name"]')?.focus());
-      }}/> : <Form model={model} className="nocturne-card combined-form">
+      {!!liveBookingEvents.length && <div className="contact-booking-callout">
+        <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
+          <DialogTrigger className="contact-booking-trigger"><CalendarDays size={19} aria-hidden="true"/><span>Rezervovat konkrétní termín</span><ArrowUpRight size={19} aria-hidden="true"/></DialogTrigger>
+          <DialogContent className="contact-booking-dialog" showCloseButton={false} onCloseAutoFocus={event => {
+            if (!focusMessage.current) return;
+            event.preventDefault();
+            focusMessage.current = false;
+            model.formRef.current?.querySelector<HTMLInputElement>('[name="name"]')?.focus();
+          }}>
+            <DialogTitle className="sr-only">Rezervace schůzky</DialogTitle>
+            <DialogDescription className="sr-only">Vyberte si volný termín 90minutové konzultace.</DialogDescription>
+            <DialogClose className="contact-booking-close" aria-label="Zavřít rezervaci"><X size={20} aria-hidden="true"/></DialogClose>
+            <AppointmentBooking onContact={() => {
+              focusMessage.current = true;
+              setBookingOpen(false);
+            }}/>
+          </DialogContent>
+        </Dialog>
+        <p>Nevyhovuje vám žádný z nabízených termínů? Napište mi a domluvíme se individuálně.</p>
+      </div>}
+      <Form model={model} className="nocturne-card combined-form">
       <div className="combined-form-heading"><span className="small-icon"><Mail className="icon" aria-hidden="true"/></span><div><h3>Napište mi.</h3><p>Ozvu se vám na uvedený e-mail.</p></div></div>
       <Fields model={model} personal/>
       <Field model={model} field="topic" label="O čem si napíšeme?" select/>
       <Field model={model} field="message" label="Co právě řešíte?" placeholder="Dobrý den, Martine, rád/a bych s vámi probral/a…" rows={4}/>
       <div className="nocturne-form-footer"><span className="character-count">{draft.message.length.toLocaleString('cs-CZ')} / 3 000</span><SendButton model={model} className="sand-button">Poslat Martinovi</SendButton></div>
       <Privacy/>
-    </Form>}
-      </div>
+    </Form>
     </div>
   </div>;
 }
 
 export function ContactExperience() {
-  const [mode, setMode] = useState<'booking' | 'message'>(liveBookingEvents.length ? 'booking' : 'message');
   const [draft, setDraft] = useState<EmailDraft>({ ...emptyEmailDraft });
   const [errors, setErrors] = useState<EmailErrors>({});
   const [busy, setBusy] = useState(false);
@@ -113,7 +126,6 @@ export function ContactExperience() {
       if (saved) { queueMicrotask(() => setDraft(current => ({ ...current, topic: saved.slice(0, 120) }))); sessionStorage.removeItem('appointment-topic'); }
     } catch { /* The form also works when storage is blocked. */ }
     const choose = (event: Event) => {
-      setMode(liveBookingEvents.length ? 'booking' : 'message');
       const topic: unknown = (event as CustomEvent).detail?.topic;
       if (typeof topic === 'string') setDraft(current => ({ ...current, topic: topic.slice(0, 120) }));
     };
@@ -155,7 +167,7 @@ export function ContactExperience() {
     <div className="scene personal-scene nocturne-scene combined-scene">
       <div className="ambient" aria-hidden="true"/>
       <div className="contact-picker-bar"><span className="eyebrow">KONTAKT</span><span className="combined-reply-note">OSOBNĚ I ONLINE</span></div>
-      <ContactCard model={model} mode={mode} chooseMode={setMode}/>
+      <ContactCard model={model}/>
       <div className="site-mini-footer"><span>HRADEC KRÁLOVÉ · OSOBNĚ I ONLINE</span><span>MARTIN KOSTRHUN · eDO finance</span></div>
     </div>
   </div>;
