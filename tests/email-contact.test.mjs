@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CONTACT_AJAX_ACTION, classifyEmailResponse, deliverContactEmail, emailPayload, validateEmailContact } from '../lib/email-contact.ts';
+import { CONTACT_AJAX_ACTION, CONTACT_PUBLIC_KEY, classifyEmailResponse, deliverContactEmail, emailPayload, validateEmailContact } from '../lib/email-contact.ts';
 
 const draft = { name: ' Alex Novák ', email: ' alex@example.com ', topic: 'Bydlení', message: 'Rád bych probral financování prvního bydlení.', website: '' };
 
@@ -13,16 +13,16 @@ test('email contact requires an email rather than the old telephone-only contact
 });
 
 test('delivery uses a fixed business recipient and sets the visitor as reply-to', () => {
-  assert.equal(CONTACT_AJAX_ACTION, 'https://formsubmit.co/ajax/martin.kostrhun@edofinance.cz');
+  assert.equal(CONTACT_AJAX_ACTION, 'https://api.web3forms.com/submit');
   const payload = emailPayload({ ...draft, topic: 'Bydlení\r\nBcc: cizi@example.com' }, 'https://mkostrhun80.github.io/martin-kostrhun/#kontakt');
   assert.equal(payload.name, 'Alex Novák');
-  assert.equal(payload._replyto, 'alex@example.com');
+  assert.equal(payload.replyto, 'alex@example.com');
   assert.equal(payload.email, 'alex@example.com');
-  assert.ok(!/[\r\n]/.test(payload._subject));
-  assert.equal(payload._template, 'table');
-  assert.equal(payload._honey, '');
-  assert.ok(!('_captcha' in payload), 'keep the provider spam protection enabled');
-  assert.ok(!('_cc' in payload));
+  assert.ok(!/[\r\n]/.test(payload.subject));
+  assert.equal(payload.access_key, CONTACT_PUBLIC_KEY);
+  assert.equal(payload.botcheck, false);
+  assert.ok(!('recaptcha_response' in payload), 'do not send an unissued captcha token');
+  assert.ok(!('ccemail' in payload));
 });
 
 test('HTTP 200 with a false, unknown or non-JSON success field is never a success', () => {
@@ -52,7 +52,7 @@ test('the actual transport sends JSON and checks the service response', async ()
     assert.equal(url, CONTACT_AJAX_ACTION);
     assert.equal(options.method, 'POST');
     assert.equal(options.headers.Accept, 'application/json');
-    assert.equal(JSON.parse(options.body)._replyto, 'alex@example.com');
+    assert.equal(JSON.parse(options.body).replyto, 'alex@example.com');
     assert.ok(options.signal instanceof AbortSignal);
     return Response.json({ success: 'true' });
   };

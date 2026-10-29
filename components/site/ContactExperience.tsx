@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type FormEvent, type ReactNode, type RefOb
 import Link from 'next/link';
 import { Check, ChevronDown, LoaderCircle, Mail, Send } from 'lucide-react';
 import { assets, siteConfig } from '@/lib/site-config';
-import { CONTACT_ACTION, deliverContactEmail, emptyEmailDraft, validateEmailContact, type EmailDraft, type EmailErrors } from '@/lib/email-contact';
+import { CONTACT_ACTION, CONTACT_PUBLIC_KEY, deliverContactEmail, emptyEmailDraft, validateEmailContact, type EmailDraft, type EmailErrors } from '@/lib/email-contact';
 
 const topics = ['Bydlení', 'Investice', 'Pojištění', 'Finanční plán', 'Něco jiného'];
 type Notice = { kind: 'sent' | 'activation' | 'error'; text: string } | null;
@@ -37,7 +37,7 @@ function Field({ model, field, label, compactLabel, placeholder, className = '',
   </label>;
 }
 function Privacy() {
-  return <p className="privacy-note">Údaje použiji k odpovědi. Zprávu doručuje FormSubmit. <Link href="/dokumenty/osobni-udaje">Ochrana osobních údajů</Link>.</p>;
+  return <p className="privacy-note">Údaje použiji k odpovědi. Zprávu doručuje Web3Forms. <Link href="/dokumenty/osobni-udaje">Ochrana osobních údajů</Link>.</p>;
 }
 function SendButton({ model, children = 'Odeslat zprávu', className = '' }: { model: Model; children?: ReactNode; className?: string }) {
   return <button className={'send-button ' + className} type="submit" disabled={model.busy}>
@@ -47,9 +47,10 @@ function SendButton({ model, children = 'Odeslat zprávu', className = '' }: { m
 function Form({ model, className, children }: { model: Model; className: string; children: ReactNode }) {
   return <form ref={model.formRef} className={className} action={CONTACT_ACTION} method="POST" noValidate onSubmit={model.submit} aria-busy={model.busy} aria-labelledby="contact-title">
     {children}
-    <input type="hidden" name="_subject" value={'Web Martina Kostrhuna — ' + (model.draft.topic || 'Nová zpráva')}/>
-    <input type="hidden" name="_template" value="table"/>
-    <label className="email-trap" aria-hidden="true">Webová stránka<input type="text" name="_honey" value={model.draft.website} onChange={event => model.update('website', event.target.value)} tabIndex={-1} autoComplete="off"/></label>
+    <input type="hidden" name="access_key" value={CONTACT_PUBLIC_KEY}/>
+    <input type="hidden" name="subject" value={'Web Martina Kostrhuna — ' + (model.draft.topic || 'Nová zpráva')}/>
+    <input type="hidden" name="from_name" value="Web Martina Kostrhuna"/>
+    <label className="email-trap" aria-hidden="true">Webová stránka<input type="text" name="botcheck" value={model.draft.website} onChange={event => model.update('website', event.target.value)} tabIndex={-1} autoComplete="off"/></label>
     {model.notice && <div className={'email-notice email-notice-' + model.notice.kind} role={model.notice.kind === 'sent' ? 'status' : 'alert'}>
       {model.notice.kind === 'sent' && <Check className="icon" aria-hidden="true"/>}<p>{model.notice.text}{model.notice.kind !== 'sent' && <> <a href={'mailto:' + siteConfig.email}>Napsat přímo na {siteConfig.email}</a>.</>}</p>
     </div>}
