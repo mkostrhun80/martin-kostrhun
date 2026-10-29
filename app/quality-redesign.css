@@ -1,7 +1,7 @@
 html { scroll-padding-top: 24px; }
 main section[id], #zpetna-vazba { scroll-margin-top: 0; }
 main:focus { outline: none; }
-main h2 em { color: #856646; }
+#spoluprace h2 em, #sluzby h2 em { color: #856646; }
 .partner-cover figcaption span, .partner-cover figcaption strong { font-size: 13px; }
 .document-back { padding: 28px 5vw; }
 .document-back a { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; }
