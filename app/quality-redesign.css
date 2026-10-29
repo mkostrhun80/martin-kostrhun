@@ -128,5 +128,5 @@ main:focus { outline: none; }
 @media(prefers-reduced-motion:reduce) {
   .contents-ticks i, .contents-rail-panel, .feedback-toggle svg { transition: none; }
 }
-@media(max-width:360px) { .feedback-panel h2 { font-size: 36px; } }
+@media(max-width:360px) { .feedback-panel h2 { font-size: 32px; } }
 @media print { .contents-rail, .privacy-settings-link { display: none; } }
