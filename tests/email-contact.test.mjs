@@ -14,7 +14,7 @@ test('email contact requires an email rather than the old telephone-only contact
 
 test('delivery uses a fixed business recipient and sets the visitor as reply-to', () => {
   assert.equal(CONTACT_AJAX_ACTION, 'https://api.web3forms.com/submit');
-  const payload = emailPayload({ ...draft, topic: 'Bydlení\r\nBcc: cizi@example.com' }, 'https://mkostrhun80.github.io/martin-kostrhun/#kontakt');
+  const payload = emailPayload({ ...draft, topic: 'Bydlení\r\nBcc: cizi@example.com' }, 'https://mkostrhun80.github.io/martin-kostrhun/#kontakt', 'test-token');
   assert.equal(payload.name, 'Alex Novák');
   assert.equal(payload.replyto, 'alex@example.com');
   assert.equal(payload.email, 'alex@example.com');
@@ -40,8 +40,8 @@ test('recipient activation stays distinct from a delivered submission', () => {
 test('invalid data and a filled honeypot never reach the delivery service', async () => {
   let calls = 0;
   const send = async () => { calls++; throw Error('must not send'); };
-  assert.equal(await deliverContactEmail({ ...draft, email: 'wrong' }, '', send), 'error');
-  assert.equal(await deliverContactEmail({ ...draft, website: 'spam' }, '', send), 'error');
+  assert.equal(await deliverContactEmail({ ...draft, email: 'wrong' }, '', 'test-token', send), 'error');
+  assert.equal(await deliverContactEmail({ ...draft, website: 'spam' }, '', 'test-token', send), 'error');
   assert.equal(calls, 0);
 });
 
@@ -57,16 +57,16 @@ test('the actual transport sends JSON and checks the service response', async ()
     return Response.json({ success: 'true' });
   };
   const before = structuredClone(draft);
-  assert.equal(await deliverContactEmail(draft, 'https://example.com/#kontakt', send), 'sent');
+  assert.equal(await deliverContactEmail(draft, 'https://example.com/#kontakt', 'test-token', send), 'sent');
   assert.equal(calls, 1);
   assert.deepEqual(draft, before, 'the transport never mutates a visitor draft');
 });
 
 test('activation, provider failure and network failure cannot clear the draft', async () => {
   const before = structuredClone(draft);
-  assert.equal(await deliverContactEmail(draft, '', async () => Response.json({ success: 'false', message: 'Needs activation' })), 'activation');
-  assert.equal(await deliverContactEmail(draft, '', async () => Response.json({ success: 'false' })), 'error');
-  await assert.rejects(deliverContactEmail(draft, '', async () => { throw Error('network'); }), /network/);
-  await assert.rejects(deliverContactEmail(draft, '', async () => new Response('<html>Error</html>')), SyntaxError);
+  assert.equal(await deliverContactEmail(draft, '', 'test-token', async () => Response.json({ success: 'false', message: 'Needs activation' })), 'activation');
+  assert.equal(await deliverContactEmail(draft, '', 'test-token', async () => Response.json({ success: 'false' })), 'error');
+  await assert.rejects(deliverContactEmail(draft, '', 'test-token', async () => { throw Error('network'); }), /network/);
+  await assert.rejects(deliverContactEmail(draft, '', 'test-token', async () => new Response('<html>Error</html>')), SyntaxError);
   assert.deepEqual(draft, before);
 });

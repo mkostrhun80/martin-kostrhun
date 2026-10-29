@@ -1,5 +1,4 @@
 import { pageMetadata } from '@/lib/metadata';
-import { Navigation } from '@/components/site/Navigation';
 import { Hero } from '@/components/site/Hero';
 import { Contents, ScrollContents } from '@/components/site/Contents';
 import { Motion } from '@/components/site/Motion';
@@ -11,5 +10,7 @@ import { SignatureIntro } from '@/components/site/SignatureIntro';
 import { homeIntroBootstrap } from '@/lib/home-intro';
 import { HomeScrollReady } from '@/components/site/HomeScrollReady';
 import { Cooperation } from '@/components/site/Cooperation';
+import { contentSections } from '@/lib/site-sections';
+const sectionComponents = { 'o-mne': About, sluzby: Services, spoluprace: Cooperation, otazky: FAQ, kontakt: Contact, zkusenosti: Trust, zazemi: Partners };
 export const metadata = pageMetadata('Martin Kostrhun | Finanční specialista');
-export default function Home() { return <><script dangerouslySetInnerHTML={{ __html: homeIntroBootstrap }}/><SignatureIntro/><Navigation /><main id="main"><div className="hero-about-sequence"><Hero /><Contents /><Motion /></div><Services /><About /><Trust /><FAQ /><Cooperation /><Contact /><Partners /></main><HomeScrollReady/><ScrollContents /><Footer /></>; }
+export default function Home() { return <><script dangerouslySetInnerHTML={{ __html: homeIntroBootstrap }}/><SignatureIntro/><main id="main" tabIndex={-1}><div className="hero-about-sequence"><Hero /><Contents /><Motion /></div>{contentSections.map(({ id }) => { const Section = sectionComponents[id as keyof typeof sectionComponents]; return <Section key={id}/>; })}</main><HomeScrollReady/><ScrollContents /><Footer /></>; }

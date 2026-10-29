@@ -51,6 +51,8 @@ next-env.d.ts
 /.codex/
 /outputs/
 /work/
+/release-readiness.local.json
+/.taste-skill/
 
 /server/.wrangler/
 /server/.dev.vars*

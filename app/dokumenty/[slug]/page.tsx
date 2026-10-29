@@ -23,14 +23,14 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
   const page = pages[slug as keyof typeof pages];
   if (!page) notFound();
   const { Content } = page;
-  return <><Navigation isHome={false}/><main id="main" className="legal-main">
+  return <><Navigation isHome={false}/><main id="main" className="legal-main" tabIndex={-1}>
     <p className="eyebrow">MARTIN KOSTRHUN / DOKUMENTY</p>
     <h1>{page.title}</h1>
     <nav className="legal-navigation" aria-label="Právní dokumenty">
       {Object.entries(pages).map(([id, document]) => <Link key={id} href={`/dokumenty/${id}`} aria-current={id === slug ? 'page' : undefined}>{document.title}</Link>)}
     </nav>
     <div className="legal-content"><Content/></div>
-    <p className="legal-updated">Poslední aktualizace: <time dateTime="2026-10-12">12. října 2026</time></p>
+    <p className="legal-updated">Poslední aktualizace: <time dateTime="2026-10-29">29. října 2026</time></p>
     <Link className="back" href="/">← ZPĚT NA WEB</Link>
   </main><Footer/></>;
 }

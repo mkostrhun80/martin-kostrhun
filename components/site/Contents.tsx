@@ -2,11 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, BookOpen, BriefcaseBusiness, Home, MessageCircle, Phone, Route, UserRound, X } from 'lucide-react';
-import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogTrigger, DialogClose } from '@/components/ui/dialog';
-import { visibleSections } from '@/lib/public-data';
-import { sitePath } from '@/lib/site-path';
-import { useSiteData } from './SiteData';
-import { AppointmentLink } from './AppointmentLink';
+import { contentSections, siteSections, type SectionId } from '@/lib/site-sections';
 import { assets } from '@/lib/site-config';
 import { useContentsTextPopups } from './useContentsTextPopups';
 
@@ -16,83 +12,86 @@ export function SectionIcon({ id }: { id: string }) {
   return <Icon size={18} strokeWidth={1.6} aria-hidden="true"/>;
 }
 export function Contents() {
-  const sections = visibleSections(useSiteData());
   const copy = useRef<HTMLDivElement>(null);
-  useContentsTextPopups(copy, sections.map(section => section.id).join(','));
+  useContentsTextPopups(copy, contentSections.map(section => section.id).join(','));
   return <section id="obsah" className="index-section index-scene index-balanced page-section" aria-labelledby="contents-heading">
     <figure className="index-photo journey-destination"><img src={assets.contentsPortrait} alt={assets.contentsAlt} width="800" height="1200" loading="eager" draggable={false}/></figure>
     <div ref={copy} className="index-copy"><div className="section-heading"><h2 id="contents-heading">Na webu najdete<span>.</span></h2><p>Vyberte si, co vás zajímá.</p></div>
-      <nav className="index-grid" aria-label="Rychlé odkazy na části webu">{sections.map(s => <a key={s.id} className={s.id === 'kontakt' ? 'index-contact' : 'index-card'} href={`#${s.id}`}><span className="index-icon"><SectionIcon id={s.id}/></span><span className="index-label">{s.label}<ArrowUpRight size={18} aria-hidden="true"/></span><p>{s.description}</p></a>)}</nav>
+      <nav className="index-grid" aria-label="Rychlé odkazy na části webu">{contentSections.map(s => <a key={s.id} className={s.id === 'kontakt' ? 'index-contact' : 'index-card'} href={`#${s.id}`}><span className="index-icon"><SectionIcon id={s.id}/></span><span className="index-label">{s.label}<ArrowUpRight size={18} aria-hidden="true"/></span><p>{s.description}</p></a>)}</nav>
     </div>
   </section>;
 }
 
-export function usePageProgress(enabled = true, detailed = true) {
-  const sections = visibleSections(useSiteData());
-  const [state, setState] = useState({ active: 'domu', progress: 0, positions: {} as Record<string, number> });
-  const key = sections.map(s => s.id).join(',');
+function useActiveSection() {
+  const [active, setActive] = useState<SectionId>('domu');
   useEffect(() => {
-    if (!enabled) return;
-    let frame = 0, disposed = false, needsMeasure = true, max = 1, threshold = 0;
-    let positions: Record<string, number> = {};
-    let offsets: { id: string; top: number }[] = [];
-    const measure = () => {
-      max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
-      threshold = Math.min(innerHeight * .35, 220);
-      offsets = key.split(',').flatMap(id => {
-        const el = document.getElementById(id);
-        return el ? [{ id, top: el.getBoundingClientRect().top + scrollY }] : [];
-      });
-      positions = Object.fromEntries(offsets.map(({ id, top }) => [id, Math.max(0, Math.min(100, top / max * 100))]));
-    };
+    let frame = 0, dirty = true;
+    let offsets: { id: SectionId; top: number }[] = [];
     const update = () => {
       frame = 0;
-      if (disposed) return;
-      if (needsMeasure) { measure(); needsMeasure = false; }
-      let active = 'domu';
-      const y = scrollY;
-      for (const section of offsets) if (section.top <= y + threshold) active = section.id;
-      const progress = detailed ? Math.round(Math.max(0, Math.min(1, y / max)) * 1000) / 1000 : 0;
-      setState(current => current.active === active && current.positions === positions && current.progress === progress
-        ? current : { active, positions, progress });
+      // All geometry is read together, only after a layout change.
+      if (dirty) {
+        offsets = siteSections.flatMap(({ id }) => {
+          const el = document.getElementById(id);
+          return el ? [{ id, top: el.getBoundingClientRect().top + scrollY }] : [];
+        });
+        dirty = false;
+      }
+      let id: SectionId = 'domu';
+      for (const section of offsets) if (section.top <= scrollY + innerHeight * .3) id = section.id;
+      setActive(current => current === id ? current : id);
     };
-    const schedule = () => { if (!disposed && !frame) frame = requestAnimationFrame(update); };
-    const resize = () => { needsMeasure = true; schedule(); };
-    update();
-    const observer = new ResizeObserver(resize); observer.observe(document.body);
-    document.fonts.ready.then(resize);
-    addEventListener('scroll', schedule, { passive: true }); addEventListener('resize', resize); addEventListener('hashchange', schedule);
-    return () => { disposed = true; cancelAnimationFrame(frame); observer.disconnect(); removeEventListener('scroll', schedule); removeEventListener('resize', resize); removeEventListener('hashchange', schedule); };
-  }, [key, enabled, detailed]);
-  return { ...state, sections };
-}
-
-/** Shared by the header and the desktop rail, with the same labels and anchors. */
-export function ContentsPanel({ isHome = true, active = 'domu', progress = 0, choose }: {
-  isHome?: boolean; active?: string; progress?: number; choose: (id: string) => void;
-}) {
-  const sections = visibleSections(useSiteData());
-  const prefix = isHome ? '' : sitePath('/');
-  const all = [{ id: 'domu', label: 'Úvod', description: 'Martin Kostrhun · finanční specialista' }, ...sections];
-  return <><div className="contents-panel-heading"><span className="menu-symbol"><BookOpen size={22} aria-hidden="true"/></span><div><DialogTitle>Obsah webu</DialogTitle><DialogDescription>Přejděte přímo tam, kam potřebujete.</DialogDescription></div><DialogClose className="glass-close" aria-label="Zavřít obsah"><X size={20}/></DialogClose></div>{isHome && <div className="menu-progress"><span>Procházení webu</span><strong>{Math.round(progress * 100)} %</strong><div><i style={{ transform: `scaleX(${progress})` }}/></div></div>}<nav className="contents-panel-links" aria-label="Obsah webu">{all.map(s => <a key={s.id} href={`${prefix}#${s.id}`} aria-current={isHome && active === s.id ? 'location' : undefined} onClick={() => choose(s.id)}><span className="menu-link-icon"><SectionIcon id={s.id}/></span><span><strong>{s.label}</strong><small>{s.description}</small></span><ArrowUpRight size={17} aria-hidden="true"/></a>)}</nav><div className="contents-panel-contact"><AppointmentLink isHome={isHome} onNavigate={() => choose('kontakt')}/></div></>;
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const measure = () => { dirty = true; schedule(); };
+    const observer = new ResizeObserver(measure);
+    observer.observe(document.body);
+    addEventListener('scroll', schedule, { passive: true }); addEventListener('resize', measure);
+    document.fonts.ready.then(measure); update();
+    return () => { cancelAnimationFrame(frame); observer.disconnect(); removeEventListener('scroll', schedule); removeEventListener('resize', measure); };
+  }, []);
+  return active;
 }
 
 export function ScrollContents() {
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const screen = matchMedia('(min-width:1101px)');
-    const sync = () => setVisible(screen.matches);
-    sync(); screen.addEventListener('change', sync);
-    return () => screen.removeEventListener('change', sync);
-  }, []);
-  const { active, progress, positions, sections } = usePageProgress(visible);
   const [open, setOpen] = useState(false);
-  const target = useRef<string | null>(null);
-  const choose = (id: string) => { target.current = id; setOpen(false); };
-  const current = active === 'domu' ? 'Úvod' : sections.find(s => s.id === active)?.label || 'Úvod';
-  return <aside className="scroll-contents" aria-label="Průchod webem"><Dialog open={open} onOpenChange={setOpen}><DialogTrigger className="scroll-trigger" aria-label="Otevřít postranní obsah webu"><BookOpen size={17} aria-hidden="true"/><span className="scroll-track" aria-hidden="true"><i style={{ transform: `scaleY(${progress})` }}/>{sections.map(s => <b key={s.id} className={active === s.id ? 'active' : ''} style={{ top: `${positions[s.id] ?? 0}%` }}/>)}</span><span className="scroll-percent" aria-hidden="true">{Math.round(progress * 100)}</span><span className="scroll-tooltip">{current}<small>Otevřít obsah</small></span></DialogTrigger><DialogContent className="contents-dialog side-contents-dialog" showCloseButton={false} overlayClassName="contents-overlay" onCloseAutoFocus={e => {
-    if (!target.current) return;
-    e.preventDefault(); const id = target.current; target.current = null;
+  const active = useActiveSection();
+  const root = useRef<HTMLElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const suppressFocus = useRef(false);
+  const closeAndFocus = () => {
+    suppressFocus.current = true; setOpen(false); trigger.current?.focus();
+    requestAnimationFrame(() => { suppressFocus.current = false; });
+  };
+  useEffect(() => {
+    const outside = (event: PointerEvent) => { if (event.target instanceof Node && !root.current?.contains(event.target)) setOpen(false); };
+    const escape = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpen(false);
+        if (root.current?.contains(document.activeElement)) {
+          suppressFocus.current = true; trigger.current?.focus();
+          requestAnimationFrame(() => { suppressFocus.current = false; });
+        }
+      }
+    };
+    addEventListener('pointerdown', outside); addEventListener('keydown', escape);
+    return () => { removeEventListener('pointerdown', outside); removeEventListener('keydown', escape); };
+  }, []);
+  const choose = (id: string) => {
+    setOpen(false);
     requestAnimationFrame(() => { const el = document.getElementById(id); el?.setAttribute('tabindex', '-1'); el?.focus({ preventScroll: true }); });
-  }}><ContentsPanel active={active} progress={progress} choose={choose}/></DialogContent></Dialog></aside>;
+  };
+  return <aside ref={root} className="contents-rail" data-open={open} aria-label="Obsah webu"
+    onMouseEnter={() => { if (matchMedia('(hover:hover) and (pointer:fine)').matches) setOpen(true); }}
+    onMouseLeave={() => { if (!root.current?.contains(document.activeElement)) setOpen(false); }}
+    onFocus={event => { if (event.target instanceof Element && event.target.closest('.contents-rail-panel')) setOpen(true); }}
+    onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }}>
+    <nav className="quick-navigation" aria-label="Rychlé ovládání webu"><button ref={trigger} type="button" className="contents-rail-trigger" aria-expanded={open} aria-controls="contents-rail-panel" onClick={() => setOpen(true)} onFocus={() => { if (!suppressFocus.current) setOpen(true); }}>
+      <span className="contents-ticks" aria-hidden="true">{siteSections.map(s => <i key={s.id} className={active === s.id ? 'is-current' : undefined}/>)}</span><span className="contents-mobile-label">Obsah</span><span className="sr-only contents-desktop-label">Otevřít obsah webu</span>
+    </button><a className="quick-contact" href="#kontakt" onClick={() => choose('kontakt')}>Kontakt<ArrowUpRight size={16} aria-hidden="true"/></a></nav>
+    <div id="contents-rail-panel" className="contents-rail-panel" inert={!open}>
+      <div className="contents-rail-heading"><strong>Obsah</strong><button type="button" aria-label="Zavřít obsah" onClick={closeAndFocus}><X size={16}/></button></div>
+      <nav aria-label="Části webu">{siteSections.map(s => <a key={s.id} href={`#${s.id}`} aria-current={active === s.id ? 'location' : undefined} onClick={() => choose(s.id)}>{s.label}</a>)}</nav>
+    </div>
+    <noscript><style>{'.contents-rail{position:static;transform:none;padding:24px 5vw}.contents-rail .quick-navigation{display:none}.contents-nojs{position:static;width:auto}'}</style><nav className="contents-nojs" aria-label="Části webu bez JavaScriptu">{siteSections.map(s => <a key={s.id} href={`#${s.id}`}>{s.label}</a>)}</nav></noscript>
+  </aside>;
 }

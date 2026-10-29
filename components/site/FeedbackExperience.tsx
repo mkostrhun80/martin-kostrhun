@@ -1,51 +1,46 @@
 'use client';
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
-import { postJSON, newSubmission } from '@/lib/site-api';
-import { useSiteData } from './SiteData';
-import { sitePath } from '@/lib/site-path';
+import { CONTACT_ACTION, deliverFeedback, emptyFeedbackDraft, FEEDBACK_CONSENT_TEXT, validateFeedback, type FeedbackDraft } from '@/lib/email-contact';
+import { formsReady } from '@/lib/form-config';
 import { siteConfig } from '@/lib/site-config';
-import { ReviewCard } from './TrustAndFAQ';
+import { CaptchaGate } from './CaptchaGate';
+
 export function FeedbackExperience() {
-    const { contactEnabled } = useSiteData();
-    const [invite, setInvite] = useState('');
-    const [revoke, setRevoke] = useState('');
-    const [busy, setBusy] = useState(false);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState(false);
-    const [withdrawn, setWithdrawn] = useState(false);
-    const [revokeLink, setRevokeLink] = useState('');
-    const submission = useRef<(ReturnType<typeof newSubmission> & {
-        withdrawalToken: string;
-    }) | null>(null);
-    useEffect(() => { const p = new URLSearchParams(location.search); queueMicrotask(() => { setInvite(p.get('invite') || ''); setRevoke(p.get('revoke') || ''); }); }, []);
-    const make = () => ({ ...newSubmission(), withdrawalToken: Array.from(crypto.getRandomValues(new Uint8Array(32)), n => n.toString(16).padStart(2, '0')).join('') });
-    async function submit(e: FormEvent<HTMLFormElement>) { e.preventDefault(); if (busy)
-        return; setBusy(true); setError(''); const form = e.currentTarget; const d = new FormData(form); submission.current ??= make(); try {
-        await postJSON('/feedback', { ...submission.current, name: d.get('name'), email: d.get('email'), displayName: d.get('displayName'), rating: Number(d.get('rating')), text: d.get('text'), website: d.get('website'), consentWebsite: d.get('consentWebsite') === 'on', consentMarketing: d.get('consentMarketing') === 'on', inviteToken: invite });
-        setRevokeLink(`${location.origin}${sitePath('/zpetna-vazba/')}?revoke=${submission.current.withdrawalToken}`);
-        setSuccess(true);
-        form.reset();
-    }
-    catch (e) {
-        setError(e instanceof Error ? e.message : 'Zpětnou vazbu se nepodařilo uložit.');
-    }
-    finally {
-        setBusy(false);
-    } }
-    if (revoke)
-        return <div className="feedback-withdraw"><h2>Odvolání souhlasu</h2><p>Stažením souhlasu se reference ihned přestane zobrazovat na webu a nebude určena k dalšímu propagačnímu použití.</p><button className="site-button" disabled={busy || withdrawn} onClick={async () => { setBusy(true); setError(''); try {
-            await postJSON('/feedback/revoke', { token: revoke });
-            setWithdrawn(true);
-        }
-        catch (e) {
-            setError(e instanceof Error ? e.message : 'Souhlas se nepodařilo změnit.');
-        }
-        finally {
-            setBusy(false);
-        } }}>{withdrawn ? 'Souhlas byl odvolán' : 'Odvolat souhlasy se zveřejněním'}</button>{error && <p role="alert">{error}</p>}{withdrawn && <p role="status">Reference byla stažena. Pro další žádosti o údaje kontaktujte Martina přímo.</p>}</div>;
-    if (success)
-        return <div className="feedback-success" role="status"><h2>Děkuji za zpětnou vazbu.</h2><p>Odpověď byla uložena. Zveřejnění proběhne pouze podle vašich souhlasů a po kontrole.</p><p>Uložte si soukromý odkaz pro případné odvolání souhlasu:</p><a href={revokeLink}>Odkaz pro odvolání souhlasu</a><button className="site-button site-button-quiet" onClick={() => navigator.clipboard.writeText(revokeLink)}>Zkopírovat odkaz</button></div>;
-    return <form className="plain-form" onSubmit={submit} onFocus={() => { submission.current ??= make(); }} onChange={() => { submission.current = { ...make(), startedAt: submission.current?.startedAt || Date.now() }; }}><div className="form-pair"><label>Vaše jméno<input name="name" required autoComplete="name" minLength={2} maxLength={100}/></label><label>E-mail pro soukromý kontakt<input name="email" type="email" required autoComplete="email" maxLength={150}/></label></div><label>Jak hodnotíte spolupráci?<select name="rating" defaultValue="" required><option value="" disabled>Vyberte hodnocení</option>{[5, 4, 3, 2, 1].map(n => <option key={n} value={n}>{n} z 5</option>)}</select></label><label>Vaše zkušenost<textarea name="text" required minLength={10} maxLength={3000} rows={5}/></label><label>Jméno pro případné zveřejnění<input name="displayName" required maxLength={100} placeholder="Například Jana K. nebo anonymně"/></label><label className="form-honeypot" aria-hidden="true">Webová stránka<input name="website" tabIndex={-1} autoComplete="off"/></label><label className="consent-row"><input type="checkbox" name="consentWebsite"/><span>Souhlasím se zveřejněním této zkušenosti a uvedeného jména na webu Martina Kostrhuna.</span></label><label className="consent-row"><input type="checkbox" name="consentMarketing"/><span>Souhlasím také s použitím této zkušenosti a uvedeného jména v příspěvcích Martina Kostrhuna na sociálních sítích a v jeho prezentačních materiálech.</span></label><p className="form-note">Oba souhlasy jsou dobrovolné. Zpětnou vazbu můžete poslat i bez nich. E-mail nezveřejňuji. Souhlas lze kdykoli odvolat pomocí soukromého odkazu po odeslání nebo <a href={`mailto:${siteConfig.email}`}>e-mailem</a>. Nepište čísla smluv ani citlivé osobní údaje. <Link href="/dokumenty/osobni-udaje">Ochrana osobních údajů</Link>.</p>{invite && <p className="form-note">Odpovídáte prostřednictvím pozvánky ke zpětné vazbě. Použijte e-mail, pro který byla vystavena.</p>}{!contactEnabled && <p>Formulář právě není dostupný. Zpětnou vazbu mi můžete poslat přímo e-mailem.</p>}{error && <p className="form-error" role="alert">{error}</p>}<button className="site-button" disabled={!contactEnabled || busy}>{busy ? 'Ukládám…' : 'Odeslat zpětnou vazbu'}</button></form>;
+  const [draft, setDraft] = useState<FeedbackDraft>({ ...emptyFeedbackDraft });
+  const [errors, setErrors] = useState<ReturnType<typeof validateFeedback>>({});
+  const [busy, setBusy] = useState(false), [sent, setSent] = useState(false), [notice, setNotice] = useState('');
+  const [token, setToken] = useState(''), [reset, setReset] = useState(0);
+  const inFlight = useRef(false), form = useRef<HTMLFormElement>(null);
+  const update = <K extends keyof FeedbackDraft>(key: K, value: FeedbackDraft[K]) => { setDraft(current => ({ ...current, [key]: value })); setErrors(current => ({ ...current, [key]: undefined })); setNotice(''); setSent(false); };
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault(); if (inFlight.current) return;
+    if (!formsReady) { setNotice('Zpětnou vazbu mi prosím pošlete přímo e-mailem.'); return; }
+    const issues = validateFeedback(draft); setErrors(issues); setNotice(''); setSent(false);
+    const first = Object.keys(issues)[0];
+    if (first) { form.current?.querySelector<HTMLElement>(`[name="${first}"]`)?.focus(); return; }
+    if (draft.website || !token) { setNotice('Nejprve prosím dokončete ověření hCaptcha.'); return; }
+    inFlight.current = true; setBusy(true);
+    try {
+      const result = await deliverFeedback(draft, location.origin + location.pathname + '#zkusenosti', token);
+      if (result === 'sent') { setDraft({ ...emptyFeedbackDraft }); setSent(true); setNotice('Děkuji. Zpětná vazba byla odeslána Martinovi e-mailem. Na webu se automaticky nezveřejní.'); }
+      else setNotice('Přijetí zpětné vazby se nepodařilo potvrdit. Text zůstal vyplněný. Zkuste to později nebo napište přímo e-mailem.');
+    } catch { setNotice('Odeslání se nepodařilo potvrdit. Text zůstal vyplněný. Zkuste to později nebo napište přímo e-mailem.'); }
+    finally { inFlight.current = false; setBusy(false); setToken(''); setReset(value => value + 1); }
+  }
+  const error = (key: keyof FeedbackDraft) => errors[key] ? <span className="email-field-error" id={`feedback-${key}-error`}>{errors[key]}</span> : null;
+  const field = (key: keyof FeedbackDraft) => ({ id: `feedback-${key}`, name: key, disabled: busy, 'aria-invalid': !!errors[key], 'aria-describedby': errors[key] ? `feedback-${key}-error` : undefined });
+  return <form ref={form} id="zpetna-vazba" className="plain-form feedback-form" action={CONTACT_ACTION} method="POST" onSubmit={submit} noValidate aria-labelledby="feedback-heading" aria-busy={busy}>
+    <h3 id="feedback-heading">Jak se vám se mnou spolupracovalo?</h3><p>Zajímá mě, co vám spolupráce přinesla a co mohu zlepšit.</p>
+    <div className="form-pair"><label htmlFor="feedback-name">Vaše jméno<input {...field('name')} required autoComplete="name" minLength={2} maxLength={100} value={draft.name} onChange={event => update('name', event.target.value)}/>{error('name')}</label><label htmlFor="feedback-email">Soukromý e-mail<input {...field('email')} required type="email" autoComplete="email" maxLength={150} value={draft.email} onChange={event => update('email', event.target.value)}/>{error('email')}</label></div>
+    <label htmlFor="feedback-rating">Hodnocení spolupráce<select {...field('rating')} required value={draft.rating} onChange={event => update('rating', event.target.value ? Number(event.target.value) : '')}><option value="" disabled>Vyberte hodnocení</option>{[5, 4, 3, 2, 1].map(n => <option key={n} value={n}>{n} z 5</option>)}</select>{error('rating')}</label>
+    <label htmlFor="feedback-message">Vaše zkušenost<textarea {...field('message')} required minLength={10} maxLength={3000} rows={5} value={draft.message} onChange={event => update('message', event.target.value)}/>{error('message')}</label>
+    <label className="email-trap" aria-hidden="true">Webová stránka<input name="website" tabIndex={-1} autoComplete="off" value={draft.website} onChange={event => update('website', event.target.value)}/></label>
+    <label className="consent-row"><input type="checkbox" name="consent" disabled={busy} checked={draft.consent} onChange={event => update('consent', event.target.checked)}/><span>{FEEDBACK_CONSENT_TEXT} (Dobrovolné.)</span></label>
+    {draft.consent && <label htmlFor="feedback-displayName">Jméno pro zveřejnění<input {...field('displayName')} required minLength={2} maxLength={100} value={draft.displayName} onChange={event => update('displayName', event.target.value)} placeholder="Například Jana K. nebo anonymně"/>{error('displayName')}</label>}
+    <p className="form-note">E-mail nezveřejňuji. Zkušenosti zveřejňuji ručně po ověření spolupráce a pouze s vaším souhlasem. Souhlas odvoláte na <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>. Neuvádějte čísla smluv ani citlivé údaje. <Link href="/dokumenty/osobni-udaje">Ochrana osobních údajů</Link>.</p>
+    {formsReady ? <CaptchaGate onToken={setToken} resetKey={reset}/> : <p className="form-note">Zpětnou vazbu mi zatím pošlete <a href={`mailto:${siteConfig.email}`}>přímo e-mailem</a>.</p>}
+    {notice && <p className={sent ? 'feedback-sent' : 'form-error'} role={sent ? 'status' : 'alert'}>{notice}</p>}
+    <button className="site-button" type="submit" disabled={busy || !formsReady || !token}>{busy ? 'Odesílám…' : 'Odeslat zpětnou vazbu'}</button>
+  </form>;
 }
-export function AllReviews() { const { reviews } = useSiteData(); return <><p>Zde jsou všechna zveřejněná hodnocení, od nejnovějšího. Nízké hodnocení není důvodem k vyřazení.</p><p className="review-method">Označení „Ověřená spolupráce“ znamená, že původ hodnocení byl doložen podle evidence klientů nebo jednorázové pozvánky vystavené po skutečné spolupráci. Neověřené příspěvky jsou označeny. Zveřejnění vždy vyžaduje souhlas autora. Spam, nepravé příspěvky a příspěvky s osobními údaji nezveřejňuji.</p>{reviews.length ? <div className="review-grid">{reviews.map(r => <ReviewCard review={r} key={r.id}/>)}</div> : <p className="empty-note">Zatím zde nejsou zveřejněná hodnocení. Zkušenosti doplním po ověření a se souhlasem autorů.</p>}<Link className="site-button" href="/zpetna-vazba">Zanechat zpětnou vazbu</Link></>; }

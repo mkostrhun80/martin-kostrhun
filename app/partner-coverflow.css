@@ -10,7 +10,7 @@
   position: relative;
   overflow-x: auto;
   overflow-y: hidden;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: none;
   overscroll-behavior-x: contain;
   scrollbar-width: thin;
   scrollbar-color: var(--light-brown) var(--sand);
@@ -22,6 +22,8 @@
 .partner-cover-scroller::-webkit-scrollbar-thumb { background: var(--light-brown); border-radius: 99px; }
 .partner-cover-track { display: flex; width: max-content; min-width: 100%; list-style: none; margin: 0; padding: 0 calc((100% - var(--cover-step)) / 2); }
 .partner-cover-item { position: relative; flex: 0 0 var(--cover-step); width: var(--cover-step); scroll-snap-align: center; }
+.partner-cover-scroller[data-enhanced=true] .partner-cover-item:not(.is-near) .partner-cover,
+.partner-cover-scroller[data-visible=false] .partner-cover { visibility: hidden; transform: none; box-shadow: none; -webkit-box-reflect: none; }
 .partner-cover {
   width: var(--cover-size);
   aspect-ratio: 1.15;

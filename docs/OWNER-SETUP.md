@@ -1,0 +1,43 @@
+# Dokončení nastavení Martinem
+
+Stav k 29. 10. 2026: kód je připraven pro statický hosting. Účty Cloudflare, Web3Forms, Cal.com a Apple nastaví Martin podle domluvy. Tento dokument nepotvrzuje, že už jsou nastavené. Do ověření zůstávají `NEXT_PUBLIC_FORMS_VERIFIED` a `NEXT_PUBLIC_BOOKING_VERIFIED` vypnuté a návštěvníci používají pracovní e-mail **martin.kostrhun@edofinance.cz**. Původní veřejný web zůstává beze změny do přepnutí.
+
+## 1. Web3Forms: doručení a povinná CAPTCHA
+
+1. Přihlaste se do [Web3Forms](https://app.web3forms.com/) a otevřete formulář odpovídající veřejnému odesílacímu klíči z `lib/email-contact.ts`. Zkontrolujte příjemce **martin.kostrhun@edofinance.cz**, jeho aktivaci a dostupnou měsíční kvótu. Kontakt a zpětná vazba sdílejí klíč a kvótu.
+2. V nastavení **Block Spam / Preferred CAPTCHA** vyberte **hCaptcha**, uložte a ověřte, že je povinná pro každé podání. Oficiální dokumentace výslovně vyžaduje aktivaci u poskytovatele: [Web3Forms hCaptcha](https://docs.web3forms.com/getting-started/customizations/spam-protection/hcaptcha). Samotná kontrola v prohlížeči nechrání přímý POST na službu. Bezplatný integrační sitekey je už v kódu; nezadávejte do webu žádný tajný klíč.
+3. Na kontrolovaném testovacím formuláři/podání proveďte po jednom pokusu bez `h-captcha-response` a s neplatným tokenem. Oba musí služba odmítnout (`success: false`) a nic nesmí doručit. Zopakujte s použitým nebo expirovaným tokenem. Při přijetí kteréhokoli z těchto podání ponechte webový formulář vypnutý a řešte nastavení s podporou Web3Forms.
+4. Pro vlastní preview zapněte `NEXT_PUBLIC_FORMS_VERIFIED=true`, znovu sestavte web a vyzkoušejte skutečné dokončení hCaptcha a jedno odeslání kontaktu a jedno odeslání zpětné vazby. Zprávy musí dorazit do pracovní schránky, nikoli do osobního Gmailu. Při chybě nesmí zmizet text ani se zobrazit potvrzení úspěchu. Ověření opakujte i na nové doméně.
+5. Zpětnou vazbu otestujte se souhlasem i bez souhlasu. Na webu se nesmí sama objevit. Schválené zkušenosti vkládejte ručně do `approvedReviews` v `lib/public-data.ts`; ověření spolupráce a kopii souhlasu ponechte soukromě. E-mail nevkládejte do veřejných dat. Odvolání přijímejte pracovním e-mailem a zveřejněnou referenci odstraňte.
+
+## 2. Cal.com a přímý iCloud kalendář
+
+Původní událost: `https://cal.com/martin-kostrhun-4iprbj/konzultace-90`. Web ji nově automaticky nezveřejňuje. Úprava tohoto webu nemění starou veřejnou stránku Cal.com: profil a událost je nutné opravit také u poskytovatele.
+
+1. V profilu/účtu a nastavení události použijte veřejné jméno Martin Kostrhun a ověřenou pracovní adresu **martin.kostrhun@edofinance.cz**. Prověřte e-mail organizátora, kontaktní údaje události a případné přepsání identity podle cílového kalendáře. Technický odesílatel potvrzení může být Cal.com, klientská kontaktní a odpovědní adresa musí být pracovní.
+2. Přidejte oficiální [Apple Calendar integraci Cal.com](https://cal.com/apps/apple-calendar). Martin zadá přihlášení a případné heslo aplikace přímo u poskytovatele. Nevkládejte ho do repozitáře, formulářů tohoto webu ani do sdílených zpráv. V iCloudu vytvořte samostatný kalendář Konzultace a zvolte ho jako **cílový kalendář nových rezervací**. Zkontrolujte kalendáře používané pro kontrolu kolizí. Pouhé zobrazení Google kalendáře v aplikaci Apple Kalendář není přímá iCloud integrace.
+3. U události zachovejte **90 minut**, časovou zónu **Europe/Prague** a správnou dostupnost. V Advanced zapněte **Requires Booker Email Verification**. Pro automatické potvrzení vypněte požadavek na ruční potvrzování organizátorem. [Oficiální postup ověření e-mailu](https://cal.com/blog/elevating-booking-authenticity-on-cal-com-a-guide-to-cal-com-s-verification-featu).
+4. V Limits zapněte **Limit number of upcoming bookings per booker**, nastavte **2**. Tento limit uvádí [Cal.com v přehledu funkcí](https://cal.com/pricing). Nezaměňujte ho s celkovým počtem rezervací za den ani s maximálním předstihem rezervace. Pokud ho současný tarif nebo událost nepodporuje, ponechte veřejnou rezervaci vypnutou a vyřešte podporovaný tarif/řešení s Cal.com; nic nekupujte automaticky.
+5. Zkopírujte nastavení na **testovací událost**, která zapisuje do testovacího iCloud kalendáře. Bez zahlcování ostrého kalendáře ověřte: neověřený e-mail nemůže potvrdit rezervaci; dva budoucí termíny stejného ověřeného zájemce projdou; třetí je odmítnutý i přes přímý odkaz Cal.com. Po zrušení musí být možné znovu rezervovat v rámci limitu. Odlišné e-maily zůstávají samostatnými identitami; tento limit není absolutní ochranou proti odhodlanému útočníkovi.
+6. Ověřte vytvoření, přesunutí a zrušení v Cal.com i iCloudu, správný čas včetně přechodu letního času, blokování obsazeného času a absenci duplicit. Staré schůzky nemažte, nemigrujte je hromadným mazáním.
+7. Z pohledu klienta projděte veřejnou stránku, potvrzovací e-mail, hlavičku Reply-To, přílohu/stažený ICS (`ORGANIZER`, `ATTENDEE`, `DESCRIPTION`, `LOCATION`, `URL`) a zobrazení události v kalendáři. Nesmí nikde zveřejnit osobní Gmail ani soukromou Apple adresu. Nastavení organizátora a cílového kalendáře jsou různé věci. Pokud Apple/Cal.com pracovní identitu nepřenese správně, rezervaci nezapínejte a dořešte to s poskytovatelem.
+8. Teprve po úspěchu nastavte `NEXT_PUBLIC_BOOKING_VERIFIED=true` a `NEXT_PUBLIC_BOOKING_URL` na ověřenou ostrou HTTPS adresu události na `cal.com`. Web odmítá jiné domény a sledující query parametry odstraní.
+
+## 3. Cloudflare Pages
+
+[Oficiální návod pro statický Next.js export](https://developers.cloudflare.com/pages/framework-guides/nextjs/deploy-a-static-nextjs-site/).
+
+1. Cloudflare → Workers & Pages → Create application → **Pages** → Import existing Git repository. Připojte tento GitHub repozitář. Nepoužívejte Workers deploy preset. Vlastní Functions, D1, R2 ani API nejsou potřeba.
+2. Nejdříve vytvořte prostředí pro kontrolu pracovní větve `codex/static-quality-redesign`; původní GitHub Pages ani doménu zatím nepřepínejte. Pro první izolovaný návrh ponechte obě ověřovací proměnné `false`. Před zpřístupněním funkcí dokončete body výše.
+3. Build command **`npm run build`**, output **`out`**, root repozitáře. Nastavte **`NODE_VERSION=24`** a **`NEXT_PUBLIC_BASE_PATH` prázdné**. Žádný příkaz `wrangler deploy` pro Worker.
+4. Po přidělení skutečné adresy projektu nastavte `NEXT_PUBLIC_SITE_URL=https://<skutecny-projekt>.pages.dev` a proveďte nový build. První build může adresu získat z `CF_PAGES_URL`; pro další preview nastavte kanonickou produkční adresu explicitně. Do metadat nepatří localhost ani vymyšlená doména. Vlastní doménu připojte až po potvrzení jejího názvu a vlastnictví, potom upravte kanonickou adresu a přesměrování.
+5. `_headers` a `_redirects` vznikají sestavením. Ověřte na HTTPS preview `X-Content-Type-Options`, `X-Frame-Options`, `Permissions-Policy`, HSTS a CSP. Širší CSP je záměrně **Report-Only** se SHA-256 pro inline skripty Next.js; základní zákazy objektů, změny base URL a vložení stránky do iframe se vynucují. Sledujte konzoli také při skutečné hCaptcha a Cal.com rezervaci. Po bezchybném ověření lze přepnout plnou CSP na vynucování; reportovací API web nemá.
+6. Zkontrolujte `/zpetna-vazba/` → `/#zpetna-vazba`, `/zkusenosti/` → `/#zkusenosti`, `/sprava/` a `/api/public` musí být nedostupné. GitHub Pages tyto hostovací hlavičky nerespektuje; jeho kopie proto není potvrzením správného nastavení Cloudflare.
+7. Vypněte případné Cloudflare Web Analytics/Zaraz nebo další nepopsané injekce. Znovu zkontrolujte cookies/úložiště před souhlasem, po načtení obou služeb a po odmítnutí. Publikovanou verzi a její právní texty posuďte podle skutečného nastavení účtů a hostingu.
+8. Před přepnutím produkce vyplňte kopii `release-readiness.example.json` do ignorovaného `release-readiness.local.json`, doplňte datum ověření a spusťte `npm run release:check` se stejnými veřejnými proměnnými jako build. Kontrola zaznamenává Martinovo ověření; sama do účtů nepřistupuje. Její úspěch nenahrazuje živé testy výše.
+
+Po schválení preview převeďte změnu do produkční větve a teprve potom přepněte veřejné odkazy/doménu. V Cloudflare uchovejte předchozí funkční deployment pro rollback; GitHub zůstává zdrojem kódu. Lokální zdrojová záloha je v `work/quality-redesign-20261029/backup`; poslední výchozí commit byl `9142e1a1b2628c90e2f625dbae9207c0e3fe6fc4`.
+
+## Kontrolní záznam
+
+Do veřejného repozitáře neukládejte přijaté zprávy, hesla, obsah soukromých pozvánek ani export kalendáře. Soukromě zaznamenejte datum, adresu preview, testovaný tarif a výsledek jednotlivých kontrol. Falešné nebo neověřené položky neoznačujte jako splněné. Při nesplněných rezervacích/formulářích zůstává použitelný přímý pracovní e-mail.

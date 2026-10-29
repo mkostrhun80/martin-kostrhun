@@ -1,0 +1,16 @@
+{
+  "testedAt": "",
+  "previewApproved": false,
+  "securityAuditApproved": false,
+  "privacyReviewed": false,
+  "web3formsRecipientVerified": false,
+  "hcaptchaEnforcedAtProvider": false,
+  "invalidCaptchaRejected": false,
+  "contactReceived": false,
+  "feedbackReceivedPrivately": false,
+  "calBusinessIdentityVerified": false,
+  "calNoPrivateAddressInInvite": false,
+  "bookerEmailVerification": false,
+  "twoFutureBookingsEnforced": false,
+  "icloudLifecycleVerified": false
+}
