@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, Pause, Play } from 'lucide-react';
 import { partners, partnerCategories, partnersSource, type PartnerCategory } from '@/lib/partners';
-import { advancePartners, canAutoplay, coverPose, partnerLoopSlots, wrapPartnerPhase } from '@/lib/partner-motion';
+import { advancePartners, canAutoplay, coverPose, partnerCardStep, partnerLoopSlots, wrapPartnerPhase } from '@/lib/partner-motion';
 import { sitePath } from '@/lib/site-path';
 
 export function Partners() {
@@ -63,8 +63,9 @@ export function Partners() {
       root.dataset.loop = String(!reduced.matches);
       // Read geometry together; draw only writes cached poses.
       width = root.clientWidth;
-      step = cards[0]?.card.offsetWidth || 1;
+      step = partnerCardStep(cards[0]?.cover.offsetWidth || 1);
       phase.current = wrapPartnerPhase(phase.current / oldStep * step, count * step);
+      root.style.setProperty('--cover-step', `${step}px`);
       cards.forEach(card => { card.last = ''; });
       dirty = true; wake();
     };

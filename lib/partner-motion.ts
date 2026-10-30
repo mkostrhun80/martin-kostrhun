@@ -1,11 +1,12 @@
 export type PartnerGeometry = { center: number; width: number };
+export function partnerCardStep(cardWidth: number) { return cardWidth + 44; }
 export function coverPose(item: PartnerGeometry, scrollLeft: number, viewport: number, reduced = false) {
   const offset = item.center - scrollLeft - viewport / 2;
   // Include two neighbouring covers before the viewport edge to avoid visible pop-in.
   const near = Math.abs(offset) <= viewport / 2 + item.width * 2.5;
   const relative = reduced ? 0 : Math.max(-1, Math.min(1, offset / (item.width * 1.45)));
   const proximity = 1 - Math.abs(relative);
-  return { near, turn: reduced ? 0 : -relative * 55, scale: reduced ? 1 : .82 + proximity * .18, depth: reduced ? 0 : proximity * 55, z: Math.round(proximity * 100) };
+  return { near, turn: reduced ? 0 : -relative * 22, scale: reduced ? 1 : .92 + proximity * .08, depth: reduced ? 0 : proximity * 28, z: Math.round(proximity * 100) };
 }
 export function wrapPartnerPhase(value: number, length: number) {
   return length > 0 ? ((value % length) + length) % length : 0;

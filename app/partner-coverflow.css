@@ -5,8 +5,8 @@
 .partners-coverflow .partner-category button[aria-pressed=true] { border-color: var(--navy); background: var(--navy); color: var(--paper); }
 .partners-coverflow .partner-category button:hover { border-color: var(--light-brown); }
 .partner-orbit {
-  --cover-step: clamp(138px, 14vw, 190px);
   --cover-size: clamp(210px, 22vw, 290px);
+  --cover-step: calc(var(--cover-size) + 44px);
   --cover-height: max(232px, calc(var(--cover-size) / 1.15));
   position: relative;
   max-width: 1360px;
@@ -41,7 +41,7 @@
 @media(max-width:760px) {
   .partners-coverflow .partner-category { gap: 6px; }
   .partners-coverflow .partner-category button { font-size: 12px; padding-inline: 12px; }
-  .partner-orbit { --cover-step: 130px; --cover-size: min(62vw, 250px); }
+  .partner-orbit { --cover-size: min(62vw, 250px); }
   .partner-orbit[data-loop=true] { padding-block: 32px 68px; }
   .partner-cover { padding: 22px 18px 18px; border-radius: 18px; }
   .partner-cover-logo img { max-height: 78px; }

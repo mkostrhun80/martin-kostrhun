@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { advancePartners, canAutoplay, coverPose, partnerLoopSlots, wrapPartnerPhase } from '../lib/partner-motion.ts';
+import { advancePartners, canAutoplay, coverPose, partnerCardStep, partnerLoopSlots, wrapPartnerPhase } from '../lib/partner-motion.ts';
 const geometry = Array.from({ length: 68 }, (_, n) => ({ center: 720 + n * 190, width: 190 }));
 test('the circular window only visits visible covers and nearby neighbours', () => {
   for (const phase of [0, 500, 6000, 12000]) {
@@ -13,7 +13,7 @@ test('the circular window only visits visible covers and nearby neighbours', () 
   }
 });
 test('center keeps a natural cover shape and reduced motion removes spatial effects', () => {
-  assert.deepEqual(coverPose(geometry[0], 0, 1440), { near: true, turn: -0, scale: 1, depth: 55, z: 100 });
+  assert.deepEqual(coverPose(geometry[0], 0, 1440), { near: true, turn: -0, scale: 1, depth: 28, z: 100 });
   const reduced = coverPose(geometry[2], 0, 1440, true);
   assert.equal(reduced.turn, 0); assert.equal(reduced.scale, 1); assert.equal(reduced.depth, 0);
 });
@@ -33,7 +33,7 @@ test('every pause condition independently stops automatic motion', () => {
 });
 test('last-to-first seam keeps the same labels and positions on desktop and mobile', () => {
   for (const count of [5, 8, 23, 68]) for (const viewport of [320, 768, 1360]) {
-    const step = viewport < 760 ? 130 : 190, pool = Math.ceil(24 / count) * count, epsilon = .00001;
+    const step = partnerCardStep(viewport < 760 ? viewport * .62 : 290), pool = Math.ceil(24 / count) * count, epsilon = .00001;
     const before = partnerLoopSlots(count * step - epsilon, count, pool, viewport, step);
     const after = partnerLoopSlots(0, count, pool, viewport, step);
     for (const slot of after.filter(s => Math.abs(s.offset) < viewport / 2 + step)) {
@@ -41,5 +41,26 @@ test('last-to-first seam keeps the same labels and positions on desktop and mobi
     }
     assert.equal(new Set(after.map(s => s.index)).size, after.length, 'a DOM cell must not be assigned two positions');
     assert.ok(after.length <= 17, 'per-frame work must remain bounded by the viewport');
+  }
+});
+test('projected 3D cards keep a visible gap throughout the handoff, including the loop seam', () => {
+  for (const viewport of [320, 390, 768, 1360]) {
+    const cardWidth = viewport < 760 ? Math.min(viewport * .62, 250) : 290;
+    const step = partnerCardStep(cardWidth), count = 5, pool = Math.ceil(24 / count) * count;
+    for (let frame = 0; frame <= 240; frame++) {
+      const phase = wrapPartnerPhase((count - .5) * step + step * frame / 240, count * step);
+      const bounds = partnerLoopSlots(phase, count, pool, viewport, step).map(slot => {
+        const pose = coverPose({ center: viewport / 2 + slot.offset, width: step }, 0, viewport);
+        const angle = pose.turn * Math.PI / 180;
+        // Same perspective/rotateY/translateZ/scale order as the CSS transform.
+        const corners = [-cardWidth / 2, cardWidth / 2].map(x => {
+          const transformedX = x * pose.scale * Math.cos(angle) + pose.depth * Math.sin(angle);
+          const transformedZ = -x * pose.scale * Math.sin(angle) + pose.depth * Math.cos(angle);
+          return slot.offset + transformedX * 900 / (900 - transformedZ);
+        });
+        return { left: Math.min(...corners), right: Math.max(...corners) };
+      }).filter(b => b.right >= -viewport / 2 && b.left <= viewport / 2).sort((a, b) => a.left - b.left);
+      for (let i = 1; i < bounds.length; i++) assert.ok(bounds[i].left - bounds[i - 1].right >= 24, `cards collide at ${viewport}px, frame ${frame}`);
+    }
   }
 });
