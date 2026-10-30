@@ -1,7 +1,18 @@
 /* The two name lines and portrait occupy separate grid tracks on phones/tablets. */
 .hero-signature .hero-name-group { display: contents; }
 .hero-signature .hero-photo-layer img { object-position: 50% 100%; }
-@media(min-width:1001px) { .hero-signature { max-height: none; } }
+/* Move the desktop composition up as one unit while keeping a full-height intro. */
+@media(min-width:1001px) {
+  .hero-signature {
+    --hero-content-top: clamp(40px, 12svh, 144px);
+    --hero-content-lift: calc(max(680px, 100svh) * .27 - var(--hero-content-top));
+    max-height: none;
+  }
+  .hero-signature .hero-name,
+  .hero-signature .hero-photo-layer { top: var(--hero-content-top); }
+  .hero-signature .hero-name-front { top: calc(var(--hero-content-top) + var(--name-size) * .82 + 18px); }
+  .hero-signature .hero-note { bottom: calc(76px + var(--hero-content-lift)); }
+}
 
 @media(max-width:1000px) {
   .hero-signature {
