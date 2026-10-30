@@ -1,4 +1,6 @@
-# Martin Kostrhun — implementation and Purple Lens
+# Historical implementation notes — Purple Lens prototype
+
+> Archiv původního prototypu. Popis stacku, formulářů a spuštění níže není aktuální návod. Platí [README](README.md) a [nastavení pro Martina](docs/OWNER-SETUP.md). Aktivní web je statický Next.js s Web3Forms a bez vlastního API, administrace nebo databáze.
 
 ## Source availability
 The workspace contained only AGENTS.md and an empty sources directory. No original application, legal documents, logos, photographs or working form backend was supplied. The original website could not be located in a focused public search. No existing files in sources were changed.

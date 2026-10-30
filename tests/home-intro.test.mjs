@@ -6,7 +6,9 @@ import { homeIntroBootstrap } from '../lib/home-intro.ts';
 function bootstrap({ hash = '', scroll = 0, reduced = false, played = false, storageBlocked = false } = {}) {
   const dataset = {}, timers = [];
   runInNewContext(homeIntroBootstrap, {
-    location: { hash }, scrollY: scroll,
+    location: { hash, search: '' }, scrollY: scroll,
+    URLSearchParams,
+    Event, dispatchEvent: () => {},
     matchMedia: () => ({ matches: reduced }),
     sessionStorage: { getItem() { if (storageBlocked) throw Error('SecurityError'); return played ? '1' : null; } },
     document: { documentElement: { dataset } },

@@ -7,12 +7,11 @@ export const homeScrollBootstrap = `(() => {
   try {
     const navigation = performance.getEntriesByType('navigation')[0];
     const path = location.pathname.replace(/\\/+$/, '') || '/';
-    if (!navigation || navigation.type !== 'reload' || path !== ${JSON.stringify(homepage)} || window.__mkHomeRefreshStarted) return;
+    if (location.hash || !navigation || navigation.type !== 'reload' || path !== ${JSON.stringify(homepage)} || window.__mkHomeRefreshStarted) return;
     window.__mkHomeRefreshStarted = true;
     const root = document.documentElement;
     const previousRestoration = history.scrollRestoration;
     history.scrollRestoration = 'manual';
-    if (location.hash) history.replaceState(history.state, '', location.pathname + location.search);
     root.dataset.homeReload = 'pending';
     let interacted = false, loaded = document.readyState === 'complete', hydrated = false, finishing = false, stopped = false;
     let timer = 0, firstFrame = 0, secondFrame = 0;

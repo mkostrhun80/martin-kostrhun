@@ -7,15 +7,18 @@ import { assets, siteConfig } from '@/lib/site-config';
 import { CONTACT_ACTION, CONTACT_PUBLIC_KEY, deliverContactEmail, emptyEmailDraft, validateEmailContact, type EmailDraft, type EmailErrors } from '@/lib/email-contact';
 import { liveBookingEvents } from '@/lib/booking-config';
 import { AppointmentBooking } from './AppointmentBooking';
+import { CaptchaGate } from './CaptchaGate';
+import { formsReady } from '@/lib/form-config';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const topics = ['Bydlení', 'Investice', 'Pojištění', 'Finanční plán', 'Něco jiného'];
 type Notice = { kind: 'sent' | 'activation' | 'error'; text: string } | null;
 type Model = {
   draft: EmailDraft; errors: EmailErrors; busy: boolean; notice: Notice;
-  formRef: RefObject<HTMLFormElement | null>;
+  focusName: () => void;
   update: (field: keyof EmailDraft, value: string) => void;
   submit: (event: FormEvent<HTMLFormElement>) => void;
+  captchaToken: string; setCaptchaToken: (token: string) => void; captchaReset: number;
 };
 
 function Field({ model, field, label, compactLabel, placeholder, className = '', rows = 4, select = false }: {
@@ -43,12 +46,12 @@ function Privacy() {
   return <p className="privacy-note">Údaje použiji k odpovědi. Zprávu doručuje Web3Forms. <Link href="/dokumenty/osobni-udaje">Ochrana osobních údajů</Link>.</p>;
 }
 function SendButton({ model, children = 'Odeslat zprávu', className = '' }: { model: Model; children?: ReactNode; className?: string }) {
-  return <button className={'send-button ' + className} type="submit" disabled={model.busy}>
+  return <button className={'send-button ' + className} type="submit" disabled={model.busy || !formsReady || !model.captchaToken}>
     {model.busy ? <><LoaderCircle className="icon email-spinner" aria-hidden="true"/>Odesílám…</> : <>{children}<Send className="icon" aria-hidden="true"/></>}
   </button>;
 }
-function Form({ model, className, children }: { model: Model; className: string; children: ReactNode }) {
-  return <form ref={model.formRef} className={className} action={CONTACT_ACTION} method="POST" noValidate onSubmit={model.submit} aria-busy={model.busy} aria-labelledby="contact-title">
+function Form({ model, formRef, className, children }: { model: Model; formRef: RefObject<HTMLFormElement | null>; className: string; children: ReactNode }) {
+  return <form ref={formRef} className={className} action={CONTACT_ACTION} method="POST" noValidate onSubmit={model.submit} aria-busy={model.busy} aria-labelledby="contact-title">
     {children}
     <input type="hidden" name="access_key" value={CONTACT_PUBLIC_KEY}/>
     <input type="hidden" name="subject" value={'Web Martina Kostrhuna — ' + (model.draft.topic || 'Nová zpráva')}/>
@@ -65,7 +68,7 @@ function Fields({ model, personal = false }: { model: Model; personal?: boolean 
     <Field model={model} field="email" label={personal ? 'Kam vám mohu napsat?' : 'E-mail'} compactLabel="E-mail" placeholder="vas@email.cz"/>
   </div>;
 }
-function ContactCard({ model }: { model: Model }) {
+function ContactCard({ model, formRef }: { model: Model; formRef: RefObject<HTMLFormElement | null> }) {
   const { draft } = model;
   const [bookingOpen, setBookingOpen] = useState(false);
   const focusMessage = useRef(false);
@@ -73,7 +76,7 @@ function ContactCard({ model }: { model: Model }) {
     <header className="combined-intro">
       <span className="eyebrow">POJĎME SE POZNAT</span>
       <h2 id="contact-title">Na dobrý plán<br/><span>nejste sami.</span></h2>
-      <p>Vyberte si termín schůzky nebo mi napište, s čím vám mohu pomoci.</p>
+      <p>{liveBookingEvents.length ? 'Vyberte si termín schůzky nebo mi napište, s čím vám mohu pomoci.' : 'Napište mi, s čím vám mohu pomoci. Termín schůzky domluvíme společně.'}</p>
     </header>
     <figure className="combined-portrait">
       <img src={assets.contactPortrait} alt={assets.contactAlt} width={1200} height={800} loading="lazy"/>
@@ -87,7 +90,7 @@ function ContactCard({ model }: { model: Model }) {
             if (!focusMessage.current) return;
             event.preventDefault();
             focusMessage.current = false;
-            model.formRef.current?.querySelector<HTMLInputElement>('[name="name"]')?.focus();
+            model.focusName();
           }}>
             <DialogTitle className="sr-only">Rezervace schůzky</DialogTitle>
             <DialogDescription className="sr-only">Vyberte si volný termín 90minutové konzultace.</DialogDescription>
@@ -100,11 +103,12 @@ function ContactCard({ model }: { model: Model }) {
         </Dialog>
         <p>Nevyhovuje vám žádný z nabízených termínů? Napište mi a domluvíme se individuálně.</p>
       </div>}
-      <Form model={model} className="nocturne-card combined-form">
+      <Form model={model} formRef={formRef} className="nocturne-card combined-form">
       <div className="combined-form-heading"><span className="small-icon"><Mail className="icon" aria-hidden="true"/></span><div><h3>Napište mi.</h3><p>Ozvu se vám na uvedený e-mail.</p></div></div>
       <Fields model={model} personal/>
       <Field model={model} field="topic" label="O čem si napíšeme?" select/>
       <Field model={model} field="message" label="Co právě řešíte?" placeholder="Dobrý den, Martine, rád/a bych s vámi probral/a…" rows={4}/>
+      {formsReady ? <CaptchaGate onToken={model.setCaptchaToken} resetKey={model.captchaReset}/> : <p className="form-note">Zprávu mi zatím pošlete přímo na <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>.</p>}
       <div className="nocturne-form-footer"><span className="character-count">{draft.message.length.toLocaleString('cs-CZ')} / 3 000</span><SendButton model={model} className="sand-button">Poslat Martinovi</SendButton></div>
       <Privacy/>
     </Form>
@@ -117,6 +121,8 @@ export function ContactExperience() {
   const [errors, setErrors] = useState<EmailErrors>({});
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState<Notice>(null);
+  const [captchaToken, setCaptchaToken] = useState('');
+  const [captchaReset, setCaptchaReset] = useState(0);
   const formRef = useRef<HTMLFormElement>(null);
   const inFlight = useRef(false);
 
@@ -142,6 +148,7 @@ export function ContactExperience() {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (inFlight.current) return;
+    if (!formsReady) { setNotice({ kind: 'error', text: 'Napište mi prosím přímo e-mailem.' }); return; }
     const issues = validateEmailContact(draft);
     setErrors(issues); setNotice(null);
     const first = Object.keys(issues)[0];
@@ -149,9 +156,10 @@ export function ContactExperience() {
       focusField(first); return;
     }
     if (draft.website) { setNotice({ kind: 'error', text: 'Zprávu se nepodařilo odeslat. Zkuste to prosím znovu.' }); return; }
+    if (!captchaToken) { setNotice({ kind: 'error', text: 'Nejprve prosím dokončete ověření hCaptcha pod zprávou.' }); return; }
     inFlight.current = true; setBusy(true);
     try {
-      const result = await deliverContactEmail(draft, location.origin + location.pathname + '#kontakt');
+      const result = await deliverContactEmail(draft, location.origin + location.pathname + '#kontakt', captchaToken);
       if (result === 'sent') {
         setNotice({ kind: 'sent', text: 'Děkuji, zpráva byla odeslána. Ozvu se vám na uvedený e-mail.' });
         setDraft({ ...emptyEmailDraft });
@@ -160,13 +168,13 @@ export function ContactExperience() {
       } else setNotice({ kind: 'error', text: 'Zprávu se nepodařilo odeslat. Vyplněný text zůstal zachovaný. Zkuste to znovu nebo mi napište přímo.' });
     } catch {
       setNotice({ kind: 'error', text: 'Odeslání se nepodařilo potvrdit. Vyplněný text zůstal zachovaný. Zkuste to později nebo mi napište přímo.' });
-    } finally { inFlight.current = false; setBusy(false); }
+    } finally { inFlight.current = false; setBusy(false); setCaptchaToken(''); setCaptchaReset(value => value + 1); }
   }
-  const model: Model = { draft, errors, busy, notice, formRef, update, submit };
+  const model: Model = { draft, errors, busy, notice, focusName: () => focusField('name'), update, submit, captchaToken, setCaptchaToken, captchaReset };
   return <div className="contact-variants contact-combined">
     <div className="scene combined-scene">
       <div className="contact-picker-bar"><span className="eyebrow">KONTAKT</span><span className="combined-reply-note">OSOBNĚ I ONLINE</span></div>
-      <ContactCard model={model}/>
+      <ContactCard model={model} formRef={formRef}/>
       <div className="site-mini-footer"><span>HRADEC KRÁLOVÉ · OSOBNĚ I ONLINE</span><span>MARTIN KOSTRHUN · eDO finance</span></div>
     </div>
   </div>;
