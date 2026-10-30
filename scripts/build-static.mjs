@@ -16,6 +16,14 @@ const result = spawnSync(process.execPath, [fileURLToPath(new URL('../node_modul
 if (result.error) throw result.error;
 if (result.status !== 0) process.exit(result.status || 1);
 await generateStaticHeaders('out', env.NEXT_PUBLIC_BASE_PATH);
+await writeFile('out/.nojekyll', '');
+await writeFile('out/deployment.json', JSON.stringify({
+  revision: process.env.GITHUB_SHA || null,
+  siteURL: env.NEXT_PUBLIC_SITE_URL,
+  basePath: env.NEXT_PUBLIC_BASE_PATH,
+  formsEnabled: env.NEXT_PUBLIC_FORMS_VERIFIED === 'true',
+  bookingEnabled: env.NEXT_PUBLIC_BOOKING_VERIFIED === 'true',
+}, null, 2) + '\n');
 const base = env.NEXT_PUBLIC_BASE_PATH;
 await writeFile('out/_redirects', ['/zpetna-vazba /#zpetna-vazba 301', '/zpetna-vazba/ /#zpetna-vazba 301', '/zkusenosti /#zkusenosti 301', '/zkusenosti/ /#zkusenosti 301'].map(rule => base ? rule.replace(/^\//, base + '/').replace(' /#', ' ' + base + '/#') : rule).join('\n') + '\n');
 console.log('Static export ready in out/. CSP is Report-Only; no Functions, API or database.');

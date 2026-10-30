@@ -1,5 +1,7 @@
 # Dokončení nastavení Martinem
 
+Aktualizace zadání: prezentační verze se publikuje na GitHub Pages přes `.github/workflows/pages.yml`, s vypnutými formuláři a rezervacemi a funkčním přímým pracovním e-mailem. Cloudflare zůstává připravenou budoucí variantou níže. Nasazení této e-mailové verze nepředstavuje ověření účtů ani splnění kontrol pro zapnutí služeb.
+
 Stav k 29. 10. 2026: kód je připraven pro statický hosting. Účty Cloudflare, Web3Forms, Cal.com a Apple nastaví Martin podle domluvy. Tento dokument nepotvrzuje, že už jsou nastavené. Do ověření zůstávají `NEXT_PUBLIC_FORMS_VERIFIED` a `NEXT_PUBLIC_BOOKING_VERIFIED` vypnuté a návštěvníci používají pracovní e-mail **martin.kostrhun@edofinance.cz**. Původní veřejný web zůstává beze změny do přepnutí.
 
 ## 1. Web3Forms: doručení a povinná CAPTCHA

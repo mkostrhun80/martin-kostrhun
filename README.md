@@ -19,7 +19,7 @@ npm run release:check -- --preview
 npm run preview
 ```
 
-Náhled vypíše místní adresu (standardně port 4173, při obsazení zvolí volný port). Export je ve složce `out`. Výchozí základní cesta je prázdná. `build:pages` zachovává možnost exportu s cestou `/martin-kostrhun`; automatické publikování na GitHub Pages je odstraněné. GitHub Actions provádí kontroly, bez nasazení.
+Náhled vypíše místní adresu (standardně port 4173, při obsazení zvolí volný port). Export je ve složce `out`. Výchozí základní cesta je prázdná. `build:pages` podporuje cestu `/martin-kostrhun`. Podle nového zadání je obnovený workflow `pages.yml`: po kontrolách publikuje `main` na GitHub Pages. Doručování formulářů a rezervace jsou v tomto workflow výslovně vypnuté; `release:check -- --email-only` ověřuje také příznaky ve skutečně sestaveném exportu. Plné zapnutí služeb nadále vyžaduje původní Martinovy kontroly. `deployment.json` obsahuje veřejný identifikátor nasazeného commitu a veřejnou konfiguraci pro ověření vydání.
 
 Formuláře doručuje Web3Forms na pracovní e-mail. hCaptcha je načítaná po povolení a u formuláře, Cal.com až po povolení v rezervaci. Web nepředstírá úspěšné odeslání. Obě služby jsou při výchozím sestavení vypnuté do ověření účtů Martinem; přímý pracovní e-mail zůstává dostupný. Nastavení je v `.env.example`.
 
