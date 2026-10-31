@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useRef, useState, type FormEvent, type ReactNode, type RefObject } from 'react';
 import Link from 'next/link';
-import { ArrowUpRight, CalendarDays, Check, LoaderCircle, Mail, Send, X } from 'lucide-react';
+import { ArrowUpRight, CalendarDays, Check, LoaderCircle, Mail, MapPin, Phone, Send, X } from 'lucide-react';
 import { assets, siteConfig } from '@/lib/site-config';
 import { CONTACT_ACTION, CONTACT_PUBLIC_KEY, deliverContactEmail, emptyEmailDraft, validateEmailContact, type EmailDraft, type EmailErrors } from '@/lib/email-contact';
 import { liveBookingEvents } from '@/lib/booking-config';
@@ -73,17 +73,14 @@ function ContactCard({ model, formRef }: { model: Model; formRef: RefObject<HTML
   const [bookingOpen, setBookingOpen] = useState(false);
   const focusMessage = useRef(false);
   return <div className="combined-layout">
-    <header className="combined-intro">
-      <span className="eyebrow">POJĎME SE POZNAT</span>
-      <h2 id="contact-title">Na dobrý plán<br/><span>nejste sami.</span></h2>
-      <p>{liveBookingEvents.length ? 'Vyberte si termín schůzky nebo mi napište, s čím vám mohu pomoci.' : 'Napište mi, s čím vám mohu pomoci. Termín schůzky domluvíme společně.'}</p>
-    </header>
-    <figure className="combined-portrait">
-      <img src={assets.contactPortrait} alt={assets.contactAlt} width={1200} height={800} loading="lazy"/>
-      <figcaption className="portrait-label glass"><span className="person-dot"/><div><strong>Martin Kostrhun</strong><span>Finanční specialista · eDO finance</span></div></figcaption>
-    </figure>
-    <div id="rezervace" className="combined-workspace">
-      {!!liveBookingEvents.length && <div className="contact-booking-callout">
+    <div className="combined-workspace">
+      <Form model={model} formRef={formRef} className="nocturne-card combined-form">
+        <header className="combined-intro">
+          <span className="eyebrow">POJĎME SE POZNAT</span>
+          <h2 id="contact-title">Na dobrý plán<br/><span>nejste sami.</span></h2>
+          <p>Napište mi, s čím vám mohu pomoci, nebo si domluvte osobní schůzku.</p>
+        </header>
+      <div id="rezervace" className="contact-booking-callout">
         <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
           <DialogTrigger className="contact-booking-trigger"><CalendarDays size={19} aria-hidden="true"/><span>Rezervovat konkrétní termín</span><ArrowUpRight size={19} aria-hidden="true"/></DialogTrigger>
           <DialogContent className="contact-booking-dialog" showCloseButton={false} onCloseAutoFocus={event => {
@@ -93,7 +90,7 @@ function ContactCard({ model, formRef }: { model: Model; formRef: RefObject<HTML
             model.focusName();
           }}>
             <DialogTitle className="sr-only">Rezervace schůzky</DialogTitle>
-            <DialogDescription className="sr-only">Vyberte si volný termín 90minutové konzultace.</DialogDescription>
+            <DialogDescription className="sr-only">{liveBookingEvents.length ? 'Vyberte si volný termín 90minutové konzultace.' : 'Domluvte si termín konzultace zprávou nebo e-mailem.'}</DialogDescription>
             <DialogClose className="contact-booking-close" aria-label="Zavřít rezervaci"><X size={20} aria-hidden="true"/></DialogClose>
             <AppointmentBooking onContact={() => {
               focusMessage.current = true;
@@ -101,18 +98,26 @@ function ContactCard({ model, formRef }: { model: Model; formRef: RefObject<HTML
             }}/>
           </DialogContent>
         </Dialog>
-        <p>Nevyhovuje vám žádný z nabízených termínů? Napište mi a domluvíme se individuálně.</p>
-      </div>}
-      <Form model={model} formRef={formRef} className="nocturne-card combined-form">
-      <div className="combined-form-heading"><span className="small-icon"><Mail className="icon" aria-hidden="true"/></span><div><h3>Napište mi.</h3><p>Ozvu se vám na uvedený e-mail.</p></div></div>
-      <Fields model={model} personal/>
-      <Field model={model} field="topic" label="O čem si napíšeme?" select/>
-      <Field model={model} field="message" label="Co právě řešíte?" placeholder="Dobrý den, Martine, rád/a bych s vámi probral/a…" rows={4}/>
-      {formsReady ? <CaptchaGate onToken={model.setCaptchaToken} resetKey={model.captchaReset}/> : <p className="form-note">Zprávu mi zatím pošlete přímo na <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>.</p>}
-      <div className="nocturne-form-footer"><span className="character-count">{draft.message.length.toLocaleString('cs-CZ')} / 3 000</span><SendButton model={model} className="sand-button">Poslat Martinovi</SendButton></div>
-      <Privacy/>
-    </Form>
+        <p>{liveBookingEvents.length ? 'Nevyhovuje vám žádný z nabízených termínů? Napište mi a domluvíme se individuálně.' : 'Online výběr termínu se připravuje. Schůzku si zatím domluvíme zprávou.'}</p>
+      </div>
+        <Fields model={model}/>
+        <Field model={model} field="topic" label="O čem si napíšeme?" select/>
+        <Field model={model} field="message" label="Vaše zpráva" placeholder="Dobrý den, Martine, rád/a bych s vámi probral/a…" rows={4}/>
+        {formsReady ? <CaptchaGate onToken={model.setCaptchaToken} resetKey={model.captchaReset}/> : <p className="form-note">Zprávu mi zatím pošlete přímo na <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>.</p>}
+        <div className="nocturne-form-footer"><span className="character-count">{draft.message.length.toLocaleString('cs-CZ')} / 3 000</span><SendButton model={model} className="sand-button">Odeslat zprávu</SendButton></div>
+        <Privacy/>
+      </Form>
     </div>
+    <aside className="combined-aside" aria-label="Martin Kostrhun a kontaktní údaje">
+      <figure className="combined-portrait">
+        <img src={assets.heroPortrait} alt={assets.portraitAlt} width={1280} height={1920} loading="lazy"/>
+      </figure>
+      <div className="combined-contact-details">
+        <a href={`mailto:${siteConfig.email}`} className="combined-contact-row"><span className="contact-detail-icon"><Mail size={20} aria-hidden="true"/></span><span><strong>E-mail</strong><span>{siteConfig.email}</span></span><ArrowUpRight size={17} aria-hidden="true"/></a>
+        <a href={siteConfig.phoneHref} className="combined-contact-row"><span className="contact-detail-icon"><Phone size={20} aria-hidden="true"/></span><span><strong>Telefon</strong><span>{siteConfig.phone}</span></span><ArrowUpRight size={17} aria-hidden="true"/></a>
+        <div className="combined-contact-row"><span className="contact-detail-icon"><MapPin size={20} aria-hidden="true"/></span><span><strong>Kde se potkáme</strong><span>{siteConfig.address}<br/>{siteConfig.city}</span></span></div>
+      </div>
+    </aside>
   </div>;
 }
 
@@ -173,9 +178,7 @@ export function ContactExperience() {
   const model: Model = { draft, errors, busy, notice, focusName: () => focusField('name'), update, submit, captchaToken, setCaptchaToken, captchaReset };
   return <div className="contact-variants contact-combined">
     <div className="scene combined-scene">
-      <div className="contact-picker-bar"><span className="eyebrow">KONTAKT</span><span className="combined-reply-note">OSOBNĚ I ONLINE</span></div>
       <ContactCard model={model} formRef={formRef}/>
-      <div className="site-mini-footer"><span>HRADEC KRÁLOVÉ · OSOBNĚ I ONLINE</span><span>MARTIN KOSTRHUN · eDO finance</span></div>
     </div>
   </div>;
 }

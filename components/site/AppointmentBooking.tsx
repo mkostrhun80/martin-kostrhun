@@ -1,12 +1,16 @@
 'use client';
 import { ArrowUpRight, CalendarDays } from 'lucide-react';
 import { liveBookingEvents } from '@/lib/booking-config';
+import { siteConfig } from '@/lib/site-config';
 import { usePrivacyPreferences } from './PrivacyPreferences';
 
 export function AppointmentBooking({ onContact }: { onContact: () => void }) {
   const { preferences, allow } = usePrivacyPreferences();
   const event = liveBookingEvents[0];
-  if (!event) return null;
+  if (!event) return <section className="appointment-booking" aria-labelledby="appointment-booking-title">
+    <header className="appointment-booking-heading"><div><span className="eyebrow">DOMLUVME SI SCHŮZKU</span><h3 id="appointment-booking-title">Domluvme si termín.</h3><p>Na schůzku si rezervujte přibližně 90 minut. Délka schůzky je orientační a může se podle potřeby změnit.</p></div><CalendarDays size={32} strokeWidth={1.5} aria-hidden="true"/></header>
+    <div className="booking-unavailable"><p>Online výběr termínu právě připravuji. Napište mi své časové možnosti a domluvíme se individuálně.</p><button type="button" className="contact-booking-trigger" onClick={onContact}>Napsat zprávu <ArrowUpRight size={18} aria-hidden="true"/></button><a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a></div>
+  </section>;
   return <section className="appointment-booking" aria-labelledby="appointment-booking-title">
     <header className="appointment-booking-heading"><div><span className="eyebrow">DOMLUVME SI SCHŮZKU</span><h3 id="appointment-booking-title">Vyberte si svůj termín.</h3><p>Na schůzku si rezervujte přibližně 90 minut. Délka schůzky je orientační a může se podle potřeby změnit.</p></div><CalendarDays size={32} strokeWidth={1.5} aria-hidden="true"/></header>
     <div className="appointment-booking-panel">
