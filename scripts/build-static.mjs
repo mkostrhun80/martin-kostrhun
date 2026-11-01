@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { writeFile } from 'node:fs/promises';
 import { generateStaticHeaders } from './static-headers.mjs';
 import nextEnvironment from '@next/env';
+import { safeBookingUrl } from '../lib/booking-config.ts';
 
 nextEnvironment.loadEnvConfig(fileURLToPath(new URL('..', import.meta.url)));
 
@@ -12,6 +13,8 @@ if (site) {
   if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash) throw Error('NEXT_PUBLIC_SITE_URL must be the real HTTPS website URL, without credentials, query or fragment.');
 }
 const env = { ...process.env, NEXT_TELEMETRY_DISABLED: '1', NEXT_PUBLIC_BASE_PATH: process.env.NEXT_PUBLIC_BASE_PATH || '', NEXT_PUBLIC_SITE_URL: site.replace(/\/$/, '') };
+const bookingURL = env.NEXT_PUBLIC_BOOKING_VERIFIED === 'true' ? safeBookingUrl(env.NEXT_PUBLIC_BOOKING_URL || '') : null;
+if (env.NEXT_PUBLIC_BOOKING_VERIFIED === 'true' && !bookingURL) throw Error('An enabled booking integration requires a valid HTTPS Cal.com event URL.');
 const result = spawnSync(process.execPath, [fileURLToPath(new URL('../node_modules/next/dist/bin/next', import.meta.url)), 'build', '--webpack'], { stdio: 'inherit', env });
 if (result.error) throw result.error;
 if (result.status !== 0) process.exit(result.status || 1);
@@ -23,6 +26,7 @@ await writeFile('out/deployment.json', JSON.stringify({
   basePath: env.NEXT_PUBLIC_BASE_PATH,
   formsEnabled: env.NEXT_PUBLIC_FORMS_VERIFIED === 'true',
   bookingEnabled: env.NEXT_PUBLIC_BOOKING_VERIFIED === 'true',
+  bookingURL,
 }, null, 2) + '\n');
 const base = env.NEXT_PUBLIC_BASE_PATH;
 await writeFile('out/_redirects', ['/zpetna-vazba /#zpetna-vazba 301', '/zpetna-vazba/ /#zpetna-vazba 301', '/zkusenosti /#zkusenosti 301', '/zkusenosti/ /#zkusenosti 301'].map(rule => base ? rule.replace(/^\//, base + '/').replace(' /#', ' ' + base + '/#') : rule).join('\n') + '\n');

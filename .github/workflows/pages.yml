@@ -15,10 +15,10 @@ jobs:
       contents: read
       pages: read
     env:
-      # Keep provider integrations off until Martin completes their account checks.
+      # Booking has its own verification gate; the contact forms are unchanged.
       NEXT_PUBLIC_FORMS_VERIFIED: 'false'
-      NEXT_PUBLIC_BOOKING_VERIFIED: 'false'
-      NEXT_PUBLIC_BOOKING_URL: ''
+      NEXT_PUBLIC_BOOKING_VERIFIED: 'true'
+      NEXT_PUBLIC_BOOKING_URL: 'https://cal.com/martin-kostrhun-4iprbj/konzultace'
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -32,11 +32,11 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm audit --audit-level=high
-      - name: Build and validate email-only website
+      - name: Build and validate verified reservations
         run: |
           npm run build:pages
           npm run check:types
-          npm run release:check -- --email-only
+          npm run release:check -- --booking-only
         env:
           NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url }}
