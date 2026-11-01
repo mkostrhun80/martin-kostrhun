@@ -1,26 +1,9 @@
 'use client';
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
-import { ArrowUpRight, Home, UserRound, BriefcaseBusiness, Route, MoreHorizontal, X } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { siteSections, type SectionId } from '@/lib/site-sections';
 
-const desktopQuery = '(min-width: 901px) and (hover: hover) and (pointer: fine)';
 const rowHeight = 22;
-const pieItems = [
-  { id: 'domu', label: 'Úvod', icon: Home },
-  { id: 'o-mne', label: 'O mně', icon: UserRound },
-  { id: 'sluzby', label: 'Služby', icon: BriefcaseBusiness },
-  { id: 'spoluprace', label: 'Spolupráce', icon: Route },
-  { id: 'obsah', label: 'Více', icon: MoreHorizontal },
-] as const;
-function piePoint(radius: number, angle: number) {
-  const radians = angle * Math.PI / 180;
-  return { x: 140 + radius * Math.cos(radians), y: 140 - radius * Math.sin(radians) };
-}
-function pieSector(index: number) {
-  const start = 180 - index * 36 - 1, end = start - 34;
-  const a = piePoint(138, start), b = piePoint(138, end), c = piePoint(44, end), d = piePoint(44, start);
-  return `M${a.x},${a.y} A138,138 0 0 1 ${b.x},${b.y} L${c.x},${c.y} A44,44 0 0 0 ${d.x},${d.y} Z`;
-}
 
 function useActiveSection() {
   const [active, setActive] = useState<SectionId>('domu');
@@ -54,17 +37,16 @@ function useActiveSection() {
 
 export function ScrollContents() {
   const active = useActiveSection();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [moreOpen, setMoreOpen] = useState(false);
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
   const root = useRef<HTMLElement>(null), rail = useRef<HTMLElement>(null);
-  const trigger = useRef<HTMLButtonElement>(null), panel = useRef<HTMLDivElement>(null);
   const markers = useRef<(HTMLAnchorElement | null)[]>([]);
   const preview = useRef<number | null>(null), pendingPosition = useRef(0);
   const railTop = useRef<number | null>(null), frame = useRef(0), focusFrame = useRef(0);
   const openTimer = useRef<ReturnType<typeof setTimeout> | null>(null), closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const suppressFocus = useRef(false);
-  const changingMenu = useRef(false);
+  const lastPointerType = useRef('mouse');
+  const tapOpenedPreview = useRef(false);
+  const touchGesture = useRef<{ id: number; startY: number; scrubbed: boolean } | null>(null);
 
   const closePreview = useCallback(() => {
     if (openTimer.current) clearTimeout(openTimer.current);
@@ -78,6 +60,10 @@ export function ScrollContents() {
     }
   }, []);
 
+  function positionAt(clientY: number) {
+    if (railTop.current === null) railTop.current = rail.current?.getBoundingClientRect().top ?? 0;
+    return Math.max(0, Math.min(siteSections.length - 1, (clientY - railTop.current) / rowHeight - .5));
+  }
   function paint(position: number) {
     for (let i = 0; i < markers.current.length; i++) {
       const proximity = Math.exp(-((i - position) ** 2) / (2 * 1.35 ** 2));
@@ -90,11 +76,9 @@ export function ScrollContents() {
     preview.current = index; setPreviewIndex(current => current === index ? current : index);
   }
   function pointerMove(clientY: number) {
-    if (!matchMedia(desktopQuery).matches) return;
     if (closeTimer.current) clearTimeout(closeTimer.current);
     closeTimer.current = null;
-    if (railTop.current === null) railTop.current = rail.current?.getBoundingClientRect().top ?? 0;
-    pendingPosition.current = Math.max(0, Math.min(siteSections.length - 1, (clientY - railTop.current) / rowHeight - .5));
+    pendingPosition.current = positionAt(clientY);
     if (frame.current) return;
     frame.current = requestAnimationFrame(() => {
       frame.current = 0; paint(pendingPosition.current);
@@ -104,15 +88,20 @@ export function ScrollContents() {
       }, 140);
     });
   }
-  function leave() {
-    if (root.current?.contains(document.activeElement)) return;
+  function cancelClose() {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = null;
+  }
+  function leave(pointerType: string) {
+    if (pointerType !== 'mouse') return;
+    if (rail.current?.contains(document.activeElement)) return;
     if (openTimer.current) clearTimeout(openTimer.current);
     openTimer.current = null;
     if (closeTimer.current) clearTimeout(closeTimer.current);
     closeTimer.current = setTimeout(closePreview, 140);
   }
   function choose(id: SectionId) {
-    closePreview(); setMenuOpen(false);
+    closePreview();
     cancelAnimationFrame(focusFrame.current);
     focusFrame.current = requestAnimationFrame(() => {
       const section = document.getElementById(id);
@@ -122,59 +111,100 @@ export function ScrollContents() {
 
   useEffect(() => {
     const outside = (event: PointerEvent) => {
-      if (event.target instanceof Node && !root.current?.contains(event.target)) { closePreview(); setMenuOpen(false); }
+      if (event.target instanceof Node && !root.current?.contains(event.target)) closePreview();
     };
     const escape = (event: globalThis.KeyboardEvent) => {
       if (event.key !== 'Escape') return;
       const index = preview.current;
       const restore = root.current?.contains(document.activeElement);
-      closePreview(); setMenuOpen(false);
-      if (restore) {
+      closePreview();
+      if (restore && index !== null) {
         suppressFocus.current = true;
-        if (matchMedia(desktopQuery).matches && index !== null) markers.current[index]?.focus(); else trigger.current?.focus();
+        markers.current[index]?.focus();
         cancelAnimationFrame(focusFrame.current);
         focusFrame.current = requestAnimationFrame(() => { suppressFocus.current = false; });
       }
     };
-    const reset = () => { railTop.current = null; };
-    const breakpoint = matchMedia(desktopQuery);
-    const footer = document.querySelector('footer');
-    const tone = new IntersectionObserver(entries => {
-      if (root.current) root.current.dataset.tone = entries.some(entry => entry.isIntersecting) ? 'dark' : 'light';
-    }, { rootMargin: `${-Math.max(0, innerHeight - 80)}px 0px 0px 0px` });
-    if (footer) tone.observe(footer);
-    const change = () => { closePreview(); setMenuOpen(false); reset(); };
-    addEventListener('pointerdown', outside); addEventListener('keydown', escape); addEventListener('resize', reset);
-    breakpoint.addEventListener('change', change);
+    let toneFrame = 0;
+    const syncTone = () => {
+      toneFrame = 0;
+      if (!root.current) return;
+      const sampleX = 56, sampleY = Math.max(0, innerHeight - 46);
+      const darkRegions = document.querySelectorAll('footer, .service-chapter-protect, .feedback-panel');
+      let dark = false;
+      for (const region of darkRegions) {
+        const rect = region.getBoundingClientRect();
+        if (sampleY >= rect.top && sampleY <= rect.bottom && sampleX >= rect.left && sampleX <= rect.right) {
+          const lightCard = region.querySelector('.feedback-form');
+          const cardRect = lightCard?.getBoundingClientRect();
+          if (cardRect && cardRect.height > 0 && sampleY >= cardRect.top && sampleY <= cardRect.bottom && sampleX >= cardRect.left && sampleX <= cardRect.right) continue;
+          dark = true;
+          break;
+        }
+      }
+      root.current.dataset.tone = dark ? 'dark' : 'light';
+    };
+    const scheduleTone = () => { if (!toneFrame) toneFrame = requestAnimationFrame(syncTone); };
+    const reset = () => { railTop.current = null; scheduleTone(); };
+    addEventListener('pointerdown', outside); addEventListener('keydown', escape);
+    addEventListener('scroll', scheduleTone, { passive: true }); addEventListener('resize', reset);
+    document.addEventListener('toggle', scheduleTone, true);
+    syncTone();
     return () => {
       if (openTimer.current) clearTimeout(openTimer.current);
       if (closeTimer.current) clearTimeout(closeTimer.current);
-      cancelAnimationFrame(frame.current); cancelAnimationFrame(focusFrame.current);
-      removeEventListener('pointerdown', outside); removeEventListener('keydown', escape); removeEventListener('resize', reset);
-      breakpoint.removeEventListener('change', change);
-      tone.disconnect();
+      cancelAnimationFrame(frame.current); cancelAnimationFrame(focusFrame.current); cancelAnimationFrame(toneFrame);
+      removeEventListener('pointerdown', outside); removeEventListener('keydown', escape);
+      removeEventListener('scroll', scheduleTone); removeEventListener('resize', reset);
+      document.removeEventListener('toggle', scheduleTone, true);
     };
   }, [closePreview]);
-  useEffect(() => {
-    if (!menuOpen) return;
-    let frame = requestAnimationFrame(() => {
-      // Wait for the opening visibility transition to start before moving focus.
-      frame = requestAnimationFrame(() => {
-        const nav = panel.current?.querySelector(moreOpen ? '.contents-rail-panel' : '.mobile-pie-picker');
-        (nav?.querySelector<HTMLAnchorElement>('a[aria-current=location]') ?? nav?.querySelector<HTMLAnchorElement>('a'))?.focus();
-        changingMenu.current = false;
-      });
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [menuOpen, moreOpen]);
 
   const selected = siteSections[previewIndex ?? siteSections.findIndex(section => section.id === active)];
-  return <aside ref={root} className="contents-rail" data-open={menuOpen} data-preview={previewIndex !== null} aria-label="Obsah webu" style={{ '--rail-half-height': `${siteSections.length * rowHeight / 2}px` } as CSSProperties}
-    onPointerEnter={() => { if (closeTimer.current) clearTimeout(closeTimer.current); closeTimer.current = null; }}
-    onPointerLeave={leave}
-    onBlur={event => { if (!changingMenu.current && !event.currentTarget.contains(event.relatedTarget)) { closePreview(); setMenuOpen(false); } }}>
+  return <aside ref={root} className="contents-rail" data-preview={previewIndex !== null} aria-label="Obsah webu" style={{ '--rail-half-height': `${siteSections.length * rowHeight / 2}px` } as CSSProperties}
+    onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) closePreview(); }}>
     <nav ref={rail} className="contents-rail-markers" aria-label="Přeskočit na část webu"
-      onPointerEnter={() => { railTop.current = null; }} onPointerMove={event => pointerMove(event.clientY)}>
+      onPointerEnter={() => { railTop.current = null; cancelClose(); }}
+      onPointerLeave={event => leave(event.pointerType)}
+      onPointerDown={event => {
+        lastPointerType.current = event.pointerType;
+        if (event.pointerType === 'mouse') return;
+        if (openTimer.current) clearTimeout(openTimer.current);
+        if (closeTimer.current) clearTimeout(closeTimer.current);
+        openTimer.current = closeTimer.current = null;
+        railTop.current = null;
+        const pos = positionAt(event.clientY), idx = Math.round(pos);
+        tapOpenedPreview.current = preview.current !== idx;
+        touchGesture.current = { id: event.pointerId, startY: event.clientY, scrubbed: false };
+        paint(pos); show(idx);
+      }}
+      onPointerMove={event => {
+        lastPointerType.current = event.pointerType;
+        if (event.pointerType === 'mouse') { pointerMove(event.clientY); return; }
+        const gesture = touchGesture.current;
+        if (!gesture || gesture.id !== event.pointerId) return;
+        if (!gesture.scrubbed && Math.abs(event.clientY - gesture.startY) > 5) {
+          gesture.scrubbed = true;
+          rail.current?.setPointerCapture(event.pointerId);
+        }
+        pendingPosition.current = positionAt(event.clientY);
+        if (frame.current) return;
+        frame.current = requestAnimationFrame(() => {
+          frame.current = 0; paint(pendingPosition.current); show(Math.round(pendingPosition.current));
+        });
+      }}
+      onPointerUp={event => {
+        if (touchGesture.current?.id === event.pointerId) {
+          if (rail.current?.hasPointerCapture(event.pointerId)) rail.current.releasePointerCapture(event.pointerId);
+          touchGesture.current = null;
+        }
+      }}
+      onPointerCancel={event => {
+        if (touchGesture.current?.id === event.pointerId) {
+          if (rail.current?.hasPointerCapture(event.pointerId)) rail.current.releasePointerCapture(event.pointerId);
+          touchGesture.current = null;
+        }
+      }}>
       {siteSections.map((section, index) => <a key={section.id} ref={element => { markers.current[index] = element; }} className="contents-rail-marker"
         href={`#${section.id}`} aria-label={`Přejít na sekci ${section.label}`} aria-current={active === section.id ? 'location' : undefined}
         aria-describedby={previewIndex === index ? 'contents-preview-description' : undefined}
@@ -182,40 +212,33 @@ export function ScrollContents() {
           const next = event.key === 'ArrowDown' ? Math.min(index + 1, siteSections.length - 1) : event.key === 'ArrowUp' ? Math.max(index - 1, 0) : event.key === 'Home' ? 0 : event.key === 'End' ? siteSections.length - 1 : null;
           if (next !== null) { event.preventDefault(); markers.current[next]?.focus(); }
         }}
-        onFocus={() => {
-          if (suppressFocus.current || !matchMedia(desktopQuery).matches) return;
+        onFocus={event => {
+          if (suppressFocus.current || !event.currentTarget.matches(':focus-visible')) return;
           if (openTimer.current) clearTimeout(openTimer.current); openTimer.current = null;
           if (closeTimer.current) clearTimeout(closeTimer.current); closeTimer.current = null;
           paint(index); show(index);
-        }} onClick={() => choose(section.id)}><span className="contents-rail-mark" aria-hidden="true"/></a>)}
+        }}
+        onClick={event => {
+          if (lastPointerType.current !== 'mouse' && event.detail !== 0 && tapOpenedPreview.current) {
+            event.preventDefault();
+            tapOpenedPreview.current = false;
+            paint(index); show(index);
+            return;
+          }
+          choose(section.id);
+        }}><span className="contents-rail-mark" aria-hidden="true"/></a>)}
     </nav>
     <a className="contents-rail-preview" href={`#${selected.id}`} tabIndex={-1} inert={previewIndex === null}
-      aria-hidden={previewIndex === null} onClick={() => choose(selected.id)}>
+      aria-hidden={previewIndex === null}
+      onPointerEnter={cancelClose}
+      onPointerLeave={event => leave(event.pointerType)}
+      onClick={() => choose(selected.id)}>
       <span className="contents-preview-heading"><strong>{selected.label}</strong><ArrowUpRight size={17} aria-hidden="true"/></span>
       <span id="contents-preview-description" className="contents-preview-description">{selected.description}</span>
     </a>
     <nav className="quick-navigation" aria-label="Rychlé ovládání webu">
-      <button ref={trigger} type="button" className="contents-rail-trigger" aria-label={menuOpen ? 'Zavřít navigaci' : 'Otevřít navigaci'} aria-expanded={menuOpen} aria-controls="contents-rail-panel" onClick={() => { closePreview(); changingMenu.current = false; setMoreOpen(false); setMenuOpen(value => !value); }}>{menuOpen && <X size={20} aria-hidden="true"/>}</button>
       <a className="quick-contact" href="#kontakt" onClick={() => choose('kontakt')}>Kontakt<ArrowUpRight size={16} aria-hidden="true"/></a>
     </nav>
-    <div ref={panel} id="contents-rail-panel" className="mobile-pie-panel" data-more={moreOpen} inert={!menuOpen}>
-      <nav className="mobile-pie-picker" aria-label="Rychlé sekce webu" hidden={moreOpen}>
-        <svg viewBox="0 0 280 144" aria-label="Půlkruhová navigace">
-          {pieItems.map((item, index) => {
-            const point = piePoint(94, 162 - index * 36), Icon = item.icon;
-            return <a key={item.id} href={`#${item.id}`} tabIndex={0} aria-label={item.label} aria-current={active === item.id ? 'location' : undefined}
-              onClick={event => { if(index === 4) { event.preventDefault(); changingMenu.current = true; setMoreOpen(true); } else choose(item.id); }}>
-              <path className="pie-sector" d={pieSector(index)}/>
-              <g pointerEvents="none"><Icon x={point.x - 9} y={point.y - 16} size={18} strokeWidth={1.5} aria-hidden="true"/><text x={point.x} y={point.y + 16} textAnchor="middle">{item.label}</text></g>
-            </a>;
-          })}
-        </svg>
-      </nav>
-      <div className="contents-rail-panel" hidden={!moreOpen}>
-      <div className="contents-rail-heading"><strong>Na webu najdete</strong><button type="button" aria-label="Zavřít obsah" onClick={() => { setMenuOpen(false); trigger.current?.focus(); }}><X size={17} aria-hidden="true"/></button></div>
-      <nav aria-label="Části webu">{siteSections.map(section => <a key={section.id} href={`#${section.id}`} aria-current={active === section.id ? 'location' : undefined} onClick={() => choose(section.id)}><strong>{section.label}</strong><span>{section.description}</span></a>)}</nav>
-      </div>
-    </div>
-    <noscript><style>{'.contents-rail{display:block;position:static;transform:none;padding:24px 5vw}.contents-rail-markers,.contents-rail-preview,.quick-navigation,.mobile-pie-panel{display:none!important}'}</style><nav className="contents-nojs" aria-label="Části webu bez JavaScriptu">{siteSections.map(section => <a key={section.id} href={`#${section.id}`}>{section.label}</a>)}</nav></noscript>
+    <noscript><style>{'.contents-rail{display:block;position:static;transform:none;padding:24px 5vw}.contents-rail-markers,.contents-rail-preview,.quick-navigation{display:none!important}'}</style><nav className="contents-nojs" aria-label="Části webu bez JavaScriptu">{siteSections.map(section => <a key={section.id} href={`#${section.id}`}>{section.label}</a>)}</nav></noscript>
   </aside>;
 }
