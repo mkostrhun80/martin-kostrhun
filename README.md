@@ -29,6 +29,6 @@ FAQ a schválené reference jsou v `lib/public-data.ts`. Reference publikujte po
 
 Partneři jsou ve dvou protisměrných pásech Three.js se zaoblenými kartami. Vykreslování se načítá až u sekce a zastaví se mimo obrazovku i po pozastavení. Při omezení animací nebo nedostupném WebGL se zobrazí statická loga; úplný seznam je dostupný i bez JavaScriptu. Bezeztrátový obrázek se všemi logy vzniká automaticky při sestavení z `lib/partners.ts` a původních souborů v `public/images/partners/`. Pro samostatné obnovení obrázku použijte `npm run partners:atlas`.
 
-Pravý navigační proužek zvětšuje značky podle vzdálenosti kurzoru a zobrazuje krátký náhled vybrané sekce. Funguje také klávesnicí; na dotykových zařízeních používá spodní tlačítko Obsah s přehledem sekcí. Náhledy jsou součástí stránky, nevyžadují další stahování a respektují omezení animací.
+Pravý navigační proužek zvětšuje značky podle vzdálenosti kurzoru a zobrazuje krátký náhled vybrané sekce. Funguje také klávesnicí. Na mobilu ho nahrazuje průhledná skleněná bublina s pěti výsečemi; zbývající sekce jsou pod Více a Kontakt je samostatně vpravo. Náhledy jsou součástí stránky, nevyžadují další stahování a respektují omezení animací.
 
 Záloha před změnami a původní rozpracovaný `scripts/preview-full.mjs` jsou lokálně v ignorovaném `work/quality-redesign-20261029/backup`. Původní skript s databází je vyřazený z projektu, jeho upravená kopie je zachovaná. Fotografie zůstávají původní; WOFF2 fonty jsou bezeztrátově zabalené ze stejných TTF (FontTools 4.68.0), s ověřenou stejnou mapou znaků.
