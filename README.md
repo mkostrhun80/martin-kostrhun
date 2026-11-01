@@ -27,4 +27,6 @@ Pro nasazení a povinná ověření účtů použijte [návod pro Martina](docs/
 
 FAQ a schválené reference jsou v `lib/public-data.ts`. Reference publikujte pouze po doložení spolupráce a souhlasu; soukromý e-mail ani podklady souhlasu do tohoto souboru nepatří. Prázdný seznam nemá náhradní vymyšlená hodnocení.
 
+Partneři jsou ve dvou protisměrných pásech Three.js se zaoblenými kartami. Vykreslování se načítá až u sekce a zastaví se mimo obrazovku i po pozastavení. Při omezení animací nebo nedostupném WebGL se zobrazí statická loga; úplný seznam je dostupný i bez JavaScriptu. Bezeztrátový obrázek se všemi logy vzniká automaticky při sestavení z `lib/partners.ts` a původních souborů v `public/images/partners/`. Pro samostatné obnovení obrázku použijte `npm run partners:atlas`.
+
 Záloha před změnami a původní rozpracovaný `scripts/preview-full.mjs` jsou lokálně v ignorovaném `work/quality-redesign-20261029/backup`. Původní skript s databází je vyřazený z projektu, jeho upravená kopie je zachovaná. Fotografie zůstávají původní; WOFF2 fonty jsou bezeztrátově zabalené ze stejných TTF (FontTools 4.68.0), s ověřenou stejnou mapou znaků.

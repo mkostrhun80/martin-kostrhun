@@ -4,6 +4,7 @@ import { writeFile } from 'node:fs/promises';
 import { generateStaticHeaders } from './static-headers.mjs';
 import nextEnvironment from '@next/env';
 import { safeBookingUrl } from '../lib/booking-config.ts';
+import { generatePartnerAtlas } from './generate-partner-atlas.mjs';
 
 nextEnvironment.loadEnvConfig(fileURLToPath(new URL('..', import.meta.url)));
 
@@ -15,6 +16,7 @@ if (site) {
 const env = { ...process.env, NEXT_TELEMETRY_DISABLED: '1', NEXT_PUBLIC_BASE_PATH: process.env.NEXT_PUBLIC_BASE_PATH || '', NEXT_PUBLIC_SITE_URL: site.replace(/\/$/, '') };
 const bookingURL = env.NEXT_PUBLIC_BOOKING_VERIFIED === 'true' ? safeBookingUrl(env.NEXT_PUBLIC_BOOKING_URL || '') : null;
 if (env.NEXT_PUBLIC_BOOKING_VERIFIED === 'true' && !bookingURL) throw Error('An enabled booking integration requires a valid HTTPS Cal.com event URL.');
+await generatePartnerAtlas();
 const result = spawnSync(process.execPath, [fileURLToPath(new URL('../node_modules/next/dist/bin/next', import.meta.url)), 'build', '--webpack'], { stdio: 'inherit', env });
 if (result.error) throw result.error;
 if (result.status !== 0) process.exit(result.status || 1);

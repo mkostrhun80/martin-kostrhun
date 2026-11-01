@@ -28,7 +28,7 @@ import "./cooperation.css";
 import "./contents-layout.css";
 import "./contact-combined.css";
 import "./desktop-scale.css";
-import "./partner-coverflow.css";
+import "./partner-ribbon.css";
 import "./appointment-booking.css";
 import "./quality-redesign.css";
 export const metadata: Metadata = { description: "Martin Kostrhun, finanční specialista eDO finance. Bydlení, investice, pojištění a finanční plán.", icons: { icon: sitePath('/favicon.svg'), shortcut: sitePath('/favicon.svg') } };

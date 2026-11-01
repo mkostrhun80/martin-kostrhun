@@ -1,98 +1,90 @@
 'use client';
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useRef, useState } from 'react';
-import { ArrowUpRight, Pause, Play } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { ArrowLeft, ArrowRight, ArrowUpRight, Pause, Play } from 'lucide-react';
 import { partners, partnerCategories, partnersSource, type PartnerCategory } from '@/lib/partners';
-import { advancePartners, canAutoplay, coverPose, partnerCardStep, partnerLoopSlots, wrapPartnerPhase } from '@/lib/partner-motion';
+import type { PartnerRibbon } from '@/lib/partner-ribbon';
 import { sitePath } from '@/lib/site-path';
+
+const motionQuery = '(prefers-reduced-motion: reduce)';
+function subscribeMotion(change: () => void) {
+  const query = matchMedia(motionQuery);
+  query.addEventListener('change', change);
+  return () => query.removeEventListener('change', change);
+}
+const getMotion = () => matchMedia(motionQuery).matches;
+const serverMotion = () => false;
 
 export function Partners() {
   const [category, setCategory] = useState<PartnerCategory | 'Všichni'>('Všichni');
-  const [playing, setPlaying] = useState(true), [reducedMotion, setReducedMotion] = useState(false);
-  const orbit = useRef<HTMLDivElement>(null), phase = useRef(0), playingRef = useRef(true);
-  const wakeRef = useRef<() => void>(() => {});
-  const shown = category === 'Všichni' ? partners : partners.filter(partner => partner.category === category);
-  // Short categories repeat only enough cells to fill the bounded 1360px stage.
-  // The complete 68-partner list needs no duplicate DOM.
-  const copies = shown.length ? Math.max(1, Math.ceil(24 / shown.length)) : 1;
-
-  useEffect(() => { playingRef.current = playing; wakeRef.current(); }, [playing]);
+  const [playing, setPlaying] = useState(true), [unavailable, setUnavailable] = useState(false);
+  const reduced = useSyncExternalStore(subscribeMotion, getMotion, serverMotion);
+  const stage = useRef<HTMLDivElement>(null), ribbon = useRef<PartnerRibbon | null>(null);
+  const gesture = useRef<{ id: number; x: number; y: number } | null>(null);
+  const selection = useMemo(() => partners.map((partner, index) => ({ partner, index })).filter(({ partner }) => category === 'Všichni' || partner.category === category), [category]);
+  const latest = useRef({ selection, playing });
   useEffect(() => {
-    const root = orbit.current;
-    if (!root) return;
-    const cards = Array.from(root.querySelectorAll<HTMLElement>('.partner-cover-item')).map(card => ({ card, cover: card.querySelector<HTMLElement>('.partner-cover')!, last: '' }));
-    cards.forEach(({ card }) => card.classList.remove('is-near'));
-    const count = category === 'Všichni' ? partners.length : partners.filter(partner => partner.category === category).length;
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-    let frame = 0, previous = 0, width = 1, step = 1, visible = false, dirty = true, disposed = false;
-    let near = new Set<number>();
-    phase.current = 0;
-    const runnable = () => count > 1 && canAutoplay({ playing: playingRef.current, reduced: reduced.matches, visible, hidden: document.hidden });
-    const draw = () => {
-      if (reduced.matches) return;
-      const slots = partnerLoopSlots(phase.current, count, cards.length, width, step);
-      const next = new Set(slots.map(slot => slot.index));
-      for (const index of near) if (!next.has(index)) { cards[index].card.classList.remove('is-near'); cards[index].last = ''; }
-      for (const { index, offset } of slots) {
-        const item = cards[index], pose = coverPose({ center: width / 2 + offset, width: step }, 0, width);
-        const key = offset.toFixed(3);
-        if (!near.has(index)) item.card.classList.add('is-near');
-        if (item.last !== key) {
-          item.last = key;
-          item.card.style.transform = `translate3d(${offset - step / 2}px, 0, 0)`;
-          item.card.style.zIndex = String(pose.z);
-          item.cover.style.setProperty('--cover-turn', `${pose.turn}deg`);
-          item.cover.style.setProperty('--cover-scale', String(pose.scale));
-          item.cover.style.setProperty('--cover-depth', `${pose.depth}px`);
-        }
-      }
-      near = next;
-    };
-    function tick(now: number) {
-      frame = 0;
-      if (disposed || !visible || document.hidden) { previous = 0; return; }
-      if (runnable()) { phase.current = advancePartners(phase.current, count * step, previous ? (now - previous) / 1000 : 0); dirty = true; }
-      previous = now;
-      if (dirty) { draw(); dirty = false; }
-      if (runnable()) frame = requestAnimationFrame(tick); else previous = 0;
-    }
-    function wake() { if (!disposed && visible && !document.hidden && !frame) frame = requestAnimationFrame(tick); }
-    wakeRef.current = wake;
-    const measure = () => {
-      const oldStep = step;
-      root.dataset.loop = String(!reduced.matches);
-      // Read geometry together; draw only writes cached poses.
-      width = root.clientWidth;
-      step = partnerCardStep(cards[0]?.cover.offsetWidth || 1);
-      phase.current = wrapPartnerPhase(phase.current / oldStep * step, count * step);
-      root.style.setProperty('--cover-step', `${step}px`);
-      cards.forEach(card => { card.last = ''; });
-      dirty = true; wake();
-    };
-    const motion = () => { setReducedMotion(reduced.matches); previous = 0; measure(); };
-    const visibility = () => { previous = 0; if (document.hidden) { cancelAnimationFrame(frame); frame = 0; } else wake(); };
-    const intersection = new IntersectionObserver(entries => {
-      visible = entries.some(entry => entry.isIntersecting);
-      root.dataset.visible = String(visible);
-      if (!visible) { cancelAnimationFrame(frame); frame = 0; previous = 0; } else { dirty = true; wake(); }
-    });
-    intersection.observe(root);
-    const resize = new ResizeObserver(measure); resize.observe(root);
-    reduced.addEventListener('change', motion); document.addEventListener('visibilitychange', visibility);
-    queueMicrotask(() => { if (!disposed) setReducedMotion(reduced.matches); }); measure();
-    return () => { disposed = true; cancelAnimationFrame(frame); intersection.disconnect(); resize.disconnect(); reduced.removeEventListener('change', motion); document.removeEventListener('visibilitychange', visibility); wakeRef.current = () => {}; };
-  }, [category]);
+    latest.current.selection = selection;
+    ribbon.current?.setPartners(selection.map(item => item.index));
+  }, [selection]);
+  useEffect(() => { latest.current.playing = playing; ribbon.current?.setPlaying(playing); }, [playing]);
 
-  return <section id="zazemi" className="page-section partners-new partners-coverflow" aria-labelledby="partners-heading">
-    <div className="partners-summary"><div><h2 id="partners-heading">Zázemí eDO finance<span>.</span></h2><p>Možnosti napříč finančním trhem. Konkrétní nabídku posuzuji podle vaší situace.</p></div></div>
+  useEffect(() => {
+    const root = stage.current;
+    if (!root || reduced || unavailable) return;
+    const abort = new AbortController();
+    let loading = false;
+    const observer = new IntersectionObserver(entries => {
+      if (loading || !entries.some(entry => entry.isIntersecting)) return;
+      loading = true; observer.disconnect();
+      void import('@/lib/partner-ribbon').then(({ createPartnerRibbon }) => {
+        if (abort.signal.aborted) return null;
+        return createPartnerRibbon(root, sitePath('/images/partners/ribbon-atlas.webp'), {
+          indices: latest.current.selection.map(item => item.index), playing: latest.current.playing,
+          signal: abort.signal, onUnavailable: () => setUnavailable(true),
+        });
+      }).then(controller => {
+        if (!controller) return;
+        if (abort.signal.aborted) { controller.dispose(); return; }
+        ribbon.current = controller;
+        controller.setPartners(latest.current.selection.map(item => item.index));
+        controller.setPlaying(latest.current.playing);
+      }).catch(() => { if (!abort.signal.aborted) setUnavailable(true); });
+    }, { rootMargin: '250px' });
+    observer.observe(root);
+    return () => { abort.abort(); observer.disconnect(); ribbon.current?.dispose(); ribbon.current = null; };
+  }, [reduced, unavailable]);
+
+  const move = (direction: number) => { setPlaying(false); ribbon.current?.step(direction); };
+  return <section id="zazemi" className="page-section partners-new partners-ribbon" aria-labelledby="partners-heading">
+    <div className="partners-summary"><div><h2 id="partners-heading">Zázemí eDO finance.</h2><p>Možnosti napříč finančním trhem. Konkrétní nabídku posuzuji podle vaší situace.</p></div></div>
     <div className="partner-category" role="group" aria-label="Oblast partnerů">{(['Všichni', ...partnerCategories] as const).map(value => <button type="button" key={value} aria-pressed={category === value} onClick={() => setCategory(value)}>{value}</button>)}</div>
-    <div ref={orbit} className="partner-orbit" aria-hidden="true">
-      <ul className="partner-cover-track">{Array.from({ length: copies }, (_, copy) => shown.map(partner => <li key={`${copy}-${partner.name}`} className="partner-cover-item" data-copy={copy > 0 ? 'true' : undefined}><figure className="partner-cover"><div className="partner-cover-logo">{partner.logo ? <img className={partner.logoLight ? 'logo-light' : undefined} src={sitePath(partner.logo)} alt="" width="220" height="100" loading="lazy"/> : <strong>{partner.shortName}</strong>}</div><figcaption><strong>{partner.shortName}</strong><span>{partner.category}</span></figcaption></figure></li>))}</ul>
+    <noscript><style>{'.partner-ribbon-stage{height:auto!important;overflow:visible!important}'}</style></noscript>
+    <div ref={stage} className="partner-ribbon-stage" data-static={reduced || unavailable ? 'true' : undefined}
+      onPointerDown={event => { gesture.current = { id: event.pointerId, x: event.clientX, y: event.clientY }; }}
+      onPointerCancel={() => { gesture.current = null; }}
+      onPointerUp={event => {
+        const start = gesture.current; gesture.current = null;
+        if (!start || start.id !== event.pointerId || reduced || unavailable) return;
+        const dx = event.clientX - start.x, dy = event.clientY - start.y;
+        if (Math.abs(dx) > 35 && Math.abs(dx) > Math.abs(dy)) move(dx < 0 ? 1 : -1);
+      }}>
+      <ul className="partner-ribbon-fallback" aria-label="Partneři eDO finance">{selection.map(({ partner }) => <li key={partner.name}>
+        {partner.logo ? <img className={partner.logoLight ? 'logo-light' : undefined} src={sitePath(partner.logo)} alt={partner.name} width="220" height="100" loading="lazy"/> : <strong>{partner.shortName}</strong>}
+      </li>)}</ul>
     </div>
-    <ul className="sr-only" aria-label="Seznam partnerů eDO finance">{shown.map(partner => <li key={partner.name}>{partner.name} — {partner.category}</li>)}</ul>
-    <div className="partner-orbit-controls">
-      <a className="text-inline" href={partnersSource} target="_blank" rel="noreferrer">Úplné informace o partnerech eDO finance <ArrowUpRight size={16} aria-hidden="true"/></a>
-      <button type="button" className="partner-play" disabled={reducedMotion} aria-pressed={playing && !reducedMotion} onClick={() => setPlaying(value => !value)}>{playing && !reducedMotion ? <Pause size={16} aria-hidden="true"/> : <Play size={16} aria-hidden="true"/>}{reducedMotion ? 'Pohyb omezen' : playing ? 'Pozastavit pohyb' : 'Spustit pohyb'}</button>
+    <div className="partner-ribbon-bottom">
+      <p className="partner-ribbon-count" aria-live="polite">{selection.length} partnerů · {category === 'Všichni' ? '5 oblastí' : category}</p>
+      <div className="partner-ribbon-actions">
+        <button type="button" aria-label="Předchozí partneři" disabled={reduced || unavailable} onClick={() => move(-1)}><ArrowLeft size={18} aria-hidden="true"/></button>
+        <button type="button" aria-label="Další partneři" disabled={reduced || unavailable} onClick={() => move(1)}><ArrowRight size={18} aria-hidden="true"/></button>
+        <button type="button" className="partner-ribbon-play" disabled={reduced || unavailable} aria-pressed={playing && !reduced && !unavailable} onClick={() => setPlaying(value => !value)}>
+          {playing && !reduced && !unavailable ? <Pause size={16} aria-hidden="true"/> : <Play size={16} aria-hidden="true"/>}
+          {reduced ? 'Pohyb omezen' : unavailable ? 'Statický přehled' : playing ? 'Pozastavit pohyb' : 'Spustit pohyb'}
+        </button>
+      </div>
     </div>
+    <details className="partner-ribbon-directory"><summary>Všichni partneři v této oblasti</summary><ul>{selection.map(({ partner }) => <li key={partner.name}>{partner.name}<span>{partner.category}</span></li>)}</ul></details>
+    <a className="partner-ribbon-source" href={partnersSource} target="_blank" rel="noreferrer">Úplné informace o partnerech eDO finance <ArrowUpRight size={16} aria-hidden="true"/></a>
   </section>;
 }
