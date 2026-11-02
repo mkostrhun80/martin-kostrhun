@@ -39,3 +39,19 @@
   .service-photo-traveller { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .service-photo-traveller { display: none; } }
+
+/* Keep the protection heading in its own row above the photo at every width. */
+#sluzby .service-chapter-protect .service-chapter-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+#sluzby .service-chapter-protect .service-chapter-heading > h3 {
+  order: 0;
+  margin: 0;
+}
+#sluzby .service-chapter-protect .service-chapter-heading > .service-photo-anchor {
+  order: 1;
+  flex-shrink: 0;
+  margin-top: 28px;
+}

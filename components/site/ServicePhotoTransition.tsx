@@ -36,10 +36,15 @@ export function ServicePhotoTransition() {
       const height = innerHeight;
       if (!from.width || !to.width || !height) { restore(); return; }
       const progress = Math.max(0, Math.min(1, (height * .86 - boundary) / (height * .72)));
-      const t = progress * progress * (3 - 2 * progress);
-      const mix = (a: number, b: number) => a + (b - a) * t;
-      const x = mix(from.left, to.left);
-      const y = mix(from.top, to.top);
+      const ease = (value: number) => {
+        const p = Math.max(0, Math.min(1, value));
+        return p * p * (3 - 2 * p);
+      };
+      const t = ease(progress);
+      const mix = (a: number, b: number, amount = t) => a + (b - a) * amount;
+      // Descend below the incoming heading before crossing into its column.
+      const x = mix(from.left, to.left, ease((progress - .45) / .55));
+      const y = mix(from.top, to.top, ease(progress / .45));
       const width = mix(from.width, to.width);
       const photoHeight = mix(from.height, to.height);
       section.dataset.photoJourney = 'active';
