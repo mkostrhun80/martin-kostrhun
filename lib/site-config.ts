@@ -18,9 +18,15 @@ export const assets = {
 };
 export const siteConfig = {
   name: 'Martin Kostrhun', email: 'martin.kostrhun@edofinance.cz',
+  role: 'finanční specialista',
+  title: 'Finanční specialista v Hradci Králové | Martin Kostrhun',
+  description: 'Martin Kostrhun, finanční specialista eDO finance v Hradci Králové. Hypotéky, investice, pojištění a finanční plán. Osobně i online.',
+  introduction: 'Jsem Martin Kostrhun, finanční specialista eDO finance v Hradci Králové. Pomáhám s hypotékami, investicemi, pojištěním a finančním plánem. Spolupráci řešíme osobně, online nebo telefonicky.',
   phone: '+420 733 428 135', phoneHref: 'tel:+420733428135',
   address: 'Gočárova třída 1620/30', city: '500 02 Hradec Králové',
+  locality: 'Hradec Králové', postalCode: '500 02', countryCode: 'CZ',
   ico: '23315598', dataBox: 'q2xdru4',
+  registryUrl: 'https://www.cnb.cz/cnb/jerrs',
   instagramUrl: null as string | null,
   linkedinUrl: 'https://www.linkedin.com/in/martin-kostrhun-61059936b/',
   facebookUrl: null as string | null,

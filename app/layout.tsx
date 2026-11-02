@@ -2,6 +2,7 @@ import { PrivacyPreferences } from "@/components/site/PrivacyPreferences";
 import type { Metadata } from "next";
 import { sitePath } from "@/lib/site-path";
 import { homeScrollBootstrap } from "@/lib/home-scroll";
+import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 import "./photography.css";
 import "./motion.css";
@@ -32,7 +33,7 @@ import "./partner-ribbon.css";
 import "./appointment-booking.css";
 import "./quality-redesign.css";
 import "./contents-rail.css";
-export const metadata: Metadata = { description: "Martin Kostrhun, finanční specialista eDO finance. Bydlení, investice, pojištění a finanční plán.", icons: { icon: sitePath('/favicon.svg'), shortcut: sitePath('/favicon.svg') } };
+export const metadata: Metadata = { description: siteConfig.description, icons: { icon: sitePath('/favicon.svg'), shortcut: sitePath('/favicon.svg') } };
 export default function RootLayout({ children }: Readonly<{
     children: React.ReactNode;
 }>) { return <html lang="cs" suppressHydrationWarning><body><a className="skip-link" href="#main">Přejít k obsahu</a><script dangerouslySetInnerHTML={{ __html: homeScrollBootstrap }}/><PrivacyPreferences>{children}</PrivacyPreferences></body></html>; }

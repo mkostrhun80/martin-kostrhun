@@ -22,7 +22,7 @@ function HeroArtwork() {
 
 export function Hero() {
   return <><div id="domu" aria-hidden="true"/><section className="hero hero-signature" aria-labelledby="hero-title">
-    <h1 id="hero-title" className="sr-only">Martin Kostrhun — finanční specialista</h1>
+    <h1 id="hero-title" className="sr-only">Martin Kostrhun — finanční specialista v Hradci Králové</h1>
     <HeroArtwork/>
     <span className="sr-only">{assets.portraitAlt}</span>
     <div className="hero-note"><div className="hero-actions"><AppointmentLink className="site-button hero-appointment"><ButtonLabel>DOMLUVIT SCHŮZKU</ButtonLabel></AppointmentLink></div></div>

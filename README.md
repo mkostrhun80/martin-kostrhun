@@ -27,6 +27,8 @@ Pro nasazení a povinná ověření účtů použijte [návod pro Martina](docs/
 
 FAQ a schválené reference jsou v `lib/public-data.ts`. Reference publikujte pouze po doložení spolupráce a souhlasu; soukromý e-mail ani podklady souhlasu do tohoto souboru nepatří. Prázdný seznam nemá náhradní vymyšlená hodnocení.
 
+Metadata, JSON-LD a textové přehledy `/llms.txt` a `/llms-full.txt` používají společné veřejné údaje. Veřejné canonical URL a identifikátory vyžadují správné `NEXT_PUBLIC_SITE_URL`, včetně případné cesty GitHub Pages. Postup údržby a měření citací popisuje [AI vyhledávání](docs/AI-SEO.md).
+
 Partneři jsou ve dvou protisměrných pásech Three.js se zaoblenými kartami. Vykreslování se načítá až u sekce a zastaví se mimo obrazovku i po pozastavení. Při omezení animací nebo nedostupném WebGL se zobrazí statická loga; úplný seznam je dostupný i bez JavaScriptu. Bezeztrátový obrázek se všemi logy vzniká automaticky při sestavení z `lib/partners.ts` a původních souborů v `public/images/partners/`. Pro samostatné obnovení obrázku použijte `npm run partners:atlas`.
 
 Pravý navigační proužek zvětšuje značky podle vzdálenosti kurzoru nebo dotyku a zobrazuje krátký náhled vybrané sekce na desktopu i na mobilu; funguje také klávesnicí. Na mobilu a dotykových zařízeních ho vlevo dole doplňuje skleněné tlačítko Kontakt. Náhledy jsou součástí stránky, nevyžadují další stahování a respektují omezení animací. Záloha předchozí mobilní varianty s tlačítkem Obsah a rohovým vějířem je v `designs/mobile-pie-obsah-backup`.

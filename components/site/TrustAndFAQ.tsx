@@ -12,5 +12,5 @@ export function Trust() {
   </section>;
 }
 export function FAQ() {
-  return <section id="otazky" className="page-section faq-new" aria-labelledby="faq-heading"><div className="section-heading"><h2 id="faq-heading">Časté otázky<span>.</span></h2><p>Praktické odpovědi před první schůzkou.</p></div><div className="faq-list">{defaultFAQ.map(f => <details key={f.id}><summary>{f.question}<span aria-hidden="true">＋</span></summary><p>{f.answer}</p></details>)}</div></section>;
+  return <section id="otazky" className="page-section faq-new" aria-labelledby="faq-heading"><div className="section-heading"><h2 id="faq-heading">Časté otázky<span>.</span></h2><p>Praktické odpovědi před první schůzkou.</p></div><div className="faq-list">{defaultFAQ.map(f => <details id={`otazka-${f.id}`} key={f.id}><summary>{f.question}<span aria-hidden="true">＋</span></summary><p>{f.answer}{f.source && <> <a href={f.source.href} target="_blank" rel="noreferrer">{f.source.label} ↗</a></>}</p></details>)}</div></section>;
 }
