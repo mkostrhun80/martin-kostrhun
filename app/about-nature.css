@@ -1,0 +1,38 @@
+/* The palm photograph supplies the section's sage ground and forest accents. */
+#o-mne {
+  --ink: #243c34;
+  --navy: #243c34;
+  --primary: #3f6453;
+  --purple: #3f6453;
+  --gold: #3f6453;
+  --border: #a6b9aa;
+  color: var(--ink);
+  background: #e2e9df;
+  border-top: 0;
+}
+
+#o-mne .about-portrait {
+  aspect-ratio: 3 / 4;
+  height: auto;
+}
+
+#o-mne .about-portrait img {
+  object-position: center;
+  transform: none;
+  filter: none;
+}
+
+#o-mne .about-role,
+#o-mne .about-meta,
+#o-mne > .eyebrow {
+  color: #3f6453;
+}
+
+#o-mne .site-button {
+  background: #3f6453;
+  color: #fff;
+}
+
+#o-mne .site-button:hover {
+  background: #2d4c3e;
+}

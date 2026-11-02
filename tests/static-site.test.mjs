@@ -42,7 +42,7 @@ test('no public API fetch or database/admin infrastructure remains in the applic
   assert.ok(!pkg.devDependencies.wrangler);
 });
 
-test('section navigation keeps the right magnifying rail on mobile and places glass Kontakt bottom-left', async () => {
+test('section navigation provides a labeled disclosure and touch rail while keeping Kontakt bottom-left', async () => {
   const [component, styles, backup] = await Promise.all([
     readFile('components/site/ScrollContents.tsx', 'utf8'),
     readFile('app/contents-rail.css', 'utf8'),
@@ -51,7 +51,12 @@ test('section navigation keeps the right magnifying rail on mobile and places gl
   assert.doesNotMatch(component, /contents-rail-trigger|mobile-pie-panel/);
   assert.match(component, /className="contents-rail-markers"/);
   assert.match(component, /className="quick-contact"[\s\S]*?>Kontakt<ArrowUpRight/);
-  assert.doesNotMatch(styles, /\.contents-rail-markers,\s*\.contents-rail-preview\s*\{\s*display:\s*none;/);
+  assert.match(component, /aria-controls="contents-section-list"/);
+  assert.match(component, /className="contents-rail-mobile"/);
+  assert.match(component, /hidden=\{!open\}/);
+  assert.doesNotMatch(component, /setPointerCapture|tapOpenedPreview|touchGesture/);
+  assert.match(styles, /min-height: 44px/);
+  assert.match(styles, /overflow-y: auto/);
   assert.match(styles, /\.quick-contact\s*\{[\s\S]*?left:\s*16px;[\s\S]*?background:\s*#ffffff20;/);
   assert.match(backup, /className="contents-rail-trigger"[\s\S]*?<span>Obsah<\/span>/);
 });

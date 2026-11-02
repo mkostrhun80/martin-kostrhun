@@ -1,26 +1,38 @@
-/* Reference: gpt-sidebar.mp4 — local marker magnification and an anchored excerpt. */
+/* Minimal markers disclose the complete section list. */
 .contents-rail { display: contents; }
-.contents-rail-markers { position: fixed; z-index: 81; top: 50%; right: 10px; transform: translateY(-50%); display: flex; flex-direction: column; width: 44px; mix-blend-mode: difference; touch-action: none; user-select: none; -webkit-user-select: none; }
-.contents-rail-marker { --mark-scale: .2; --mark-opacity: .3; display: flex; align-items: center; justify-content: flex-end; width: 44px; height: 22px; padding-right: 6px; color: #fff; }
-.contents-rail-marker[aria-current=location] { --mark-scale: .45; --mark-opacity: 1; }
+.contents-rail-controls { position: fixed; z-index: 81; top: 50%; right: max(10px, env(safe-area-inset-right)); transform: translateY(-50%); width: 52px; color: #14243a; }
+.contents-rail-label, .contents-rail-mobile { border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.contents-rail-label { display: block; width: 52px; min-height: 44px; font-size: 13px; }
+.contents-rail-markers { display: flex; flex-direction: column; width: 52px; }
+.contents-rail-marker { --mark-scale: .2; --mark-opacity: .3; display: flex; align-items: center; justify-content: flex-end; width: 52px; height: 22px; padding-right: 6px; color: inherit; }
+.contents-rail-marker[aria-current=location], .contents-rail-marker[data-active=true] { --mark-scale: .45; --mark-opacity: 1; }
 .contents-rail-mark { display: block; width: 40px; height: 2px; border-radius: 2px; background: currentColor; opacity: var(--mark-opacity); transform: scaleX(var(--mark-scale)); transform-origin: right center; transition: transform 150ms cubic-bezier(.22,1,.36,1), opacity 150ms ease; }
-.contents-rail-marker:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 4px; }
-.contents-rail-preview { position: fixed; z-index: 80; top: calc(50% - var(--rail-half-height, 99px)); right: 68px; width: 300px; padding: 16px 18px; border: 1px solid #14243a16; border-radius: 14px; background: #fffdf9; color: #14243a; box-shadow: 0 8px 28px #14243a14; /* taste-skill-ignore */ opacity: 0; visibility: hidden; pointer-events: none; transform: translate3d(6px,calc(var(--preview-y, 99px) - 50%),0); transition: opacity 120ms ease, transform 160ms cubic-bezier(.22,1,.36,1), visibility 120ms; }
-.contents-rail[data-preview=true] .contents-rail-preview { opacity: 1; visibility: visible; pointer-events: auto; transform: translate3d(0,calc(var(--preview-y, 99px) - 50%),0); }
-.contents-rail-preview::after { content: ''; position: absolute; inset: 0 -20px 0 auto; width: 20px; }
-.contents-preview-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; font-size: 14px; line-height: 1.5; }
-.contents-preview-heading strong { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.contents-preview-heading svg { flex-shrink: 0; color: #586579; }
-.contents-preview-description { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-top: 8px; color: #586579; font-size: 14px; line-height: 1.6; }
+.contents-rail-controls :focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.contents-rail-mobile { display: none; }
+.contents-rail-panel { position: fixed; z-index: 82; top: 50%; right: max(72px, calc(env(safe-area-inset-right) + 62px)); transform: translateY(-50%); width: min(310px, calc(100% - 88px - env(safe-area-inset-right))); max-height: calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); overflow-y: auto; overscroll-behavior: contain; box-sizing: border-box; padding: 18px; border-radius: 24px; background: #ffffff45; color: #14243a; border: 1px solid #ffffffb8; backdrop-filter: blur(12px) saturate(165%); -webkit-backdrop-filter: blur(12px) saturate(165%); box-shadow: inset 0 1px 0 #ffffffc2, inset 0 -1px 0 #ffffff26, 0 12px 36px #14243a1c; }
+.contents-rail-panel[hidden] { display: none; }
+.contents-rail-panel a { box-sizing: border-box; position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; margin-block: 6px; padding: 16px 20px; border: 1px solid transparent; font-size: 15px; line-height: 1.5; border-radius: 14px; text-decoration: none; transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease, color 160ms ease; }
+.contents-rail-panel a svg { flex-shrink: 0; opacity: .5; transition: opacity 160ms ease, transform 160ms ease; }
+.contents-rail-panel a:is(:hover, :focus-visible, [aria-current=location]) svg { opacity: 1; }
+@media(hover:hover) { .contents-rail-panel a:hover svg { transform: translate(1px, -1px); } }
+.contents-rail-panel a[aria-current=location] { background: #ffffff30; color: #243c34; font-weight: 600; }
+.contents-rail-panel a:is(:hover, :focus-visible, [aria-current=location]) {
+  background: #ffffff30;
+  border-color: #ffffffb8;
+  backdrop-filter: blur(6px) saturate(175%);
+  -webkit-backdrop-filter: blur(6px) saturate(175%);
+  box-shadow: inset 0 1px 0 #ffffffeb, inset 1px 0 0 #ffffff45, inset 0 -1px 0 #ffffff45, 0 4px 14px #14243a14;
+}
+.contents-rail-panel a:focus-visible { outline: 2px solid #243c34; outline-offset: -2px; }
+@media(max-width:900px), (hover:none), (pointer:coarse) {
+  .contents-rail-label, .contents-rail-markers { display: none; }
+  .contents-rail-mobile { display: block; width: 52px; padding: 0; touch-action: manipulation; }
+  .contents-mobile-label { display: flex; align-items: center; justify-content: center; min-height: 44px; font-size: 13px; }
+  .contents-mobile-marks { display: flex; flex-direction: column; }
+}
+@media(max-height:300px) { .contents-rail-controls { top: 16px; transform: none; } .contents-mobile-marks, .contents-rail-markers { display: none; } }
 .quick-navigation { display: none; }
 .contents-nojs { display: grid; gap: 12px; }
-
-@media(max-width:900px) {
-  .contents-rail-preview {
-    right: 58px;
-    width: min(280px, calc(100vw - 74px));
-  }
-}
 
 @media(max-width:900px), (hover:none), (pointer:coarse) {
   .quick-navigation { display: contents; }
@@ -46,13 +58,32 @@
   }
   .contents-rail[data-tone=dark] .quick-contact { color: #fffdf9; }
   .quick-navigation a:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
-  body:has(input:focus, textarea:focus, select:focus) :is(.contents-rail-markers, .contents-rail-preview, .quick-contact) { visibility: hidden; pointer-events: none; }
+  body:has(input:focus, textarea:focus, select:focus) :is(.contents-rail-controls, .contents-rail-panel, .quick-contact) { visibility: hidden; pointer-events: none; }
 }
 
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) {
   .quick-contact { background: #f5f2eceb; }
 }
 @media(prefers-reduced-motion:reduce) {
-  .contents-rail-mark, .contents-rail-preview { transition: none; }
+  .contents-rail-mark, .contents-rail-panel { transition: none; }
 }
 @media print { .contents-rail { display: none; } }
+
+/* Match the existing Kontakt glass while keeping text readable over each section. */
+/* The label stays plain; only the disclosed list has a glass surface. */
+.contents-rail-label, .contents-mobile-label { font-weight: 500; }
+.contents-rail[data-controls-tone=dark] .contents-rail-controls { color: #fffdf9; }
+.contents-rail[data-panel-tone=dark] .contents-rail-panel {
+  background: #14243a70;
+  color: #fffdf9;
+  border-color: #ffffff66;
+}
+.contents-rail[data-panel-tone=dark] .contents-rail-panel a[aria-current=location] { background: #ffffff1a; color: #fffdf9; }
+.contents-rail[data-panel-tone=dark] .contents-rail-panel a:is(:hover, :focus-visible) { background: #ffffff2b; border-color: #ffffffa3; }
+.contents-rail[data-panel-tone=dark] .contents-rail-panel a:focus-visible { outline-color: #fffdf9; }
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) {
+  .contents-rail-panel { background: #f5f2ec; color: #14243a; }
+  .contents-rail[data-panel-tone=dark] .contents-rail-panel { background: #14243a; }
+}
+
+@media(prefers-reduced-motion:reduce) { .contents-rail-panel a, .contents-rail-panel a svg { transition: none; } .contents-rail-panel a:hover svg { transform: none; } }

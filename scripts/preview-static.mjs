@@ -1,4 +1,4 @@
-// Loopback-only static preview. No administration, form processing or database.
+// Local static preview. Set HOST explicitly to opt into LAN access.
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { resolve, relative, isAbsolute, sep, extname } from 'node:path';
@@ -24,9 +24,10 @@ const server = createServer(async (req, res) => {
   } catch { res.writeHead(404, { ...securityHeaders, 'Content-Type': 'text/plain; charset=utf-8' }); res.end('Stránka nenalezena'); }
 });
 const requestedPort = Number(process.env.PORT || 4173);
+const host = process.env.HOST || '127.0.0.1';
 server.once('error', error => {
   if (!['EADDRINUSE', 'EACCES'].includes(error.code) || !requestedPort) throw error;
-  console.log(`Port ${requestedPort} unavailable, choosing a free local port.`); server.listen(0, '127.0.0.1');
+  console.log(`Port ${requestedPort} unavailable, choosing a free local port.`); server.listen(0, host);
 });
-server.on('listening', () => console.log(`Preview: http://127.0.0.1:${server.address().port}${base}/`));
-server.listen(requestedPort, '127.0.0.1');
+server.on('listening', () => console.log(`Preview: http://${host}:${server.address().port}${base}/`));
+server.listen(requestedPort, host);
