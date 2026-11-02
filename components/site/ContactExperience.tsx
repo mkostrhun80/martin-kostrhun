@@ -110,7 +110,7 @@ function ContactCard({ model, formRef }: { model: Model; formRef: RefObject<HTML
     </div>
     <aside className="combined-aside" aria-label="Martin Kostrhun a kontaktní údaje">
       <figure className="combined-portrait">
-        <img src={assets.heroPortrait} alt={assets.portraitAlt} width={1280} height={1920} loading="lazy"/>
+        <img src={assets.contactPortrait} alt={assets.portraitAlt} width={1280} height={1920} loading="lazy"/>
       </figure>
       <div className="combined-contact-details">
         <a href={`mailto:${siteConfig.email}`} className="combined-contact-row"><span className="contact-detail-icon"><Mail size={20} aria-hidden="true"/></span><span><strong>E-mail</strong><span>{siteConfig.email}</span></span><ArrowUpRight size={17} aria-hidden="true"/></a>
