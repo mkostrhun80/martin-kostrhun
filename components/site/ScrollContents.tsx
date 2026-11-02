@@ -46,7 +46,8 @@ export function ScrollContents() {
   const suppressFocus = useRef(false);
   const lastPointerType = useRef('mouse');
   const tapOpenedPreview = useRef(false);
-  const touchGesture = useRef<{ id: number; startY: number; scrubbed: boolean } | null>(null);
+  const touchGesture = useRef<{ id: number; startY: number; startIndex: number; scrubbed: boolean } | null>(null);
+  const suppressClickAfterScrub = useRef(false);
 
   const closePreview = useCallback(() => {
     if (openTimer.current) clearTimeout(openTimer.current);
@@ -167,6 +168,8 @@ export function ScrollContents() {
       onPointerEnter={() => { railTop.current = null; cancelClose(); }}
       onPointerLeave={event => leave(event.pointerType)}
       onPointerDown={event => {
+        if (!event.isPrimary) return;
+        suppressClickAfterScrub.current = false;
         lastPointerType.current = event.pointerType;
         if (event.pointerType === 'mouse') return;
         if (openTimer.current) clearTimeout(openTimer.current);
@@ -175,7 +178,7 @@ export function ScrollContents() {
         railTop.current = null;
         const pos = positionAt(event.clientY), idx = Math.round(pos);
         tapOpenedPreview.current = preview.current !== idx;
-        touchGesture.current = { id: event.pointerId, startY: event.clientY, scrubbed: false };
+        touchGesture.current = { id: event.pointerId, startY: event.clientY, startIndex: idx, scrubbed: false };
         paint(pos); show(idx);
       }}
       onPointerMove={event => {
@@ -183,27 +186,41 @@ export function ScrollContents() {
         if (event.pointerType === 'mouse') { pointerMove(event.clientY); return; }
         const gesture = touchGesture.current;
         if (!gesture || gesture.id !== event.pointerId) return;
-        if (!gesture.scrubbed && Math.abs(event.clientY - gesture.startY) > 5) {
+        const position = positionAt(event.clientY);
+        if (!gesture.scrubbed && (Math.abs(event.clientY - gesture.startY) > 5 || Math.round(position) !== gesture.startIndex)) {
           gesture.scrubbed = true;
           rail.current?.setPointerCapture(event.pointerId);
         }
-        pendingPosition.current = positionAt(event.clientY);
+        pendingPosition.current = position;
         if (frame.current) return;
         frame.current = requestAnimationFrame(() => {
           frame.current = 0; paint(pendingPosition.current); show(Math.round(pendingPosition.current));
         });
       }}
       onPointerUp={event => {
-        if (touchGesture.current?.id === event.pointerId) {
-          if (rail.current?.hasPointerCapture(event.pointerId)) rail.current.releasePointerCapture(event.pointerId);
-          touchGesture.current = null;
-        }
+        const gesture = touchGesture.current;
+        if (!gesture || gesture.id !== event.pointerId) return;
+        touchGesture.current = null;
+        if (rail.current?.hasPointerCapture(event.pointerId)) rail.current.releasePointerCapture(event.pointerId);
+        // Use the release position, even if the last preview animation frame has not run yet.
+        const index = Math.round(positionAt(event.clientY));
+        if (!gesture.scrubbed && Math.abs(event.clientY - gesture.startY) <= 5 && index === gesture.startIndex) return;
+        markers.current[index]?.click();
+        suppressClickAfterScrub.current = true;
       }}
       onPointerCancel={event => {
         if (touchGesture.current?.id === event.pointerId) {
           if (rail.current?.hasPointerCapture(event.pointerId)) rail.current.releasePointerCapture(event.pointerId);
           touchGesture.current = null;
+          closePreview();
         }
+      }}
+      onClickCapture={event => {
+        // A browser may still synthesize a click for the original touch after a drag.
+        if (!suppressClickAfterScrub.current || event.detail === 0) return;
+        suppressClickAfterScrub.current = false;
+        event.preventDefault();
+        event.stopPropagation();
       }}>
       {siteSections.map((section, index) => <a key={section.id} ref={element => { markers.current[index] = element; }} className="contents-rail-marker"
         href={`#${section.id}`} aria-label={`Přejít na sekci ${section.label}`} aria-current={active === section.id ? 'location' : undefined}
