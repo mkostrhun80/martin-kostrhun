@@ -29,8 +29,8 @@
 #sluzby .service-photo-anchor img { width: 100%; height: 100%; object-fit: cover; object-position: center; transform: none; filter: none; }
 #sluzby .service-chapter-protect .service-chapter-heading { grid-column: 2; grid-row: 1; }
 #sluzby .service-chapter-protect .service-chapter-items { grid-column: 1; grid-row: 1; }
-#sluzby .service-chapter-protect .service-photo-anchor { margin-left: auto; }
-.service-photo-traveller { position: fixed; left: 0; top: 0; z-index: 8; width: 0; height: 0; visibility: hidden; pointer-events: none; border-radius: 22px; overflow: hidden; contain: layout paint; }
+#sluzby .service-chapter-protect .service-photo-anchor { margin-left: 0; }
+.service-photo-traveller { position: fixed; left: 0; top: 0; z-index: 8; width: 0; height: 0; visibility: hidden; pointer-events: none; border-radius: 22px; overflow: hidden; background: var(--light-brown, #c4a484); contain: layout paint; }
 .service-photo-traveller img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
 #sluzby[data-photo-journey=active] .service-photo-anchor img { visibility: hidden; }
 #sluzby[data-photo-journey=active] .service-photo-traveller { will-change: transform; }
@@ -53,5 +53,15 @@
 #sluzby .service-chapter-protect .service-chapter-heading > .service-photo-anchor {
   order: 1;
   flex-shrink: 0;
-  margin-top: 28px;
+  align-self: flex-start;
+  margin: 28px 0 0;
+}
+
+/* The destination stays under the heading, with a quieter, more distant portrait. */
+#sluzby .service-chapter-protect .service-photo-anchor { background: transparent; box-shadow: none; }
+#sluzby .service-chapter-protect .service-photo-anchor img {
+  object-fit: contain;
+  transform: scale(.88);
+  transform-origin: center;
+  border-radius: 22px;
 }
