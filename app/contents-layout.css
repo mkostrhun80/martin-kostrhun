@@ -113,3 +113,25 @@
   .index-balanced .index-grid > .index-contact { min-height: 96px; gap: 4px 14px; }
   .index-balanced .index-contact .index-label { font-size: 17px; }
 }
+
+/* A portrait-shaped crop of foto2 retains its full height and the full figure. */
+#obsah.index-balanced .index-photo {
+  align-self: center;
+  justify-self: center;
+  width: min(100%, 480px);
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  aspect-ratio: 3 / 4;
+  margin: 0;
+}
+#obsah.index-balanced .index-photo img {
+  width: 100%; height: 100%; object-fit: cover; object-position: 54% 50%;
+  transform: none; scale: none; filter: none;
+}
+@media (min-width: 761px) and (max-width: 1000px) {
+  #obsah.index-balanced .index-photo { width: 100%; aspect-ratio: 16 / 9; }
+}
+@media (max-width: 760px) {
+  #obsah.index-balanced .index-photo { width: min(100%, 400px); aspect-ratio: 4 / 5; }
+}

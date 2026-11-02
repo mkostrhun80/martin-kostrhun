@@ -19,3 +19,23 @@
 @media(max-width:900px){.service-chapter{gap:5vw;grid-template-columns:minmax(0,.85fr) minmax(0,1fr)}.service-chapter-heading h2{font-size:10vw}.service-chapter-heading figure{width:100%}.service-item{grid-template-columns:27px minmax(0,1fr);gap:14px}.service-item-number{font-size:30px}.service-item h3{font-size:29px}.service-item-short{font-size:17px}}
 @media(max-width:760px){.services-editorial{padding-bottom:0}.services-statement{font-size:14vw;margin-bottom:30px}.service-chapter{display:block;padding-bottom:55px}.service-chapter-heading{position:static;margin-bottom:35px}.service-chapter-heading h2{font-size:22vw;margin:18px 0 25px}.service-chapter-heading figure{width:70%;max-height:210px;margin-left:auto}.service-item{grid-template-columns:28px minmax(0,1fr);gap:15px;min-height:0;padding:32px 0}.service-item h3{font-size:31px}.service-item-short{font-size:18px}.service-item-description{font-size:14px}.service-item .text-link{font-size:10px;margin-top:15px}.service-chapter-protect{margin:0 -22px;padding:55px 22px}}
 @media(prefers-reduced-motion:reduce){.service-item::before{transform:scaleX(1)}}
+
+/* The same photo changes columns at the boundary of the two chapters. */
+#sluzby .service-chapter-heading .service-photo-anchor {
+  display: block; width: min(100%, 360px, calc(58svh * 2 / 3)); height: auto;
+  max-width: none; max-height: none; aspect-ratio: 2 / 3; margin: 28px 0 0;
+  border-radius: 22px; overflow: hidden; background: #e3d9cc;
+}
+#sluzby .service-photo-anchor img { width: 100%; height: 100%; object-fit: cover; object-position: center; transform: none; filter: none; }
+#sluzby .service-chapter-protect .service-chapter-heading { grid-column: 2; grid-row: 1; }
+#sluzby .service-chapter-protect .service-chapter-items { grid-column: 1; grid-row: 1; }
+#sluzby .service-chapter-protect .service-photo-anchor { margin-left: auto; }
+.service-photo-traveller { position: fixed; left: 0; top: 0; z-index: 8; width: 0; height: 0; visibility: hidden; pointer-events: none; border-radius: 22px; overflow: hidden; contain: layout paint; }
+.service-photo-traveller img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+#sluzby[data-photo-journey=active] .service-photo-anchor img { visibility: hidden; }
+#sluzby[data-photo-journey=active] .service-photo-traveller { will-change: transform; }
+@media (max-width: 760px) {
+  #sluzby .service-chapter-heading .service-photo-anchor { width: min(78%, 300px); margin-inline: auto; }
+  .service-photo-traveller { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .service-photo-traveller { display: none; } }
