@@ -7,10 +7,10 @@ export const services = [
  {id:'podnikani', group:'Chránit', title:'Podnikatelské finance', short:'Prostor věnovat se podnikání.', description:'Pomáhám řešit finanční ochranu podnikatelů, pojištění odpovědnosti, majetku a další související oblasti.', position:'65% 25%'},
 ];
 export const steps = [
- ['Úvodní schůzka','Nejdřív potřebuji vědět, kde jste a kam se chcete dostat.'],
- ['Návrh možností','Dívám se na dostupné možnosti a vysvětluji jejich výhody i rizika.'],
- ['Realizace','Vybrané řešení společně uvedeme do praxe. Provedu vás jednotlivými kroky i potřebnými dokumenty.'],
- ['Dlouhodobá péče','Spolupráce podpisem smlouvy nekončí. Finance se mění spolu s vaším životem.'],
+ ["Úvodní schůzka","Představím vám sebe i společnost eDO finance. Společně projdeme vaši aktuální finanční situaci, co už máte vyřešené a co právě potřebujete. Ujasníme si také vaše přání a plány do budoucna."],
+ ["Návrh možností","Na základě vašich potřeb a přání připravím návrh řešení a porovnám vhodné možnosti na trhu. Srozumitelně vám vysvětlím jejich přínosy, náklady i případná rizika. Vy se pak v klidu rozhodnete, co vám dává smysl a zda chcete návrh realizovat."],
+ ["Realizace","Pokud budete s návrhem souhlasit, postarám se o jeho realizaci. Provedu vás potřebnými kroky i dokumenty, aby se z vašich plánů stalo konkrétní řešení."],
+ ["Dlouhodobá péče","Podpisem smlouvy naše spolupráce teprve začíná. Vaše produkty budu pravidelně kontrolovat a porovnávat s aktuální nabídkou na trhu. Budu vás informovat o novinkách a vhodných příležitostech a podle potřeby navrhnu úpravy. Chci, abyste zbytečně nepřepláceli a vaše řešení odpovídalo tomu, co v dané životní situaci skutečně potřebujete."],
 ];
 export const documents = [
  {title:'Právní informace', href:'/dokumenty/pravni-informace'},
