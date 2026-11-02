@@ -65,3 +65,28 @@
   transform-origin: center;
   border-radius: 22px;
 }
+
+/* Mirror the build chapter so both card/photo gaps use the same grid tracks. */
+@media (min-width: 761px) {
+  #sluzby .service-chapter-protect {
+    grid-template-columns: minmax(0, 1fr) minmax(0, .82fr);
+  }
+  #sluzby .service-chapter-protect .service-chapter-heading {
+    align-items: flex-end;
+  }
+  #sluzby .service-chapter-protect .service-chapter-heading > h3 {
+    max-width: 100%;
+  }
+  #sluzby .service-chapter-protect .service-chapter-heading > .service-photo-anchor {
+    align-self: flex-end;
+  }
+  /* Keep the visible left edge on the mirrored spacing despite the zoom-out. */
+  #sluzby .service-chapter-protect .service-photo-anchor img {
+    transform-origin: left center;
+  }
+}
+@media (min-width: 761px) and (max-width: 900px) {
+  #sluzby .service-chapter-protect {
+    grid-template-columns: minmax(0, 1fr) minmax(0, .85fr);
+  }
+}
