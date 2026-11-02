@@ -54,7 +54,7 @@ export function ServicePhotoTransition() {
     const onScroll = () => { if (visible && !media.matches && !document.hidden) schedule(); };
     const observer = new IntersectionObserver(entries => {
       visible = entries[0].isIntersecting;
-      if (visible) stage.querySelector('img')!.loading = 'eager';
+      if (visible) pictures.forEach(image => { image.loading = 'eager'; });
       schedule();
     });
     observer.observe(section);
