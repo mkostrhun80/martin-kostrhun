@@ -36,3 +36,17 @@
 #o-mne .site-button:hover {
   background: #2d4c3e;
 }
+
+#o-mne .about-copy > .about-quote {
+  max-width: 28ch;
+  margin: 32px auto;
+  color: #737b75;
+  font-size: clamp(24px, 2.2vw, 30px);
+  line-height: 1.45;
+  text-align: center;
+}
+
+#o-mne .about-quote em {
+  color: inherit;
+  font-style: italic;
+}
