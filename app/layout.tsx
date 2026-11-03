@@ -34,6 +34,7 @@ import "./appointment-booking.css";
 import "./quality-redesign.css";
 import "./contents-rail.css";
 import "./about-nature.css";
+import "./services-grid.css";
 export const metadata: Metadata = { description: siteConfig.description, icons: { icon: sitePath('/favicon.svg'), shortcut: sitePath('/favicon.svg') } };
 export default function RootLayout({ children }: Readonly<{
     children: React.ReactNode;

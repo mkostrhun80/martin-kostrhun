@@ -1,0 +1,16 @@
+/* One service section: six equal cards, with stable anchors for direct links. */
+#sluzby.services-unified { padding-block: clamp(56px, 6vw, 96px); background: var(--paper); }
+#sluzby .services-intro { margin-bottom: 40px; }
+#sluzby .services-intro h2 { font-size: clamp(64px, 7vw, 100px); }
+.services-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+#sluzby .services-card { display: flex; flex-direction: column; align-items: flex-start; gap: 0; min-width: 0; min-height: 260px; margin: 0; padding: 28px; border: 0; border-radius: 24px; background: #ffffff80; color: var(--navy); box-shadow: inset 0 1px 0 #fff; }
+#sluzby .services-card h3 { font-family: Display, sans-serif; font-size: clamp(30px, 2.8vw, 42px); line-height: 1.06; letter-spacing: -.025em; text-transform: uppercase; margin: 0; }
+#sluzby .services-card .service-item-description { flex: 1; max-width: none; font-size: 15px; line-height: 1.7; color: #455366; margin: 18px 0 24px; }
+#sluzby .services-card .site-button { margin-top: auto; max-width: 100%; min-height: 44px; }
+@media(max-width:1100px) { .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; } }
+@media(max-width:600px) {
+  .services-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  #sluzby .services-card { min-height: 0; padding: 26px; }
+  #sluzby .services-intro { margin-bottom: 30px; }
+  #sluzby .services-intro > p { max-width: none; }
+}
