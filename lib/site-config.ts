@@ -4,7 +4,7 @@ import { sitePath } from './site-path';
 export const assets = {
   heroPortrait: sitePath('/images/martin-hero-foto3.webp'),
   heroLensPortrait: sitePath('/images/martin-hero-foto3.webp'),
-  contentsPortrait: sitePath('/images/martin-contents-foto6.webp'),
+  contentsPortrait: sitePath('/images/martin-services-foto4.webp'),
   aboutPortrait: sitePath('/images/martin-strom.jpg'),
   servicePortrait: sitePath('/images/martin-services-foto4.webp'),
   serviceAlt: 'Martin Kostrhun na terase u prosklené stěny',
