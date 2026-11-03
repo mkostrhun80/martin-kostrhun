@@ -15,7 +15,7 @@ export function Contents() {
   const copy = useRef<HTMLDivElement>(null);
   useContentsTextPopups(copy, indexSections.map(section => section.id).join(','));
   return <section id="obsah" className="index-section index-scene index-balanced page-section" aria-labelledby="contents-heading">
-    <figure className="index-photo journey-destination"><img src={assets.contentsPortrait} alt={assets.contentsAlt} width="1600" height="900" loading="eager" draggable={false}/></figure>
+    <figure className="index-photo journey-destination"><img src={assets.contentsPortrait} alt={assets.contentsAlt} width="1365" height="2048" loading="eager" draggable={false}/></figure>
     <div ref={copy} className="index-copy"><div className="section-heading"><h2 id="contents-heading">Na webu najdete<span>.</span></h2><p>Vyberte si, co vás zajímá.</p></div>
       <nav className="index-grid" aria-label="Rychlé odkazy na části webu">{indexSections.map(s => <a key={s.id} className={s.id === 'kontakt' ? 'index-contact' : 'index-card'} href={`#${s.id}`}><span className="index-icon"><SectionIcon id={s.id}/></span><span className="index-label">{s.label}<ArrowUpRight size={18} aria-hidden="true"/></span><p>{s.description}</p></a>)}</nav>
     </div>
