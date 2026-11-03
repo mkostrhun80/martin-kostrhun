@@ -6,11 +6,11 @@ import { safeBookingUrl, liveBookingEvents } from '../lib/booking-config.ts';
 import { readPreferences, preferenceRecord, PRIVACY_MAX_AGE } from '../lib/privacy-preferences.ts';
 import { reportOnlyPolicy } from '../scripts/static-headers.mjs';
 
-test('one ordered section list places cooperation after contents and FAQ directly before contact', () => {
-  assert.deepEqual(siteSections.map(s => s.id), ['domu', 'obsah', 'spoluprace', 'o-mne', 'sluzby', 'otazky', 'kontakt', 'zkusenosti', 'zazemi']);
+test('one ordered section list places services after contents and FAQ directly before contact', () => {
+  assert.deepEqual(siteSections.map(s => s.id), ['domu', 'obsah', 'sluzby', 'o-mne', 'spoluprace', 'otazky', 'kontakt', 'zkusenosti', 'zazemi']);
   assert.equal(new Set(siteSections.map(s => s.id)).size, siteSections.length);
   assert.deepEqual(contentSections.map(s => s.id), siteSections.slice(2).map(s => s.id));
-  assert.deepEqual(indexSections.map(s => s.id), ['spoluprace', 'o-mne', 'sluzby', 'otazky', 'kontakt']);
+  assert.deepEqual(indexSections.map(s => s.id), ['sluzby', 'o-mne', 'spoluprace', 'otazky', 'kontakt']);
 });
 test('booking only accepts an exact HTTPS Cal.com event and defaults to unpublished', () => {
   assert.equal(safeBookingUrl('https://cal.com/example/consultation?utm=tracking#x'), 'https://cal.com/example/consultation');
