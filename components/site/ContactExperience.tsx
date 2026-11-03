@@ -73,6 +73,9 @@ function ContactCard({ model, formRef }: { model: Model; formRef: RefObject<HTML
   const [bookingOpen, setBookingOpen] = useState(false);
   const focusMessage = useRef(false);
   return <div className="combined-layout">
+    <aside className="combined-aside" aria-label="Martin Kostrhun">
+      <figure className="combined-portrait"><img src={assets.contactPortrait} alt={assets.portraitAlt} width={1280} height={1920} loading="lazy" decoding="async"/></figure>
+    </aside>
     <div className="combined-workspace">
       <Form model={model} formRef={formRef} className="nocturne-card combined-form">
         <header className="combined-intro">
@@ -103,21 +106,16 @@ function ContactCard({ model, formRef }: { model: Model; formRef: RefObject<HTML
         <Fields model={model}/>
         <Field model={model} field="topic" label="O čem si napíšeme?" select/>
         <Field model={model} field="message" label="Vaše zpráva" placeholder="Dobrý den, Martine, rád/a bych s vámi probral/a…" rows={4}/>
-        {formsReady ? <CaptchaGate onToken={model.setCaptchaToken} resetKey={model.captchaReset}/> : <p className="form-note">Zprávu mi zatím pošlete přímo na <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>.</p>}
-        <div className="nocturne-form-footer"><span className="character-count">{draft.message.length.toLocaleString('cs-CZ')} / 3 000</span><SendButton model={model} className="sand-button">Odeslat zprávu</SendButton></div>
+        {formsReady ? <CaptchaGate onToken={model.setCaptchaToken} resetKey={model.captchaReset}/> : <p className="form-note">Zprávu mi zatím pošlete přímo na <a href={'mailto:' + siteConfig.email}>{siteConfig.email}</a>.</p>}
+        <div className="nocturne-form-footer"><SendButton model={model} className="sand-button">Odeslat zprávu</SendButton><span className="character-count">{draft.message.length.toLocaleString('cs-CZ')} / 3 000</span></div>
         <Privacy/>
       </Form>
     </div>
-    <aside className="combined-aside" aria-label="Martin Kostrhun a kontaktní údaje">
-      <figure className="combined-portrait">
-        <img src={assets.heroPortrait} alt={assets.portraitAlt} width={1280} height={1920} loading="lazy"/>
-      </figure>
-      <div className="combined-contact-details">
-        <a href={`mailto:${siteConfig.email}`} className="combined-contact-row"><span className="contact-detail-icon"><Mail size={20} aria-hidden="true"/></span><span><strong>E-mail</strong><span>{siteConfig.email}</span></span><ArrowUpRight size={17} aria-hidden="true"/></a>
-        <a href={siteConfig.phoneHref} className="combined-contact-row"><span className="contact-detail-icon"><Phone size={20} aria-hidden="true"/></span><span><strong>Telefon</strong><span>{siteConfig.phone}</span></span><ArrowUpRight size={17} aria-hidden="true"/></a>
-        <div className="combined-contact-row"><span className="contact-detail-icon"><MapPin size={20} aria-hidden="true"/></span><span><strong>Kde se potkáme</strong><span>{siteConfig.address}<br/>{siteConfig.city}</span></span></div>
-      </div>
-    </aside>
+    <div className="combined-contact-details">
+      <a href={'mailto:' + siteConfig.email} className="combined-contact-row"><Mail size={19} aria-hidden="true"/><span><strong>E-mail</strong><span>{siteConfig.email}</span></span><ArrowUpRight size={16} aria-hidden="true"/></a>
+      <a href={siteConfig.phoneHref} className="combined-contact-row"><Phone size={19} aria-hidden="true"/><span><strong>Telefon</strong><span>{siteConfig.phone}</span></span><ArrowUpRight size={16} aria-hidden="true"/></a>
+      <div className="combined-contact-row"><MapPin size={19} aria-hidden="true"/><span><strong>Kde se potkáme</strong><span>{siteConfig.address}, {siteConfig.city}</span></span></div>
+    </div>
   </div>;
 }
 

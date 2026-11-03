@@ -2,7 +2,7 @@ import { steps } from '@/lib/content';
 import { AppointmentLink } from './AppointmentLink';
 import { ButtonLabel } from './ButtonLabel';
 
-const stepDetails = ['Osobně i online', 'Podle vašich cílů', 'Společně', 'Průběžně'];
+const stepDetails = ['Analýza', 'Projekt', 'Společně', 'Servis'];
 
 export function Cooperation() {
   return <section id="spoluprace" className="section cooperation" aria-labelledby="cooperation-heading">

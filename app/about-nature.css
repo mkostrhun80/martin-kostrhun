@@ -36,3 +36,29 @@
 #o-mne .site-button:hover {
   background: #2d4c3e;
 }
+
+#o-mne .about-copy > .about-quote {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 430px;
+  min-width: 0;
+  margin: 28px 0 32px;
+  color: #5f6962;
+  font-size: 15px;
+  line-height: 1.8;
+  text-align: justify;
+  text-align-last: left;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+#o-mne .about-quote em {
+  display: block;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  font-style: italic;
+  white-space: normal;
+}
+
+#o-mne .about-copy > p:not(.eyebrow) { text-align: justify; text-align-last: left; hyphens: auto; }

@@ -2,13 +2,15 @@ import { sitePath } from './site-path';
 
 // Web-optimized copies of the owner-supplied original photographs.
 export const assets = {
-  heroPortrait: sitePath('/images/DSC01657-original.jpg'),
-  heroLensPortrait: sitePath('/images/DSC01657-original.jpg'),
-  contentsPortrait: sitePath('/images/DSC01608-original.jpg'),
+  heroPortrait: sitePath('/images/martin-hero-foto3.webp'),
+  heroLensPortrait: sitePath('/images/martin-hero-foto3.webp'),
+  contentsPortrait: sitePath('/images/martin-contents-foto6.webp'),
   aboutPortrait: sitePath('/images/martin-strom.jpg'),
+  servicePortrait: sitePath('/images/martin-services-foto4.webp'),
+  serviceAlt: 'Martin Kostrhun na terase u prosklené stěny',
   editorialPortrait01: sitePath('/images/DSC01638-original.jpg'),
   editorialPortrait02: sitePath('/images/DSC01624-original.jpg'),
-  contactPortrait: sitePath('/images/DSC01638-original.jpg'),
+  contactPortrait: sitePath('/images/DSC01657-original.jpg'),
   isPlaceholder: false,
   portraitAlt: 'Martin Kostrhun, finanční specialista',
   contentsAlt: 'Martin Kostrhun na terase',

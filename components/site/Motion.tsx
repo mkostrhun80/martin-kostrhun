@@ -40,6 +40,7 @@ export function Motion() {
         originals.forEach((image, i) => {
           const style = getComputedStyle(image);
           images[i].style.objectPosition = style.objectPosition;
+          images[i].style.objectFit = style.objectFit;
           images[i].style.filter = style.filter;
         });
         const end = { x: tr.left + tr.width / 2, y: tr.top + scrollY + tr.height / 2 };
