@@ -3,7 +3,7 @@
 #sluzby .services-intro { margin-bottom: 40px; }
 #sluzby .services-intro h2 { font-size: clamp(64px, 7vw, 100px); }
 .services-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
-#sluzby .services-card { display: flex; flex-direction: column; align-items: flex-start; gap: 0; min-width: 0; min-height: 260px; margin: 0; padding: 28px; border: 0; border-radius: 24px; background: var(--service-surface, #ffffff80); color: var(--navy); box-shadow: inset 0 1px 0 #fff; }
+#sluzby .services-card { display: flex; flex-direction: column; align-items: flex-start; gap: 0; min-width: 0; min-height: 260px; margin: 0; padding: 28px; border: 1px solid var(--glass-line); border-radius: 24px; background: linear-gradient(145deg, rgba(255, 255, 255, .65), rgba(255, 255, 255, .26)); color: var(--navy); box-shadow: var(--glass-shadow); }
 #sluzby .services-card h3 { font-family: Display, sans-serif; font-size: clamp(30px, 2.8vw, 42px); line-height: 1.06; letter-spacing: -.025em; text-transform: uppercase; margin: 0; }
 #sluzby .services-card .service-item-description { flex: 1; max-width: none; font-size: 15px; line-height: 1.7; color: #455366; margin: 18px 0 24px; }
 #sluzby .services-card .site-button { margin-top: auto; max-width: 100%; min-height: 44px; }
@@ -15,13 +15,8 @@
   #sluzby .services-intro > p { max-width: none; }
 }
 
-/* Quiet, distinct tones identify each service without splitting the section. */
-#sluzba-investice { --service-surface: #dce8d9; --service-ink: #304e3b; }
-#sluzba-bydleni { --service-surface: #efe0c9; --service-ink: #745333; }
-#sluzba-plan { --service-surface: #dbe5ef; --service-ink: #334f6d; }
-#sluzba-pojisteni { --service-surface: #d6e5e2; --service-ink: #2e5958; }
-#sluzba-stari { --service-surface: #e7e8d3; --service-ink: #555d36; }
-#sluzba-podnikani { --service-surface: #e6dbd0; --service-ink: #665043; }
-#sluzby .services-card h3 { color: var(--service-ink, var(--navy)); }
-#sluzby .services-card .site-button { background: #ffffff66; color: var(--service-ink, var(--navy)); }
-#sluzby .services-card .site-button:hover { background: var(--service-ink, var(--navy)); color: #fffdf9; }
+/* All service cards share the site's cream, navy and light-brown treatment.
+   Translucent surfaces keep the section's existing contour motif visible. */
+#sluzby .services-card h3 { color: var(--navy); }
+#sluzby .services-card .site-button { background: var(--light-brown); color: var(--navy); }
+#sluzby .services-card .site-button:is(:hover, :focus-visible) { background: var(--navy); color: var(--warm-white); }
