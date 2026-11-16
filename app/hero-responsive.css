@@ -72,13 +72,17 @@
   }
   .hero-signature .hero-note { position: relative; inset: auto!important; justify-content: center; }
   .hero-signature .hero-actions { width: 100%; align-items: center; }
-  .hero-signature .hero-appointment { width: min(100%, 340px); min-height: 54px!important; padding: 17px 24px!important; font-size: 12px!important; }
+  .hero-signature .hero-appointment {
+    width: min(100%, 340px);
+    min-height: 54px!important;
+    margin-inline: auto;
+    padding: 17px 24px!important;
+    font-size: 12px!important;
+  }
 }
 @media(min-width:561px) and (max-width:1000px) and (max-height:600px) {
   .hero-signature { height: max(520px, 100svh)!important; min-height: max(520px, 100svh)!important; padding-top: 32px; }
   .hero-signature .hero-artwork { grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); gap: 28px; }
   .hero-signature .hero-name { font-size: min(25.5cqw, 190px); text-align: left; }
   .hero-signature .hero-photo-layer { justify-self: end; width: min(100%, calc((max(100svh, 520px) - 220px) * .8)); height: auto; max-height: none; }
-  .hero-signature .hero-note { justify-content: flex-start; }
-  .hero-signature .hero-actions { width: auto; }
 }

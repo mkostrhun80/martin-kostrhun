@@ -27,10 +27,13 @@
 @media(max-width:900px), (hover:none), (pointer:coarse) {
   .contents-rail-label, .contents-rail-markers { display: none; }
   .contents-rail-mobile { display: block; width: 52px; padding: 0; touch-action: manipulation; }
-  .contents-mobile-label { display: flex; align-items: center; justify-content: center; min-height: 44px; font-size: 13px; }
   .contents-mobile-marks { display: flex; flex-direction: column; }
 }
-@media(max-height:300px) { .contents-rail-controls { top: 16px; transform: none; } .contents-mobile-marks, .contents-rail-markers { display: none; } }
+@media(max-height:300px) {
+  .contents-rail-controls { top: 16px; transform: none; }
+  .contents-rail-markers { display: none; }
+  .contents-mobile-marks .contents-rail-marker { height: 14px; }
+}
 .quick-navigation { display: none; }
 .contents-nojs { display: grid; gap: 12px; }
 
@@ -71,7 +74,7 @@
 
 /* Match the existing Kontakt glass while keeping text readable over each section. */
 /* The label stays plain; only the disclosed list has a glass surface. */
-.contents-rail-label, .contents-mobile-label { font-weight: 500; }
+.contents-rail-label { font-weight: 500; }
 .contents-rail[data-controls-tone=dark] .contents-rail-controls { color: #fffdf9; }
 .contents-rail[data-panel-tone=dark] .contents-rail-panel {
   background: #14243a70;

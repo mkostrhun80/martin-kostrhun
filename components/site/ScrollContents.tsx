@@ -150,7 +150,6 @@ export function ScrollContents() {
       </nav>
       <button ref={mobileTrigger} className="contents-rail-mobile" type="button" aria-label="Obsah" aria-expanded={open} aria-controls="contents-section-list"
         onClick={() => { cancelClose(); setOpen(value => !value); }} onKeyDown={triggerKeys}>
-        <span className="contents-mobile-label">Obsah</span>
         <span className="contents-mobile-marks" aria-hidden="true">{siteSections.map(section => <span key={section.id} className="contents-rail-marker" data-active={active === section.id}><span className="contents-rail-mark"/></span>)}</span>
       </button>
     </div>
@@ -163,9 +162,11 @@ export function ScrollContents() {
           if (next !== null) { event.preventDefault(); links.current[next]?.focus(); }
         }}><span>{section.label}</span><ArrowUpRight size={16} aria-hidden="true"/></a>)}
     </nav>
-    <nav className="quick-navigation" aria-label="Rychlé ovládání webu">
-      <a className="quick-contact" href="#kontakt" onClick={() => choose('kontakt')}>Kontakt<ArrowUpRight size={16} aria-hidden="true"/></a>
-    </nav>
+    {active !== 'domu' && (
+      <nav className="quick-navigation" aria-label="Rychlé ovládání webu">
+        <a className="quick-contact" href="#kontakt" onClick={() => choose('kontakt')}>Kontakt<ArrowUpRight size={16} aria-hidden="true"/></a>
+      </nav>
+    )}
     <noscript><style>{'.contents-rail{display:block;position:static;transform:none;padding:24px 5vw}.contents-rail-controls,.contents-rail-panel,.quick-navigation{display:none!important}'}</style><nav className="contents-nojs" aria-label="Části webu bez JavaScriptu">{siteSections.map(section => <a key={section.id} href={`#${section.id}`}>{section.label}</a>)}</nav></noscript>
   </aside>;
 }
