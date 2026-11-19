@@ -42,17 +42,21 @@ test('no public API fetch or database/admin infrastructure remains in the applic
   assert.ok(!pkg.devDependencies.wrangler);
 });
 
-test('persistent header and mobile drawer provide labeled controls, escape support and minimum touch targets', async () => {
-  const [header, styles] = await Promise.all([
-    readFile('components/site/SiteHeader.tsx', 'utf8'),
-    readFile('app/sections.css', 'utf8'),
+test('section navigation provides a labeled disclosure and touch rail while keeping Kontakt bottom-left', async () => {
+  const [component, styles, backup] = await Promise.all([
+    readFile('components/site/ScrollContents.tsx', 'utf8'),
+    readFile('app/contents-rail.css', 'utf8'),
+    readFile('designs/mobile-pie-obsah-backup/ScrollContents.tsx', 'utf8'),
   ]);
-  assert.match(header, /className="header-nav-desktop"/);
-  assert.match(header, /aria-controls="mobile-nav-drawer"/);
-  assert.match(header, /aria-expanded=\{open\}/);
-  assert.match(header, /event\.key === 'Escape'/);
-  assert.match(header, /<noscript>/);
-  assert.match(styles, /\.mobile-menu-trigger\s*\{[\s\S]*?min-height:\s*44px/);
-  assert.match(styles, /\.mobile-drawer\s*\{[\s\S]*?background:\s*var\(--bg-ground\)/);
-  assert.match(styles, /\.mobile-drawer-nav a\s*\{[\s\S]*?min-height:\s*48px/);
+  assert.doesNotMatch(component, /contents-rail-trigger|mobile-pie-panel/);
+  assert.match(component, /className="contents-rail-markers"/);
+  assert.match(component, /className="quick-contact"[\s\S]*?>Kontakt<ArrowUpRight/);
+  assert.match(component, /aria-controls="contents-section-list"/);
+  assert.match(component, /className="contents-rail-mobile"/);
+  assert.match(component, /hidden=\{!open\}/);
+  assert.doesNotMatch(component, /setPointerCapture|tapOpenedPreview|touchGesture/);
+  assert.match(styles, /min-height: 44px/);
+  assert.match(styles, /overflow-y: auto/);
+  assert.match(styles, /\.quick-contact\s*\{[\s\S]*?left:\s*16px;[\s\S]*?background:\s*#ffffff20;/);
+  assert.match(backup, /className="contents-rail-trigger"[\s\S]*?<span>Obsah<\/span>/);
 });

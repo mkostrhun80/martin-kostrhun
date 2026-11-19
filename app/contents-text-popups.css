@@ -1,0 +1,4 @@
+/* Keep this section readable in print and when motion is disabled mid-animation. */
+@media (prefers-reduced-motion: reduce), print {
+  #obsah .contents-text-popup { opacity: 1!important; transform: none!important; }
+}

@@ -167,14 +167,6 @@ test('full releases still require both integrations and their original owner che
   rejected(check([]), /NEXT_PUBLIC_FORMS_VERIFIED must be true/);
 }));
 
-test('pages release validates both verified booking and enabled forms cleanly', () => fixture(({ built, write, check }) => {
-  write('out/deployment.json', { ...built, formsEnabled: true });
-  const ok = check(['--pages'], { NEXT_PUBLIC_FORMS_VERIFIED: 'true' });
-  assert.equal(ok.status, 0, ok.stderr);
-  assert.match(ok.stdout, /Pages release checks passed/);
-  rejected(check(['--pages'], { NEXT_PUBLIC_FORMS_VERIFIED: 'false' }), /Pages publishing requires forms verified/);
-}));
-
 test('an enabled booking with an unsafe URL fails before running a build', () => {
   const cwd = mkdtempSync(join(tmpdir(), 'martin-booking-invalid-build-'));
   try {

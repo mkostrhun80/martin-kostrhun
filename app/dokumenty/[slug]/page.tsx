@@ -27,10 +27,10 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
     <p className="eyebrow">MARTIN KOSTRHUN / DOKUMENTY</p>
     <h1>{page.title}</h1>
     <nav className="legal-navigation" aria-label="Právní dokumenty">
-      {Object.entries(pages).map(([id, document]) => <Link key={id} href={`/dokumenty/${id}`} prefetch={false} aria-current={id === slug ? 'page' : undefined}>{document.title}</Link>)}
+      {Object.entries(pages).map(([id, document]) => <Link key={id} href={`/dokumenty/${id}`} aria-current={id === slug ? 'page' : undefined}>{document.title}</Link>)}
     </nav>
     <div className="legal-content"><Content/></div>
     <p className="legal-updated">Poslední aktualizace: <time dateTime="2026-10-29">29. října 2026</time></p>
-    <Link className="back" href="/" prefetch={false}>← ZPĚT NA WEB</Link>
+    <Link className="back" href="/">← ZPĚT NA WEB</Link>
   </main><Footer/></>;
 }

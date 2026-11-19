@@ -1,0 +1,285 @@
+/* Shared action buttons with a vertical rolling label. */
+.site-button {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  max-width: 100%;
+  padding: 15px 24px;
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  background: var(--primary);
+  color: white;
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-align: center;
+  overflow: hidden;
+  transition: background .25s ease;
+}
+.site-button:is(:hover, :focus-visible) {
+  background: #c4a484;
+}
+.site-button:focus-visible, .submit-button:focus-visible {
+  outline: 2px solid #c4a484;
+  outline-offset: 4px;
+}
+.button-label {
+  display: inline-grid;
+  overflow: hidden;
+  vertical-align: middle;
+  line-height: 1.4;
+}
+.button-label-line {
+  display: block;
+  grid-area: 1 / 1;
+  transition: transform .48s cubic-bezier(.22, 1, .36, 1);
+}
+.button-label-copy { transform: translateY(100%); }
+:is(.site-button, .submit-button):is(:hover, :focus-visible):not(:disabled) .button-label-line {
+  transform: translateY(-100%);
+}
+:is(.site-button, .submit-button):is(:hover, :focus-visible):not(:disabled) .button-label-copy {
+  transform: translateY(0);
+}
+.hero-with-flow .hero-note { width: 340px; max-width: calc(100% - 88px); }
+.hero-note .hero-appointment {
+  width: 100%;
+  min-height: 70px;
+  margin-top: 24px;
+  padding: 22px 28px;
+  border: 2px solid #c4a484;
+  border-radius: 12px;
+  background: #c4a484;
+  color: white;
+  font-size: 16px;
+  letter-spacing: .045em;
+  box-shadow: 0 12px 35px #c4a48452;
+  animation: appointment-halo 3.2s ease-in-out infinite;
+}
+.hero-note .tiny-cross { display: none; }
+@keyframes appointment-halo {
+  0%, 100% { box-shadow: 0 12px 35px #c4a48452, 0 0 0 0 #c4a48430; }
+  50% { box-shadow: 0 15px 42px #c4a48475, 0 0 0 9px #c4a48400; }
+}
+.hero-bottom { z-index: 6; }
+.hero-note .site-button-quiet {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 12px;
+  padding: 12px 18px;
+  border-color: #14243a35;
+  background: #f5f2ec80;
+  color: var(--ink);
+  font-size: 11px;
+}
+.hero-note .site-button-quiet:hover { background: white; }
+.service-item .site-button { margin-top: 22px; font-size: 11px; }
+.partners .section-top .site-button { padding: 14px 20px; }
+.partner-belt-controls .site-button { padding: 14px 20px; border: 1px solid var(--primary); background: var(--primary); color: white; }
+.partners-bottom .site-button { padding: 12px 18px; font-size: 10px; }
+.social .site-button { gap: 0; padding: 18px 28px; font-size: 13px; border: 1px solid var(--primary); }
+.contact-intro .site-button { margin-top: 24px; }
+.contact { background: var(--ink); color: var(--paper); }
+.contact-intro p { color: #e8dac9; }
+.contact-links { border-color: #ffffff35; }
+.contact-links > .contact-action {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px;
+  min-height: 80px;
+  padding: 16px 20px;
+  border: 1px solid #ffffff35;
+  border-radius: 10px;
+  background: #14243a;
+  transition: background .25s, transform .25s, border-color .25s;
+}
+.contact-links > .contact-action:is(:hover, :focus-visible) { background: #14243a; transform: translateX(4px); border-color: #c4a484; }
+.contact-links > .contact-action > span {
+  color: #d5d0c8;
+  margin: 0;
+  width: auto;
+  min-width: 0;
+  font-size: 9px;
+  letter-spacing: .06em;
+}
+.contact-links .contact-value {
+  min-width: 0;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+.contact-links .site-button-small {
+  min-height: 34px;
+  margin: 0;
+  padding: 9px 14px;
+  font-size: 9px;
+}
+.menu-links > a { transition: background .25s, padding .25s; }
+.menu-links > a:is(:hover, :focus-visible) { background: #c4a48416; padding-left: 18px; }
+
+/* Reduce the About portrait's previous 1.65 zoom by 25 percent. */
+.about-portrait { height: auto; width: 100%; aspect-ratio: 2 / 3; }
+.about-portrait img, .hero-photo-handoff .handoff-to {
+  transform: scale(1.2375);
+  transform-origin: 50% 68%;
+  object-position: center;
+}
+.approach-heading h2 { font-size: clamp(64px, 7.1vw, 110px); line-height: .96; }
+.approach { border-top: 1px solid #c9bbaa; }
+.hero-flow-hint { font-size: 9px; }
+.hero-flow-hint > span:first-child { font-size: inherit; }
+.hero-with-flow { --fluid-presence: 0; }
+.hero-with-flow[data-fluid-active=true] { --fluid-presence: 1; }
+@media (max-width: 760px) {
+  .hero-with-flow .hero-note { width: 300px; max-width: calc(100% - 44px); }
+  .hero-note .hero-appointment { min-height: 64px; margin-top: 14px; padding: 19px 18px; font-size: 14px; }
+  .hero-with-flow .hero-note p { width: fit-content; font-size: 23px; }
+  .approach-heading h2 { font-size: 14vw; }
+  .about-portrait { height: auto; width: 100%; }
+  .partners-bottom { flex-wrap: wrap; gap: 20px; }
+  .contact-links > .contact-action { grid-template-columns: minmax(0, 1fr) auto; gap: 6px 14px; min-height: 0; padding: 16px; }
+  .contact-links > .contact-action > span { grid-column: 1 / -1; }
+  .contact-links .contact-value { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-button, .button-label-line, .contact-action, .menu-links > a { transition: none; }
+  :is(.site-button, .submit-button):is(:hover, :focus-visible):not(:disabled) .button-label-line { transform: none; }
+  .button-label-copy { display: none; }
+  .hero-note .hero-appointment { animation: none; }
+  .site-button:is(:hover, :focus-visible), .site-button:active, .contact-links > .contact-action:is(:hover, :focus-visible) { transform: none; }
+  .hero-fluid-svg { display: none; }
+}
+
+/* Registered HTML typography keeps the highlight on the original glyphs,
+   including Safari font metrics and the shared scroll transforms. */
+.hero-glow-type {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle var(--cursor-glow-radius, 0px) at var(--cursor-glow-x, 0px) var(--cursor-glow-y, 0px), #000 0%, #000 40%, #00000073 70%, transparent 100%);
+  mask-image: radial-gradient(circle var(--cursor-glow-radius, 0px) at var(--cursor-glow-x, 0px) var(--cursor-glow-y, 0px), #000 0%, #000 40%, #00000073 70%, transparent 100%);
+  opacity: calc(clamp(0, calc(1 - var(--hero-scroll-progress, 0) * 1.8), 1) * var(--fluid-presence, 0));
+  transition: opacity .45s;
+}
+.hero-glow-type .hero-name { color: #c4a484; mix-blend-mode: normal; }
+.hero-glow-type .hero-name-dot { color: inherit; }
+.hero-about-sequence[data-handoff=moving] .hero-glow-type { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) { .hero-glow-type { display: none; } }
+
+/* Both scenes share a stacking context, keeping type above the travelling photo. */
+.hero-about-sequence .hero,
+.hero-with-flow > .hero-artwork { isolation: auto; }
+.hero-with-flow > .hero-artwork > .hero-name { z-index: 6; }
+.hero-glow-type { z-index: 7; }
+.hero-about-sequence .about { z-index: auto; }
+.hero-about-sequence .about-copy,
+.hero-about-sequence .about > .eyebrow { position: relative; z-index: 6; }
+.navigation { border-bottom: 0; }
+.hero-with-flow { min-height: min(780px, 100svh); }
+.hero-with-flow .hero-note { bottom: 40px; }
+@media (max-width: 760px) {
+  .hero-with-flow { min-height: min(730px, 100svh); }
+  .hero-with-flow .hero-note { bottom: 54px; }
+  .hero-flow-hint { display: none; }
+}
+
+/* One subtle corner radius for every photographic frame. */
+:root { --photo-radius: 12px; }
+.hero-photo-layer,
+.about-portrait,
+.editorial-sticky figure,
+.service-chapter-heading figure,
+.contact-composition figure {
+  border-radius: var(--photo-radius);
+  overflow: hidden;
+}
+
+.hero-actions { width: 100%; display: flex; flex-direction: column; }
+@media (max-width: 760px) {
+  .hero-with-flow .hero-photo-layer {
+    top: calc(20% + var(--name-size) * var(--name-leading) + var(--name-gap) + var(--name-size) * .25);
+    bottom: 83px;
+    height: auto;
+    aspect-ratio: auto;
+  }
+  .hero-with-flow .hero-note {
+    width: calc(100% - 44px);
+    max-width: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero-actions {
+    width: min(260px, 100%);
+    align-self: flex-start;
+  }
+  .hero-note .hero-appointment {
+    min-height: 50px;
+    margin-top: 12px;
+    padding: 13px 16px;
+    font-size: 12px;
+    border-radius: 10px;
+  }
+  .hero-note .site-button-quiet {
+    min-height: 36px;
+    margin-top: 8px;
+    padding: 9px 12px;
+    font-size: 10px;
+  }
+  .hero-actions .button-label,
+  .hero-actions .button-label-line {
+    margin: 0;
+    font-size: inherit;
+    text-align: center;
+  }
+}
+
+/* On touch screens, every overlapping glyph stays distinct on light and dark
+   parts of the portrait; this registered layer follows the handoff as well. */
+.hero-photo-type { display: none; }
+@media (max-width: 760px) {
+  .hero-with-flow > .hero-artwork > .hero-name {
+    color: var(--ink);
+    mix-blend-mode: normal;
+  }
+  .hero-photo-type {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    pointer-events: none;
+    clip-path: var(--hero-photo-type-clip, inset(100%));
+  }
+  .hero-photo-type .hero-name {
+    color: #c4a484;
+    mix-blend-mode: normal;
+    -webkit-text-stroke: .6px #14243a;
+    paint-order: stroke fill;
+  }
+  .hero-photo-type .hero-name-dot { color: var(--purple); }
+}
+
+/* Readable legal documents, with the same navigation on every page. */
+.legal-navigation { display: flex; flex-wrap: wrap; gap: 12px; margin: -20px 0 40px; }
+.legal-navigation a { padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; line-height: 1.5; }
+.legal-navigation a[aria-current=page] { background: var(--primary); border-color: var(--primary); color: white; }
+.legal-content { max-width: 760px; }
+.legal-content a { text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.legal-content ul { margin: 0 0 24px; padding-left: 22px; font-size: 15px; line-height: 1.8; }
+.legal-content li + li { margin-top: 8px; }
+.legal-main .legal-updated { margin-top: 48px; color: #586579; font-size: 12px; }
+@media (max-width: 760px) {
+  .legal-navigation { gap: 8px; }
+  .legal-navigation a { font-size: 11px; padding: 9px 12px; }
+  .legal-main h2 { font-size: 22px; line-height: 1.3; }
+}

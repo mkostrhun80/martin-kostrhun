@@ -29,7 +29,7 @@ export function PrivacyPreferences({ children }: { children: ReactNode }) {
       <DialogDescription>Web funguje i bez externích služeb. Můžete mi napsat přímo e-mailem. Analytické ani reklamní měření nepoužívám.</DialogDescription>
       <label className="privacy-choice"><input type="checkbox" checked={draft.calendar} onChange={event => setDraft(value => ({ ...value, calendar: event.target.checked }))}/><span><strong>Rezervace Cal.com</strong><small>Načte externí kalendář po otevření rezervace; poskytovatel může ukládat údaje v prohlížeči.</small></span></label>
       <label className="privacy-choice"><input type="checkbox" checked={draft.captcha} onChange={event => setDraft(value => ({ ...value, captcha: event.target.checked }))}/><span><strong>Ochrana formulářů hCaptcha</strong><small>Ověří, že zprávu neposílá automat. Připojí prohlížeč ke službě hCaptcha a může používat její úložiště.</small></span></label>
-      <p className="form-note">Volbu si pamatuji v tomto prohlížeči. Vypnutí již povolené hCaptcha obnoví stránku; rozepsanou zprávu si předem zkopírujte. <Link href="/dokumenty/cookies" prefetch={false}>Cookies a úložiště</Link>.</p>
+      <p className="form-note">Volbu si pamatuji v tomto prohlížeči. Vypnutí již povolené hCaptcha obnoví stránku; rozepsanou zprávu si předem zkopírujte. <Link href="/dokumenty/cookies">Cookies a úložiště</Link>.</p>
       <div className="privacy-actions"><button type="button" onClick={() => save({ calendar: true, captcha: true })}>Přijmout vše</button><button type="button" onClick={() => save({ ...deniedPreferences })}>Odmítnout vše</button><button type="button" onClick={() => save(draft)}>Uložit nastavení</button></div>
     </DialogContent></Dialog>
   </Context.Provider>;

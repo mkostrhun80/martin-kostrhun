@@ -33,14 +33,14 @@ export function homeStructuredData() {
       {
         '@type': 'Person', '@id': personId,
         name: siteConfig.name, jobTitle: siteConfig.role,
-        url: `${url}#o-mne`, image: absoluteSiteURL('images/DSC01608-original.jpg'),
+        url: `${url}#o-mne`, image: absoluteSiteURL('images/DSC01657-original.jpg'),
         affiliation: { '@type': 'Organization', name: 'eDO finance, a.s.' },
         sameAs: [siteConfig.linkedinUrl],
       },
       {
         '@type': 'FinancialService', '@id': businessId,
         name: siteConfig.name, url, description: siteConfig.description,
-        image: absoluteSiteURL('images/DSC01608-original.jpg'),
+        image: absoluteSiteURL('images/DSC01657-original.jpg'),
         telephone: siteConfig.phone, email: siteConfig.email,
         identifier: { '@type': 'PropertyValue', propertyID: 'IČO', value: siteConfig.ico },
         address: {

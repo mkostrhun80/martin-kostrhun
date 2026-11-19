@@ -1,0 +1,64 @@
+/* Bound the composition on wide windows; keep backgrounds full width. */
+@media(min-width:1440px) {
+  :root {
+    --wide-content: 1360px;
+    --wide-gutter: max(5vw, calc((100vw - var(--wide-content)) / 2));
+  }
+
+  .index-balanced,
+  .services-editorial,
+  .about,
+  .trust-new,
+  .faq-new,
+  .cooperation,
+  .partners-new,
+  .footer { padding-inline: var(--wide-gutter); }
+  .contact-gallery.contact.section { padding-inline: var(--wide-gutter); }
+
+  /* A tall monitor must not stretch the second photograph to viewport height. */
+  .index-balanced { min-height: 0; padding-block: 96px; gap: 64px; }
+  .index-balanced .index-photo { max-height: 660px; }
+  .index-balanced .section-heading h2 { font-size: 76px; }
+
+  .services-editorial { padding-top: 96px; }
+  .services-intro { margin-bottom: 64px; gap: 64px; }
+  .services-intro h2 { font-size: clamp(96px, 7vw, 112px); }
+  .services-intro > p { max-width: 360px; }
+  .service-chapter { gap: 72px; padding-bottom: 80px; }
+  .service-chapter-heading h3.display { font-size: 76px; }
+  .service-chapter-heading figure { width: 100%; max-width: 480px; margin-top: 28px; }
+  .service-item { min-height: 230px; padding: 28px; }
+  .service-item h4 { font-size: 42px; }
+  .service-item-description { max-width: 52ch; }
+  .service-item .site-button { font-size: 12px; }
+  .service-chapter-protect {
+    margin-inline: calc(-1 * var(--wide-gutter));
+    padding: 80px var(--wide-gutter) 88px;
+  }
+
+  .about { padding-block: 96px; }
+  .about-layout { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 80px; margin-top: 40px; }
+  .about-portrait { width: min(100%, 440px, 44svh); justify-self: center; height: auto; max-height: none; aspect-ratio: 2 / 3; }
+  .about-copy .display { font-size: 96px; }
+  .about-copy h3 { font-size: 28px; }
+  .about-meta { font-size: 12px; }
+
+  .trust-new,
+  .faq-new { padding-block: 96px; }
+  .faq-new { gap: 80px; }
+  .trust-new .section-heading h2,
+  .faq-new .section-heading h2 { font-size: 76px; }
+  .faq-list summary { font-size: 18px; }
+  .cooperation { padding-block: 96px; --timeline-gap: 120px; }
+  .cooperation-heading { margin-bottom: 54px; }
+  .cooperation-heading h2 { font-size: 84px; }
+  .cooperation-card { padding: 32px; }
+  .cooperation-card h3 { font-size: 27px; }
+
+  .contact-gallery.contact.section { padding-block: 88px; }
+  .partners-new { padding-block: 64px; }
+  .partners-new .section-heading h2 { font-size: 56px; }
+  .footer-columns { column-gap: 48px; padding-block: 52px; }
+  .footer-columns > div { font-size: 13px; }
+  .footer-bottom { font-size: 11px; }
+}

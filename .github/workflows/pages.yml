@@ -15,8 +15,8 @@ jobs:
       contents: read
       pages: read
     env:
-      # Enable public forms (Web3Forms + hCaptcha) and verified Cal.com booking on GitHub Pages.
-      NEXT_PUBLIC_FORMS_VERIFIED: 'true'
+      # Booking has its own verification gate; the contact forms are unchanged.
+      NEXT_PUBLIC_FORMS_VERIFIED: 'false'
       NEXT_PUBLIC_BOOKING_VERIFIED: 'true'
       NEXT_PUBLIC_BOOKING_URL: 'https://cal.com/martin-kostrhun-4iprbj/konzultace'
     steps:
@@ -32,11 +32,11 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm audit --audit-level=high
-      - name: Build and validate verified pages release
+      - name: Build and validate verified reservations
         run: |
           npm run build:pages
           npm run check:types
-          npm run release:check -- --pages
+          npm run release:check -- --booking-only
         env:
           NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url }}

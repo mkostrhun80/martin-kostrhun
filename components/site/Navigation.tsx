@@ -1,6 +1,7 @@
-import { SiteHeader } from './SiteHeader';
+import { ArrowLeft } from 'lucide-react';
+import { sitePath } from '@/lib/site-path';
 
-/** Subpages and legal documents share the same persistent header navigation. */
+/** Legal/legacy documents retain a simple way back; the home page has no header. */
 export function Navigation({ isHome = false }: { isHome?: boolean }) {
-  return <SiteHeader isHome={isHome} />;
+  return isHome ? null : <nav className="document-back" aria-label="Zpět na web"><a href={sitePath('/')}><ArrowLeft size={17} aria-hidden="true"/>Martin Kostrhun</a></nav>;
 }
