@@ -76,7 +76,7 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
 
   return (
     <>
-      <header className="site-header">
+      <header className="site-header" data-header-theme={isHome ? 'dark' : 'light'}>
         <div className="site-header-inner">
           <a className="header-brand" href={sectionHref('domu', isHome)} aria-label="Martin Kostrhun — úvod">
             <span className="header-monogram">
@@ -117,6 +117,7 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
             </button>
           </div>
         </div>
+        {isHome && <div className="scroll-progress-bar" aria-hidden="true" />}
       </header>
 
       <div

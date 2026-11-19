@@ -146,7 +146,7 @@ export function SignatureIntro() {
               className="signature-underline"
               d="M68 204 C220 184 500 184 746 192 C650 194 550 201 456 208"
               fill="none"
-              stroke="var(--accent-brass)"
+              stroke="var(--accent-gold)"
               strokeWidth="4"
               strokeLinecap="round"
               strokeLinejoin="round"

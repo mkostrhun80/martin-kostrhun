@@ -14,53 +14,75 @@ function makeResponsiveImage(
   baseName: string,
   alt: string,
   sizes: string,
+  has1200 = false,
 ): ResponsiveImageSpec {
   const path480Webp = sitePath(`/images/optimized/${baseName}-480.webp`);
   const path800Webp = sitePath(`/images/optimized/${baseName}-800.webp`);
+  const path1200Webp = sitePath(`/images/optimized/${baseName}-1200.webp`);
   const path480Avif = sitePath(`/images/optimized/${baseName}-480.avif`);
   const path800Avif = sitePath(`/images/optimized/${baseName}-800.avif`);
+  const path1200Avif = sitePath(`/images/optimized/${baseName}-1200.avif`);
   return {
     alt,
-    width: 800,
-    height: 1000,
+    width: has1200 ? 1200 : 800,
+    height: has1200 ? 1500 : 1000,
     sizes,
-    avifSrcSet: `${path480Avif} 480w, ${path800Avif} 800w`,
-    webpSrcSet: `${path480Webp} 480w, ${path800Webp} 800w`,
-    src: path800Webp,
+    avifSrcSet: has1200
+      ? `${path480Avif} 480w, ${path800Avif} 800w, ${path1200Avif} 1200w`
+      : `${path480Avif} 480w, ${path800Avif} 800w`,
+    webpSrcSet: has1200
+      ? `${path480Webp} 480w, ${path800Webp} 800w, ${path1200Webp} 1200w`
+      : `${path480Webp} 480w, ${path800Webp} 800w`,
+    src: has1200 ? path1200Webp : path800Webp,
   };
 }
 
 // Web-optimized responsive variants (AVIF + WebP) in public/images/optimized/.
 export const assets = {
-  heroPortrait: sitePath('/images/optimized/hero-martin-800.webp'),
+  heroPortrait: sitePath('/images/optimized/hero-martin-1200.webp'),
   contentsPortrait: sitePath('/images/optimized/editorial-planning-800.webp'),
+  servicesPortrait: sitePath('/images/optimized/editorial-architecture-800.webp'),
   aboutPortrait: sitePath('/images/optimized/about-martin-800.webp'),
+  processPortrait: sitePath('/images/optimized/editorial-balcony-800.webp'),
   contactPortrait: sitePath('/images/optimized/editorial-consultation-800.webp'),
   isPlaceholder: false,
   portraitAlt: 'Martin Kostrhun v obleku s notebookem v Hradci Králové',
   contentsAlt: 'Pracovní stůl finančního specialisty s otevřeným diářem a deskami v námořnické modři',
+  servicesAlt: 'Martin Kostrhun v obleku u prosklené galerie v Hradci Králové',
   aboutAlt: 'Martin Kostrhun s úsměvem u notebooku při přípravě finančního plánu',
+  processAlt: 'Martin Kostrhun na terase před osobní konzultací',
   contactAlt: 'Klidná konzultační místnost v teplých tónech přírodního dubu a vápna',
   responsive: {
     hero: makeResponsiveImage(
       'hero-martin',
       'Martin Kostrhun v obleku s notebookem v Hradci Králové',
-      '(max-width: 900px) 92vw, 440px',
+      '(max-width: 900px) 92vw, 48vw',
+      true,
     ),
     contents: makeResponsiveImage(
       'editorial-planning',
       'Pracovní stůl finančního specialisty s otevřeným diářem a deskami v námořnické modři',
-      '(max-width: 900px) 92vw, 480px',
+      '(max-width: 900px) 92vw, 520px',
+    ),
+    services: makeResponsiveImage(
+      'editorial-architecture',
+      'Martin Kostrhun v obleku u prosklené galerie v Hradci Králové',
+      '(max-width: 900px) 92vw, 460px',
     ),
     about: makeResponsiveImage(
       'about-martin',
       'Martin Kostrhun s úsměvem u notebooku při přípravě finančního plánu',
+      '(max-width: 900px) 92vw, 520px',
+    ),
+    process: makeResponsiveImage(
+      'editorial-balcony',
+      'Martin Kostrhun na terase před osobní konzultací',
       '(max-width: 900px) 92vw, 460px',
     ),
     contact: makeResponsiveImage(
       'editorial-consultation',
       'Klidná konzultační místnost v teplých tónech přírodního dubu a vápna',
-      '(max-width: 900px) 92vw, 460px',
+      '(max-width: 900px) 92vw, 480px',
     ),
   },
 };

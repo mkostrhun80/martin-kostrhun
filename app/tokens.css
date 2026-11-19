@@ -1,44 +1,92 @@
 :root {
-  --bg-ground: #F5F5F3;
+  /* Sovereign Private Advisory palette (low-chroma architectural stone + Midnight Navy + Champagne Gold) */
+  --bg-ground: #F4F3F1;
   --bg-surface: #FFFFFF;
-  --bg-stone: #EAE8E3;
-  --bg-stone-deep: #DFDCD4;
-  --bg-navy: #101E30;
-  --bg-navy-soft: #1B2E47;
+  --bg-linen: #E8E6E1;
+  --bg-linen-deep: #DAD6CE;
+  --bg-navy: #0E1B2C;
+  --bg-navy-elevated: #162840;
+  --bg-navy-hover: #1E3554;
 
-  --ink-primary: #101E30;
-  --ink-body: #182538;
+  --ink-primary: #0E1B2C;
+  --ink-body: #1C2B3D;
   --ink-secondary: #223042;
-  --ink-muted: #465364;
-  --ink-on-dark: #F5F5F3;
-  --ink-on-dark-muted: #CED5E0;
+  --ink-muted: #4C5A6B;
+  --ink-on-dark: #F4F3F1;
+  --ink-on-dark-soft: #C7D1DE;
 
-  --accent-brass: #8C6A3E;
-  --accent-brass-text: #72542D;
-  --accent-brass-light: #C6A774;
+  /* Single Champagne Bronze / Gold accent */
+  --accent-gold: #C4A484;
+  --accent-gold-hover: #D4B799;
+  --accent-bronze: #7D5B30;
+  --accent-bronze-dark: #634621;
+
   --accent-success: #1F573F;
   --accent-danger: #9B2C2C;
   --accent-danger-bg: #FCEEEE;
-  --accent-warn-bg: #F4EFE4;
+  --accent-warn-bg: #EDE9E0;
 
-  --border-field: rgba(16, 30, 48, 0.24);
-  --radius-sm: 4px;
-  --radius-md: 6px;
+  --border-field: rgba(14, 27, 44, 0.24);
+  --radius-none: 0px;
+  --radius-sm: 2px;
+  --radius-md: 2px;
 
+  /* Typography */
   --font-display: var(--font-serif), Georgia, 'Times New Roman', serif;
   --font-body: var(--font-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-  --container: min(1240px, calc(100% - clamp(32px, 6vw, 96px)));
-  --header-h: 72px;
+  /* Exact 6-step scale (0 font-size drift) */
+  --step-small: 0.875rem;   /* 14px */
+  --step-body: 1.0625rem;   /* 17px */
+  --step-lead: 1.25rem;     /* 20px */
+  --step-sub: 1.5rem;       /* 24px */
+  --step-head: 3.25rem;     /* 52px */
+  --step-display: 4.5rem;   /* 72px */
 
+  /* Layout grid & outer frame */
+  --margin: clamp(20px, 3.5vw, 48px);
+  --gutter: clamp(20px, 3vw, 44px);
+  --container: min(1340px, calc(100% - var(--margin) * 2));
+  --header-h: 76px;
+
+  /* Motion tokens */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --t-press: 140ms;
+  --t-hover: 200ms;
+  --t-ui: 280ms;
+  --t-reveal: 680ms;
+
+  /* Compatibility aliases for shared helpers & tests */
   --paper: var(--bg-ground);
   --ink: var(--ink-primary);
   --navy: var(--bg-navy);
-  --light-brown: var(--accent-brass);
+  --bg-stone: var(--bg-linen);
+  --bg-stone-deep: var(--bg-linen-deep);
+  --bg-navy-soft: var(--bg-navy-elevated);
+  --ink-on-dark-muted: var(--ink-on-dark-soft);
+  --light-brown: var(--accent-gold);
+  --accent-brass: var(--accent-bronze);
+  --accent-brass-text: var(--accent-bronze-dark);
+  --accent-brass-light: var(--accent-gold);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
+  :root {
+    --step-body: 1rem;       /* 16px */
+    --step-lead: 1.125rem;   /* 18px */
+    --step-sub: 1.1875rem;   /* 19px */
+    --step-head: 2.5rem;     /* 40px */
+    --step-display: 3.125rem;/* 50px */
+  }
+}
+
+@media (max-width: 600px) {
   :root {
     --header-h: 60px;
+    --step-head: 2.125rem;   /* 34px */
+    --step-display: 2.1875rem;/* 35px (2-line safe at 390px) */
   }
 }

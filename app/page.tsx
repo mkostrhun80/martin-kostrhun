@@ -10,6 +10,7 @@ import { SignatureIntro } from '@/components/site/SignatureIntro';
 import { homeIntroBootstrap } from '@/lib/home-intro';
 import { HomeScrollReady } from '@/components/site/HomeScrollReady';
 import { Cooperation } from '@/components/site/Cooperation';
+import { ScrollChoreography } from '@/components/site/ScrollChoreography';
 import { contentSections } from '@/lib/site-sections';
 import { siteConfig } from '@/lib/site-config';
 import { homeStructuredData, serializeStructuredData } from '@/lib/structured-data';
@@ -49,6 +50,7 @@ export default function Home() {
         })}
       </main>
       <HomeScrollReady />
+      <ScrollChoreography />
       <Footer />
     </>
   );

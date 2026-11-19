@@ -1,6 +1,6 @@
 import { PrivacyPreferences } from '@/components/site/PrivacyPreferences';
-import type { Metadata } from 'next';
-import { Newsreader, Plus_Jakarta_Sans } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
+import { Manrope, Newsreader } from 'next/font/google';
 import { sitePath } from '@/lib/site-path';
 import { homeScrollBootstrap } from '@/lib/home-scroll';
 import { siteConfig } from '@/lib/site-config';
@@ -16,12 +16,16 @@ const serif = Newsreader({
   display: 'swap',
 });
 
-const sans = Plus_Jakarta_Sans({
+const sans = Manrope({
   subsets: ['latin', 'latin-ext'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-sans',
   display: 'swap',
 });
+
+export const viewport: Viewport = {
+  themeColor: '#0E1B2C',
+};
 
 export const metadata: Metadata = {
   description: siteConfig.description,

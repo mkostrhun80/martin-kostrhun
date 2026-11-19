@@ -14,7 +14,6 @@ export function AppointmentBooking({ onContact }: { onContact: () => void }) {
       <section className="appointment-booking" aria-labelledby="appointment-booking-title">
         <header className="appointment-booking-heading">
           <div>
-            <span className="eyebrow">DOMLUVME SI SCHŮZKU</span>
             <h3 id="appointment-booking-title">Domluvme si termín.</h3>
             <p>
               Na schůzku si rezervujte přibližně 90 minut. Délka schůzky je orientační a může se podle potřeby změnit.
@@ -37,7 +36,6 @@ export function AppointmentBooking({ onContact }: { onContact: () => void }) {
     <section className="appointment-booking" aria-labelledby="appointment-booking-title">
       <header className="appointment-booking-heading">
         <div>
-          <span className="eyebrow">DOMLUVME SI SCHŮZKU</span>
           <h3 id="appointment-booking-title">Vyberte si svůj termín.</h3>
           <p>
             Na schůzku si rezervujte přibližně 90 minut. Délka schůzky je orientační a může se podle potřeby změnit.

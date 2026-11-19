@@ -24,7 +24,7 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
   if (!page) notFound();
   const { Content } = page;
   return <><Navigation isHome={false}/><main id="main" className="legal-main" tabIndex={-1}>
-    <p className="eyebrow">MARTIN KOSTRHUN / DOKUMENTY</p>
+    <p className="legal-context">Martin Kostrhun · Dokumenty</p>
     <h1>{page.title}</h1>
     <nav className="legal-navigation" aria-label="Právní dokumenty">
       {Object.entries(pages).map(([id, document]) => <Link key={id} href={`/dokumenty/${id}`} prefetch={false} aria-current={id === slug ? 'page' : undefined}>{document.title}</Link>)}

@@ -19,7 +19,7 @@ export function PictureFrame({
         width={spec.width}
         height={spec.height}
         sizes={spec.sizes}
-        loading={priority ? 'eager' : 'lazy'}
+        loading="eager"
         decoding="async"
         fetchPriority={priority ? 'high' : undefined}
         draggable={false}

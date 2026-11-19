@@ -5,6 +5,7 @@ const homepage = sitePath('/').replace(/\/+$/, '') || '/';
 /** Runs before the homepage body, independently of the signature animation. */
 export const homeScrollBootstrap = `(() => {
   try {
+    document.documentElement.classList.add('js');
     const navigation = performance.getEntriesByType('navigation')[0];
     const path = location.pathname.replace(/\\/+$/, '') || '/';
     if (location.hash || !navigation || navigation.type !== 'reload' || path !== ${JSON.stringify(homepage)} || window.__mkHomeRefreshStarted) return;

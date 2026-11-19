@@ -1,6 +1,6 @@
 export const INTRO_SESSION_KEY = 'mk.signature.hero.v4';
-export const SIGNATURE_MOTION = { start: 20, draw: 440, stagger: 40, complete: 480, retract: 720, retractDuration: 200 } as const;
-export const INTRO_TIMING = { signature: 920, duration: 240 } as const;
+export const SIGNATURE_MOTION = { start: 20, draw: 400, stagger: 35, complete: 440, retract: 640, retractDuration: 180 } as const;
+export const INTRO_TIMING = { signature: 820, duration: 220 } as const;
 
 // Runs before the homepage is painted. Without JavaScript the settled page is
 // the default; a hydration failure cannot leave an opaque intro over the site.

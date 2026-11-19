@@ -181,12 +181,12 @@ function ContactCard({ model, formRef }: { model: Model; formRef: RefObject<HTML
   return (
     <div className="contact-grid">
       <div className="contact-sidebar">
-        <header className="section-header" style={{ marginBottom: 0 }}>
+        <header className="section-header" data-reveal="mask" style={{ marginBottom: 0 }}>
           <h2 id="contact-title" className="section-heading-display">
-            Domluvme si setkání.
+            Domluvme si schůzku.
           </h2>
           <p className="section-lead">
-            Napište mi, s čím vám mohu pomoci, nebo si rovnou vyberte termín úvodní konzultace.
+            Napište mi, s čím vám mohu pomoci, nebo si rovnou vyberte termín devadesátiminutové úvodní konzultace.
           </p>
         </header>
 
@@ -226,8 +226,8 @@ function ContactCard({ model, formRef }: { model: Model; formRef: RefObject<HTML
           </div>
         </div>
 
-        <figure className="editorial-media">
-          <PictureFrame spec={assets.responsive.contact} />
+        <figure className="editorial-media" data-reveal="shutter">
+          <PictureFrame spec={assets.responsive.contact} className="editorial-plate" />
         </figure>
       </div>
 
@@ -241,7 +241,7 @@ function ContactCard({ model, formRef }: { model: Model; formRef: RefObject<HTML
           <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
             <DialogTrigger className="contact-booking-trigger">
               <CalendarDays size={18} aria-hidden="true" />
-              <span>Rezervovat termín</span>
+              <span>Vybrat termín online</span>
               <ArrowUpRight size={16} aria-hidden="true" />
             </DialogTrigger>
             <DialogContent

@@ -1,5 +1,6 @@
-import { ArrowUpRight, Plus } from 'lucide-react';
+import { ArrowUpRight, Star } from 'lucide-react';
 import { approvedReviews, defaultFAQ, type Review } from '@/lib/public-data';
+import { siteConfig } from '@/lib/site-config';
 import { FeedbackExperience } from './FeedbackExperience';
 import { FeedbackDisclosure } from './FeedbackDisclosure';
 
@@ -14,9 +15,19 @@ export function ReviewCard({ review }: { review: Review }) {
           {new Date(review.createdAt).toLocaleDateString('cs-CZ', { timeZone: 'Europe/Prague' })}
         </time>
       </div>
-      <span aria-label={`Hodnocení ${review.rating} z 5`}>
-        {'★'.repeat(review.rating)}
-        {'☆'.repeat(5 - review.rating)}
+      <span
+        style={{ display: 'inline-flex', gap: '3px', color: 'var(--accent-bronze-dark)' }}
+        aria-label={`Hodnocení ${review.rating} z 5`}
+      >
+        {[1, 2, 3, 4, 5].map(n => (
+          <Star
+            key={n}
+            size={15}
+            fill={n <= review.rating ? 'currentColor' : 'none'}
+            strokeWidth={1.75}
+            aria-hidden="true"
+          />
+        ))}
       </span>
     </article>
   );
@@ -24,9 +35,9 @@ export function ReviewCard({ review }: { review: Review }) {
 
 export function Trust() {
   return (
-    <section id="zkusenosti" className="section-band band-stone" aria-labelledby="reviews-heading">
+    <section id="zkusenosti" className="section-band band-alabaster" aria-labelledby="reviews-heading">
       <div className="section-shell">
-        <header className="section-header">
+        <header className="section-header" data-reveal="mask">
           <h2 id="reviews-heading" className="section-heading-display">
             Zkušenosti klientů.
           </h2>
@@ -37,18 +48,18 @@ export function Trust() {
 
         {approvedReviews.length === 0 ? (
           <div className="trust-pillars" aria-label="Ověřitelnost spolupráce">
-            <div className="trust-pillar-card">
-              <strong>Registr České národní banky</strong>
+            <article className="trust-pillar-card" data-reveal="stagger" style={{ '--stagger': 0 } as React.CSSProperties}>
+              <h3>Registr ČNB</h3>
               <p>Oprávnění pro investice, úvěry, pojištění i penze si kdykoli ověříte pod IČO 23315598.</p>
-            </div>
-            <div className="trust-pillar-card">
-              <strong>Více než 68 partnerů</strong>
+            </article>
+            <article className="trust-pillar-card" data-reveal="stagger" style={{ '--stagger': 1 } as React.CSSProperties}>
+              <h3>Více než 68 partnerů</h3>
               <p>Nabídky srovnávám napříč hlavními českými bankami, pojišťovnami a investičními domy.</p>
-            </div>
-            <div className="trust-pillar-card">
-              <strong>Pouze reálné reference</strong>
+            </article>
+            <article className="trust-pillar-card" data-reveal="stagger" style={{ '--stagger': 2 } as React.CSSProperties}>
+              <h3>Pouze reálné reference</h3>
               <p>Na webu nepublikuji smyšlené citáty. Zkušenost se zveřejní až po vzájemné spolupráci a vašem souhlasu.</p>
-            </div>
+            </article>
           </div>
         ) : (
           <>
@@ -73,24 +84,30 @@ export function Trust() {
 
 export function FAQ() {
   return (
-    <section id="otazky" className="section-band band-stone" aria-labelledby="faq-heading">
+    <section id="otazky" className="section-band band-linen" aria-labelledby="faq-heading">
       <div className="section-shell faq-layout">
-        <header className="section-header">
-          <h2 id="faq-heading" className="section-heading-display">
-            Časté otázky.
-          </h2>
-          <p className="section-lead">
-            Co klienty nejčastěji zajímá před první nezávaznou schůzkou.
-          </p>
-        </header>
+        <div className="faq-header-sticky">
+          <header className="section-header" data-reveal="mask" style={{ marginBottom: 0 }}>
+            <h2 id="faq-heading" className="section-heading-display">
+              Časté otázky.
+            </h2>
+            <p className="section-lead">
+              Co klienty nejčastěji zajímá před první nezávaznou schůzkou — včetně odměňování a registrace u ČNB.
+            </p>
+          </header>
+
+          <a className="site-link-inline faq-registry-link" href={siteConfig.registryUrl} target="_blank" rel="noreferrer">
+            Ověřit oprávnění v registru ČNB <ArrowUpRight size={15} aria-hidden="true" />
+          </a>
+        </div>
 
         <div className="faq-list">
           {defaultFAQ.map(faq => (
             <details id={`otazka-${faq.id}`} key={faq.id}>
               <summary>
                 <span>{faq.question}</span>
-                <span className="faq-toggle-icon" aria-hidden="true">
-                  <Plus size={20} strokeWidth={1.75} />
+                <span className="faq-toggle-mark" aria-hidden="true">
+                  +
                 </span>
               </summary>
               <div className="faq-answer">

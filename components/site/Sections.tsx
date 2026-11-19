@@ -10,34 +10,34 @@ import { SafeEmailLink } from './SafeEmailLink';
 
 export function About() {
   return (
-    <section id="o-mne" className="section-band band-stone" aria-labelledby="about-heading">
+    <section id="o-mne" className="section-band band-linen" aria-labelledby="about-heading">
       <div className="section-shell about-grid">
-        <figure className="editorial-media">
-          <PictureFrame spec={assets.responsive.about} />
-        </figure>
-
         <div className="about-copy">
-          <h2 id="about-heading" className="section-heading-display">
-            O mně.
-          </h2>
-          <h3 className="about-subhead">Ahoj, já jsem Martin.</h3>
+          <header className="section-header" data-reveal="mask" style={{ marginBottom: 0 }}>
+            <h2 id="about-heading" className="section-heading-display">
+              Martin Kostrhun.
+            </h2>
+            <p className="about-role-line">Finanční specialista · eDO finance · Hradec Králové</p>
+          </header>
+
           <p>
-            Jsem finanční poradce v eDO finance, a.s., v Hradci Králové. Pomáhám s financováním bydlení,
-            pojištěním, investicemi i realitami. Zajímá mě, co opravdu potřebujete, abychom vašim financím
-            společně dali směr podle vašich představ.
+            Pomáhám s financováním bydlení, pojištěním, investicemi i realitami. Zajímá mě, co opravdu
+            potřebujete, abychom vašim financím společně dali směr podle vašich představ.
           </p>
           <p>
             Vedle práce dokončuji studium informačního managementu na Univerzitě Hradec Králové. Duší jsem
             sportovec — baví mě fotbal, fitko, cestování a objevování nových věcí.
           </p>
           <p>
-            Zakládám si na férovosti a otevřené komunikaci. Chci, abyste rozuměli každému společnému kroku a mohli se
-            kdykoliv zeptat. Podpis smlouvy je pro mě začátkem dlouhodobého partnerství, které se vyvíjí spolu s
-            vaším životem.
+            Zakládám si na férovosti a otevřené komunikaci. Chci, abyste rozuměli každému společnému kroku a
+            mohli se kdykoliv zeptat. Podpis smlouvy je pro mě začátkem dlouhodobého partnerství, které se
+            vyvíjí spolu s vaším životem.
           </p>
-          <blockquote className="about-quote">
+
+          <blockquote className="about-quote" data-reveal="mask">
             „Finance nejsou cíl, jsou prostředkem k životu podle vašich představ.“
           </blockquote>
+
           <div className="about-signature-wrap">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -51,14 +51,29 @@ export function About() {
               decoding="async"
             />
             <a className="site-button" href={siteConfig.linkedinUrl} target="_blank" rel="noreferrer">
-              LinkedIn <ArrowUpRight size={17} aria-hidden="true" />
+              Profil na LinkedIn <ArrowUpRight size={17} aria-hidden="true" />
             </a>
           </div>
-          <div className="about-meta">
-            <span>Hradec Králové</span>
-            <span>Osobně i online</span>
-          </div>
+
+          <dl className="about-meta">
+            <div>
+              <dt>Působnost</dt>
+              <dd>Hradec Králové</dd>
+            </div>
+            <div>
+              <dt>Forma schůzek</dt>
+              <dd>Osobně i online</dd>
+            </div>
+            <div>
+              <dt>Registrace</dt>
+              <dd>IČO {siteConfig.ico}</dd>
+            </div>
+          </dl>
         </div>
+
+        <figure className="editorial-media about-media" data-reveal="shutter">
+          <PictureFrame spec={assets.responsive.about} className="editorial-plate" />
+        </figure>
       </div>
     </section>
   );
@@ -68,7 +83,8 @@ export function Contact() {
   return (
     <section
       id="kontakt"
-      className="section-band band-alabaster"
+      className="section-band band-navy has-contours"
+      data-chapter="dark"
       aria-label="Kontakt s Martinem Kostrhunem"
     >
       <div className="section-shell">
@@ -80,8 +96,15 @@ export function Contact() {
 
 export function Footer() {
   return (
-    <footer className="site-footer">
+    <footer className="site-footer band-navy has-contours" data-chapter="dark">
       <div className="footer-inner">
+        <div className="footer-masthead-wrap">
+          <p className="footer-masthead">
+            Martin Kostrhun<span>.</span>
+          </p>
+          <p className="footer-tagline">Finanční poradenství v Hradci Králové a online.</p>
+        </div>
+
         <div className="footer-columns">
           <div className="footer-col">
             <Link className="footer-monogram" href="/#domu" prefetch={false}>

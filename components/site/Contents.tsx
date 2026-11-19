@@ -1,3 +1,4 @@
+import { ArrowRight } from 'lucide-react';
 import { indexSections } from '@/lib/site-sections';
 import { assets } from '@/lib/site-config';
 import { PictureFrame } from './PictureFrame';
@@ -19,25 +20,29 @@ const principles = [
 
 export function Contents() {
   return (
-    <section id="obsah" className="section-band band-stone" aria-labelledby="contents-heading">
+    <section id="obsah" className="section-band band-alabaster" aria-labelledby="contents-heading">
       <div className="section-shell contents-grid">
-        <figure className="editorial-media">
-          <PictureFrame spec={assets.responsive.contents} />
+        <figure className="editorial-media" data-reveal="shutter">
+          <PictureFrame spec={assets.responsive.contents} className="editorial-plate" />
         </figure>
 
         <div className="contents-body">
-          <header className="section-header">
+          <header className="section-header" data-reveal="mask">
             <h2 id="contents-heading" className="section-heading-display">
               Plán místo náhod.
             </h2>
-            <p className="section-lead">
-              Každá finanční oblast souvisí s ostatními. Zvolte téma, které právě řešíte, nebo projděte zásady naší spolupráce.
+            <p className="contents-statement" data-fill>
+              Každé finanční rozhodnutí ovlivňuje ta ostatní. Místo izolovaných smluv stavíme jeden přehledný plán podle vašeho života.
             </p>
           </header>
 
           <ol className="principles-list">
-            {principles.map(item => (
-              <li key={item.title}>
+            {principles.map((item, index) => (
+              <li
+                key={item.title}
+                data-reveal="stagger"
+                style={{ '--stagger': index } as React.CSSProperties}
+              >
                 <strong>{item.title}</strong>
                 <p>{item.text}</p>
               </li>
@@ -46,9 +51,12 @@ export function Contents() {
 
           <nav className="index-links-list" aria-label="Rychlé odkazy na části webu">
             {indexSections.map(section => (
-              <a key={section.id} href={`#${section.id}`}>
-                <span className="index-link-top">{section.label} →</span>
-                <p>{section.description}</p>
+              <a key={section.id} href={`#${section.id}`} className="index-row-link">
+                <div className="index-row-copy">
+                  <span className="index-link-top">{section.label}</span>
+                  <p>{section.description}</p>
+                </div>
+                <ArrowRight size={17} className="index-row-arrow" aria-hidden="true" />
               </a>
             ))}
           </nav>
