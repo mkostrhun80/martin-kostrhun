@@ -1,25 +1,59 @@
-'use client';
-/* eslint-disable @next/next/no-img-element */
-import { useRef } from 'react';
-import { ArrowUpRight, BookOpen, BriefcaseBusiness, Home, MessageCircle, Phone, Route, UserRound } from 'lucide-react';
 import { indexSections } from '@/lib/site-sections';
 import { assets } from '@/lib/site-config';
-import { useContentsTextPopups } from './useContentsTextPopups';
+import { PictureFrame } from './PictureFrame';
 
-const icons = { domu: Home, sluzby: BriefcaseBusiness, 'o-mne': UserRound, zkusenosti: MessageCircle, otazky: MessageCircle, kontakt: Phone, spoluprace: Route };
-export function SectionIcon({ id }: { id: string }) {
-  const Icon = icons[id as keyof typeof icons] || BookOpen;
-  return <Icon size={18} strokeWidth={1.6} aria-hidden="true"/>;
-}
+const principles = [
+  {
+    title: 'Srozumitelnost bez nátlaku',
+    text: 'Nejdřív si vyjasníme čísla, možnosti i rizika. Rozhodnutí děláte vždy v klidu a s plným přehledem.',
+  },
+  {
+    title: 'Srovnání napříč trhem',
+    text: 'Porovnávám konkrétní parametry bank, pojišťoven a investičních institucí místo jednoho univerzálního produktu.',
+  },
+  {
+    title: 'Dlouhodobá péče',
+    text: 'Podpisem smlouvy servis začíná. Průběžně hlídáme sazby, podmínky i změny ve vaší životní situaci.',
+  },
+];
+
 export function Contents() {
-  const copy = useRef<HTMLDivElement>(null);
-  useContentsTextPopups(copy, indexSections.map(section => section.id).join(','));
-  return <section id="obsah" className="index-section index-scene index-balanced page-section" aria-labelledby="contents-heading">
-    <figure className="index-photo journey-destination"><img src={assets.contentsPortrait} alt={assets.contentsAlt} width="1365" height="2048" loading="eager" draggable={false}/></figure>
-    <div ref={copy} className="index-copy"><div className="section-heading"><h2 id="contents-heading">Na webu najdete<span>.</span></h2><p>Vyberte si, co vás zajímá.</p></div>
-      <nav className="index-grid" aria-label="Rychlé odkazy na části webu">{indexSections.map(s => <a key={s.id} className={s.id === 'kontakt' ? 'index-contact' : 'index-card'} href={`#${s.id}`}><span className="index-icon"><SectionIcon id={s.id}/></span><span className="index-label">{s.label}<ArrowUpRight size={18} aria-hidden="true"/></span><p>{s.description}</p></a>)}</nav>
-    </div>
-  </section>;
-}
+  return (
+    <section id="obsah" className="section-band band-stone" aria-labelledby="contents-heading">
+      <div className="section-shell contents-grid">
+        <figure className="editorial-media">
+          <PictureFrame spec={assets.responsive.contents} />
+        </figure>
 
-export { ScrollContents } from './ScrollContents';
+        <div className="contents-body">
+          <header className="section-header">
+            <h2 id="contents-heading" className="section-heading-display">
+              Plán místo náhod.
+            </h2>
+            <p className="section-lead">
+              Každá finanční oblast souvisí s ostatními. Zvolte téma, které právě řešíte, nebo projděte zásady naší spolupráce.
+            </p>
+          </header>
+
+          <ol className="principles-list">
+            {principles.map(item => (
+              <li key={item.title}>
+                <strong>{item.title}</strong>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ol>
+
+          <nav className="index-links-list" aria-label="Rychlé odkazy na části webu">
+            {indexSections.map(section => (
+              <a key={section.id} href={`#${section.id}`}>
+                <span className="index-link-top">{section.label} →</span>
+                <p>{section.description}</p>
+              </a>
+            ))}
+          </nav>
+        </div>
+      </div>
+    </section>
+  );
+}

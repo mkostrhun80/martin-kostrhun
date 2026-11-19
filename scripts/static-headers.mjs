@@ -4,9 +4,10 @@ import { join, relative, resolve } from 'node:path';
 export const securityHeaders = {
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY',
+  'Cross-Origin-Opener-Policy': 'same-origin',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=(), browsing-topics=()',
-  'Strict-Transport-Security': 'max-age=31536000',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
   'Content-Security-Policy': "object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
 };
 export function reportOnlyPolicy(html) {
